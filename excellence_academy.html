@@ -1,0 +1,2904 @@
+<!DOCTYPE html>
+<html lang="ar" dir="rtl">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>هندسة الحياة – التخطيط الاستراتيجي الشخصي | Excellence Academy</title>
+  <meta name="description" content="برنامج هندسة الحياة من تقديم أكاديمية إكسيلانس للتدريب والتعليم والمدرب أحمد رجوح.">
+
+  <!-- Tailwind CSS & Three.js -->
+  <script src="https://cdn.tailwindcss.com"></script>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/three.js/r128/three.min.js"></script>
+  <script src="https://cdn.jsdelivr.net/npm/three@0.128.0/examples/js/controls/OrbitControls.js"></script>
+  <script>
+    tailwind.config = {
+      theme: {
+        extend: {
+          colors: {
+            brand: {
+              950: '#040B1A',
+              900: '#0B1D3A',
+              800: '#132C54',
+              700: '#1D427A'
+            }
+          }
+        }
+      }
+    };
+  </script>
+
+  <!-- Fonts & Icons -->
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Cairo:wght@400;500;600;700;800;900&family=Plus+Jakarta+Sans:wght@600;700;800&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css">
+
+  <style>
+    * {
+      box-sizing: border-box;
+      -webkit-tap-highlight-color: transparent;
+    }
+
+    body {
+      font-family: 'Cairo', sans-serif;
+      background-color: #FFFFFF;
+      color: #0F172A;
+      overflow-x: hidden;
+      margin: 0;
+      padding: 0;
+    }
+
+    .font-en {
+      font-family: 'Plus Jakarta Sans', sans-serif;
+    }
+
+    /* إخفاء وإظهار الأقسام بسلاسة */
+    .app-section {
+      display: none;
+    }
+    .app-section.active {
+      display: block;
+    }
+
+    /* تحريك الشعار في الشاشة الافتتاحية */
+    @keyframes logoFloatPulse {
+      0%, 100% {
+        transform: scale(1) translateY(0);
+        box-shadow: 0 0 25px rgba(56, 189, 248, 0.45);
+      }
+      50% {
+        transform: scale(1.07) translateY(-6px);
+        box-shadow: 0 0 45px rgba(56, 189, 248, 0.85);
+      }
+    }
+    .splash-logo-anim {
+      animation: logoFloatPulse 2.2s ease-in-out infinite;
+    }
+
+    /* تدرج النص الأزرق الفاخر */
+    .text-gold-gradient {
+      background: linear-gradient(135deg, #0284C7 0%, #38BDF8 50%, #0369A1 100%);
+      -webkit-background-clip: text;
+      -webkit-text-fill-color: transparent;
+    }
+
+    /* الأزرار المتوهجة */
+    .glow-btn {
+      position: relative;
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      gap: 10px;
+      padding: 15px 32px;
+      font-weight: 800;
+      color: #FFFFFF;
+      background: linear-gradient(135deg, #0284C7 0%, #0369A1 100%);
+      border: 1.5px solid #38BDF8;
+      border-radius: 9999px;
+      box-shadow: 0 8px 20px -4px rgba(3, 105, 161, 0.35);
+      transition: all 0.25s ease-in-out;
+      overflow: hidden;
+      cursor: pointer;
+    }
+
+    .glow-btn:hover {
+      background: linear-gradient(135deg, #38BDF8 0%, #0284C7 100%);
+      color: #FFFFFF;
+      border-color: #BAE6FD;
+      box-shadow: 0 0 24px rgba(56, 189, 248, 0.8), 0 0 45px rgba(2, 132, 199, 0.4);
+      transform: translateY(-2px);
+    }
+
+    .glow-btn:active {
+      transform: scale(0.96);
+    }
+
+    /* الشريط المنحني السفلي لاختيار الباقات مع الدائرة المضيئة العائمة */
+    .nav-dock-container {
+      background: #0B1221;
+      border: 1.5px solid rgba(148, 163, 184, 0.25);
+      box-shadow: 0 18px 40px -10px rgba(2, 6, 23, 0.65);
+    }
+
+    .nav-floating-circle {
+      position: absolute;
+      top: -26px;
+      width: 60px;
+      height: 60px;
+      border-radius: 9999px;
+      border: 6px solid #0B1221;
+      transition: all 0.45s cubic-bezier(0.34, 1.56, 0.64, 1);
+      pointer-events: none;
+      z-index: 10;
+    }
+
+    /* ألوان الباقات الثلاث المخصصة */
+    .pkg-theme-bronze {
+      --pkg-main: #D97706;
+      --pkg-light: #F59E0B;
+    }
+    .pkg-theme-silver {
+      --pkg-main: #64748B;
+      --pkg-light: #94A3B8;
+    }
+    .pkg-theme-gold {
+      --pkg-main: #EAB308;
+      --pkg-light: #FACC15;
+    }
+
+    .package-glow-wrapper {
+      position: relative;
+    }
+    .package-glow-wrapper::before {
+      content: '';
+      position: absolute;
+      inset: -4px;
+      border-radius: 32px;
+      background: linear-gradient(135deg, var(--pkg-main, #0284C7), var(--pkg-light, #38BDF8));
+      opacity: 0.45;
+      filter: blur(22px);
+      z-index: 0;
+      transition: all 0.4s ease;
+    }
+    .package-glow-wrapper:hover::before {
+      opacity: 0.75;
+    }
+
+    /* أنيميشن ظهور العناصر عند السكرول */
+    .reveal {
+      opacity: 0;
+      transform: translateY(20px);
+      transition: all 0.6s cubic-bezier(0.16, 1, 0.3, 1);
+    }
+    .reveal.visible {
+      opacity: 1;
+      transform: translateY(0);
+    }
+
+    /* خلفية قسم آراء المشاركين المطابقة للصورة */
+    .testimonials-grid-bg {
+      background-color: #061033;
+      background-image:
+        radial-gradient(circle at 50% 62%, rgba(56, 189, 248, 0.22) 0%, rgba(11, 29, 74, 0.45) 45%, rgba(4, 11, 26, 0.95) 100%),
+        linear-gradient(to right, rgba(56, 189, 248, 0.1) 1px, transparent 1px),
+        linear-gradient(to bottom, rgba(56, 189, 248, 0.1) 1px, transparent 1px);
+      background-size: 100% 100%, 48px 48px, 48px 48px;
+    }
+
+    @keyframes cardFadePop {
+      0% { opacity: 0; transform: scale(0.96); }
+      100% { opacity: 1; transform: scale(1); }
+    }
+    .testimonial-pop {
+      animation: cardFadePop 0.35s cubic-bezier(0.16, 1, 0.3, 1);
+    }
+
+    /* حاوية العرض ثلاثي الأبعاد لبوكس Gold Box */
+    .showcase-3d-wrapper {
+      position: relative;
+      width: 100%;
+      height: 640px;
+      background: radial-gradient(circle at 50% 42%, #132145 0%, #070d1f 68%, #040711 100%);
+      overflow: hidden;
+      user-select: none;
+      -webkit-user-select: none;
+    }
+    @media (min-width: 640px) {
+      .showcase-3d-wrapper {
+        height: 700px;
+      }
+    }
+    .showcase-3d-wrapper canvas {
+      display: block;
+      width: 100%;
+      height: 100%;
+      outline: none;
+      cursor: grab;
+    }
+    .showcase-3d-wrapper canvas:active { cursor: grabbing; }
+
+    .luxury-glass-3d {
+      background: rgba(8, 15, 34, 0.86);
+      backdrop-filter: blur(16px);
+      -webkit-backdrop-filter: blur(16px);
+      border: 1px solid rgba(56, 189, 248, 0.4);
+      box-shadow: 0 20px 50px rgba(0, 0, 0, 0.55), inset 0 1px 0 rgba(186, 230, 253, 0.2);
+    }
+    .sky-pill-3d {
+      background: rgba(13, 24, 52, 0.88);
+      border: 1px solid rgba(56, 189, 248, 0.38);
+      color: #bae6fd;
+      transition: all 0.2s ease;
+    }
+    .sky-pill-3d:hover, .sky-pill-3d.active {
+      background: rgba(56, 189, 248, 0.24);
+      border-color: #38bdf8;
+      color: #ffffff;
+    }
+  </style>
+</head>
+<body class="bg-white text-slate-900 min-h-screen flex flex-col">
+
+  <!-- ========================================================= -->
+  <!-- 0. شاشة البداية الترحيبية مع تحريك الشعار (fondu) -->
+  <!-- ========================================================= -->
+  <div id="splashScreen" class="fixed inset-0 z-[100] bg-gradient-to-br from-brand-950 via-brand-900 to-sky-900 flex flex-col items-center justify-center text-white px-6 text-center transition-opacity duration-1000 ease-in-out">
+    <div class="splash-logo-anim w-24 h-24 rounded-3xl bg-sky-500/15 backdrop-blur-md border-2 border-sky-400 flex items-center justify-center mb-6">
+      <svg class="w-12 h-12 text-sky-400" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+        <path d="M12 2L2 7l10 5 10-5-10-5zM2 17l10 5 10-5M2 12l10 5 10-5" stroke-linecap="round" stroke-linejoin="round"/>
+      </svg>
+    </div>
+    <span class="font-en text-xs tracking-[0.3em] uppercase text-sky-300 font-bold mb-2">Excellence Academy</span>
+    <h1 class="text-2xl sm:text-4xl font-black mb-2">مرحباً بك في <span class="text-sky-400">أكاديمية إكسيلانس</span></h1>
+    <p class="text-sm text-sky-100 font-medium">برنامج هندسة الحياة – التخطيط الاستراتيجي الشخصي</p>
+  </div>
+
+  <!-- ========================================================= -->
+  <!-- 1. الواجهة الرئيسية المباشرة -->
+  <!-- ========================================================= -->
+  <main id="section-home" class="app-section active flex-grow">
+    
+    <!-- شريط علوي نظيف -->
+    <header class="w-full max-w-6xl mx-auto px-4 pt-5 pb-3 flex items-center justify-between">
+      <div class="flex items-center gap-3">
+        <div class="w-10 h-10 rounded-xl bg-brand-900 border border-sky-400/70 text-sky-300 flex items-center justify-center shadow-md">
+          <svg class="w-5 h-5" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2">
+            <path d="M12 2L2 7l10 5 10-5-10-5zM2 17l10 5 10-5M2 12l10 5 10-5" stroke-linecap="round" stroke-linejoin="round"/>
+          </svg>
+        </div>
+        <div>
+          <span class="font-en text-sm font-extrabold tracking-wider text-brand-900 block leading-none">EXCELLENCE <span class="text-sky-600">ACADEMY</span></span>
+          <span class="text-[11px] font-bold text-slate-500">أكاديمية إكسيلانس للتدريب والتعليم</span>
+        </div>
+      </div>
+
+      <div class="flex items-center gap-2">
+        <button type="button" onclick="switchSection('packages')" class="text-xs font-extrabold text-brand-900 bg-sky-50 border border-sky-400 px-3.5 py-2 rounded-full hover:bg-sky-100 transition shadow-sm">
+          <i class="fa-solid fa-crown text-sky-600 ml-1"></i> الباقات والأسعار
+        </button>
+        <button type="button" onclick="openAdminModal()" class="w-9 h-9 rounded-full bg-slate-50 hover:bg-slate-100 text-slate-400 hover:text-sky-600 flex items-center justify-center text-xs transition border border-slate-200" title="لوحة الإدارة">
+          <i class="fa-solid fa-gear"></i>
+        </button>
+      </div>
+    </header>
+
+    <!-- القسم الرئيسي Hero Section -->
+    <section class="relative pt-6 pb-16 sm:pt-10 sm:pb-24 px-4 overflow-hidden">
+      <div class="absolute top-6 left-1/2 -translate-x-1/2 w-[500px] h-[500px] bg-sky-100/60 rounded-full filter blur-3xl -z-10 pointer-events-none"></div>
+
+      <div class="max-w-4xl mx-auto text-center">
+        <div class="inline-flex items-center gap-2 px-4 py-1.5 rounded-full bg-sky-50 border border-sky-400/70 text-brand-900 text-xs font-extrabold mb-6 shadow-sm">
+          <i class="fa-solid fa-compass text-sky-600"></i>
+          <span>التخطيط الاستراتيجي الشخصي وتطوير المهارات القيادية</span>
+        </div>
+
+        <h1 class="text-4xl sm:text-6xl font-black text-brand-950 leading-tight mb-4">
+          <span class="text-gold-gradient">هندسة الحياة</span>
+        </h1>
+
+        <p class="text-xl sm:text-3xl font-extrabold text-brand-900 mb-5">
+          لا تترك حياتك للصدفة... <span class="underline decoration-sky-500 decoration-4 underline-offset-8">صمّمها باستراتيجية.</span>
+        </p>
+
+        <p class="text-sm sm:text-base text-slate-600 font-medium leading-relaxed max-w-2xl mx-auto mb-6">
+          برنامج تدريبي متكامل يساعدك على اكتشاف ذاتك، وبناء رؤيتك الشخصية والمهنية، وتطوير مهاراتك القيادية، وتحويل أهدافك إلى خطة عملية قابلة للتنفيذ والقياس.
+        </p>
+
+        <p class="text-xs sm:text-sm font-black text-sky-700 mb-8">
+          من قيادة الذات إلى تحقيق الأهداف والارتقاء المهني.
+        </p>
+
+        <!-- خطوات رحلتك في المتجر -->
+        <div class="flex flex-wrap items-center justify-center gap-2 sm:gap-3 mb-9 text-xs font-extrabold">
+          <button type="button" onclick="scrollToCurriculum()" class="px-4 py-2 rounded-full bg-white hover:bg-sky-50 border border-slate-200 hover:border-sky-400 shadow-sm transition flex items-center gap-2 cursor-pointer">
+            <span class="w-5 h-5 rounded-full bg-brand-900 text-sky-300 font-en text-[10px] flex items-center justify-center">1</span>
+            <span>اكتشف البرنامج</span>
+          </button>
+          <button type="button" onclick="openComparisonModal()" class="px-4 py-2 rounded-full bg-white hover:bg-sky-50 border border-slate-200 hover:border-sky-400 shadow-sm transition flex items-center gap-2 cursor-pointer">
+            <span class="w-5 h-5 rounded-full bg-brand-900 text-sky-300 font-en text-[10px] flex items-center justify-center">2</span>
+            <span>قارن الباقات</span>
+          </button>
+          <button type="button" onclick="switchSection('packages')" class="px-4 py-2 rounded-full bg-white hover:bg-sky-50 border border-slate-200 hover:border-sky-400 shadow-sm transition flex items-center gap-2 cursor-pointer">
+            <span class="w-5 h-5 rounded-full bg-sky-500 text-white font-en text-[10px] flex items-center justify-center">3</span>
+            <span>اختر باقتك المناسبة</span>
+          </button>
+        </div>
+
+        <!-- مشغل الفيديو التعريفي للبرنامج -->
+        <div class="max-w-2xl mx-auto mb-9">
+          <div onclick="playMainPromoVideo()" id="mainVideoCard" class="relative aspect-video rounded-3xl overflow-hidden bg-brand-950 border-2 border-sky-400 shadow-[0_20px_50px_-15px_rgba(2,132,199,0.3)] cursor-pointer group">
+            <div class="absolute inset-0 bg-gradient-to-tr from-brand-950 via-slate-900 to-brand-900 flex flex-col items-center justify-center p-6 text-white">
+              <div class="w-16 h-16 sm:w-20 sm:h-20 rounded-full bg-sky-500 text-white flex items-center justify-center text-2xl shadow-[0_0_25px_rgba(56,189,248,0.75)] transition transform group-hover:scale-110 mb-3">
+                <i class="fa-solid fa-play ml-1"></i>
+              </div>
+              <h3 class="text-base sm:text-xl font-black">شاهد الفيديو التعريفي لبرنامج <span class="text-sky-400">هندسة الحياة</span></h3>
+              <p class="text-xs text-sky-200 mt-1">تقديم المدرب أحمد رجوح – Excellence Academy</p>
+            </div>
+          </div>
+        </div>
+
+        <!-- أزرار الدعوة لاتخاذ الإجراء -->
+        <div class="flex flex-col sm:flex-row items-center justify-center gap-3.5">
+          <button type="button" onclick="switchSection('packages')" class="glow-btn w-full sm:w-auto text-base px-9 py-4">
+            <span>سجّل الآن</span>
+            <i class="fa-solid fa-arrow-left text-sm"></i>
+          </button>
+          <button type="button" onclick="switchSection('packages')" class="w-full sm:w-auto px-7 py-4 rounded-full bg-slate-50 hover:bg-sky-50 text-brand-950 font-extrabold border-2 border-sky-400 transition text-sm">
+            استعرض الباقات مباشرة
+          </button>
+        </div>
+      </div>
+    </section>
+
+    <!-- القسم الثالث: المشكلة التي يعالجها البرنامج -->
+    <section class="py-16 bg-slate-50 border-y border-slate-200/70 px-4 reveal">
+      <div class="max-w-4xl mx-auto">
+        <div class="text-center max-w-2xl mx-auto mb-10">
+          <span class="text-xs font-extrabold text-sky-700 bg-sky-50 border border-sky-300 px-3.5 py-1 rounded-full">هل تواجه هذه التحديات؟</span>
+          <h2 class="text-2xl sm:text-3xl font-black text-brand-950 mt-3 leading-snug">
+            هل تشعر أنك تعمل كثيرًا، لكنك لا تتقدم بالقدر الذي تطمح إليه؟
+          </h2>
+        </div>
+
+        <div class="grid grid-cols-1 sm:grid-cols-2 gap-3.5 mb-8">
+          <div class="bg-white p-4 rounded-2xl border border-slate-200/80 shadow-sm flex items-center gap-3.5">
+            <div class="w-9 h-9 rounded-xl bg-sky-50 border border-sky-300 text-sky-600 flex items-center justify-center shrink-0"><i class="fa-solid fa-compass"></i></div>
+            <span class="text-xs sm:text-sm font-bold text-slate-800">الانشغال اليومي دون رؤية واضحة.</span>
+          </div>
+          <div class="bg-white p-4 rounded-2xl border border-slate-200/80 shadow-sm flex items-center gap-3.5">
+            <div class="w-9 h-9 rounded-xl bg-sky-50 border border-sky-300 text-sky-600 flex items-center justify-center shrink-0"><i class="fa-solid fa-list-ol"></i></div>
+            <span class="text-xs sm:text-sm font-bold text-slate-800">تعدد الأهداف وصعوبة ترتيب الأولويات.</span>
+          </div>
+          <div class="bg-white p-4 rounded-2xl border border-slate-200/80 shadow-sm flex items-center gap-3.5">
+            <div class="w-9 h-9 rounded-xl bg-sky-50 border border-sky-300 text-sky-600 flex items-center justify-center shrink-0"><i class="fa-solid fa-anchor"></i></div>
+            <span class="text-xs sm:text-sm font-bold text-slate-800">الشعور بالجمود الشخصي أو المهني.</span>
+          </div>
+          <div class="bg-white p-4 rounded-2xl border border-slate-200/80 shadow-sm flex items-center gap-3.5">
+            <div class="w-9 h-9 rounded-xl bg-sky-50 border border-sky-300 text-sky-600 flex items-center justify-center shrink-0"><i class="fa-solid fa-scale-balanced"></i></div>
+            <span class="text-xs sm:text-sm font-bold text-slate-800">صعوبة اتخاذ القرارات المهمة.</span>
+          </div>
+          <div class="bg-white p-4 rounded-2xl border border-slate-200/80 shadow-sm flex items-center gap-3.5">
+            <div class="w-9 h-9 rounded-xl bg-sky-50 border border-sky-300 text-sky-600 flex items-center justify-center shrink-0"><i class="fa-solid fa-battery-quarter"></i></div>
+            <span class="text-xs sm:text-sm font-bold text-slate-800">ضعف الانضباط والاستمرارية.</span>
+          </div>
+          <div class="bg-white p-4 rounded-2xl border border-slate-200/80 shadow-sm flex items-center gap-3.5">
+            <div class="w-9 h-9 rounded-xl bg-sky-50 border border-sky-300 text-sky-600 flex items-center justify-center shrink-0"><i class="fa-solid fa-map"></i></div>
+            <span class="text-xs sm:text-sm font-bold text-slate-800">امتلاك الطموح دون وجود خطة واضحة.</span>
+          </div>
+          <div class="bg-white p-4 rounded-2xl border border-slate-200/80 shadow-sm flex items-center gap-3.5">
+            <div class="w-9 h-9 rounded-xl bg-sky-50 border border-sky-300 text-sky-600 flex items-center justify-center shrink-0"><i class="fa-solid fa-yin-yang"></i></div>
+            <span class="text-xs sm:text-sm font-bold text-slate-800">صعوبة الموازنة بين الحياة الشخصية والمهنية.</span>
+          </div>
+          <div class="bg-white p-4 rounded-2xl border border-slate-200/80 shadow-sm flex items-center gap-3.5">
+            <div class="w-9 h-9 rounded-xl bg-sky-50 border border-sky-300 text-sky-600 flex items-center justify-center shrink-0"><i class="fa-solid fa-bullseye"></i></div>
+            <span class="text-xs sm:text-sm font-bold text-slate-800">عدم القدرة على تحويل الأفكار إلى نتائج ملموسة.</span>
+          </div>
+        </div>
+
+        <div class="bg-brand-900 text-white border border-sky-400/50 rounded-2xl p-5 text-center shadow-md">
+          <p class="text-xs sm:text-sm font-black text-sky-300">
+            المشكلة ليست دائمًا في قلة الجهد، بل قد تكون في غياب الرؤية والاستراتيجية المناسبة.
+          </p>
+        </div>
+      </div>
+    </section>
+
+    <!-- القسم الرابع: الفئات المستهدفة -->
+    <section class="py-16 bg-white px-4 reveal">
+      <div class="max-w-4xl mx-auto">
+        <div class="text-center max-w-2xl mx-auto mb-10">
+          <span class="text-xs font-extrabold text-sky-700 bg-sky-50 border border-sky-300 px-3.5 py-1 rounded-full">الجمهور المستهدف</span>
+          <h2 class="text-2xl sm:text-3xl font-black text-brand-950 mt-2">لمن صُمّم هذا البرنامج؟</h2>
+        </div>
+
+        <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4 mb-10">
+          <div class="bg-slate-50 p-5 rounded-2xl border border-slate-200/80 hover:border-sky-400 transition flex items-center gap-3.5">
+            <div class="w-11 h-11 rounded-xl bg-brand-900 text-sky-300 flex items-center justify-center text-lg shrink-0"><i class="fa-solid fa-user-tie"></i></div>
+            <h3 class="text-sm font-extrabold text-slate-900">المدراء التنفيذيون</h3>
+          </div>
+          <div class="bg-slate-50 p-5 rounded-2xl border border-slate-200/80 hover:border-sky-400 transition flex items-center gap-3.5">
+            <div class="w-11 h-11 rounded-xl bg-brand-900 text-sky-300 flex items-center justify-center text-lg shrink-0"><i class="fa-solid fa-building"></i></div>
+            <h3 class="text-sm font-extrabold text-slate-900">أصحاب المؤسسات والمشاريع</h3>
+          </div>
+          <div class="bg-slate-50 p-5 rounded-2xl border border-slate-200/80 hover:border-sky-400 transition flex items-center gap-3.5">
+            <div class="w-11 h-11 rounded-xl bg-brand-900 text-sky-300 flex items-center justify-center text-lg shrink-0"><i class="fa-solid fa-rocket"></i></div>
+            <h3 class="text-sm font-extrabold text-slate-900">رواد الأعمال</h3>
+          </div>
+          <div class="bg-slate-50 p-5 rounded-2xl border border-slate-200/80 hover:border-sky-400 transition flex items-center gap-3.5">
+            <div class="w-11 h-11 rounded-xl bg-brand-900 text-sky-300 flex items-center justify-center text-lg shrink-0"><i class="fa-solid fa-users-gear"></i></div>
+            <h3 class="text-sm font-extrabold text-slate-900">مسؤولو الفرق وقادة العمل</h3>
+          </div>
+          <div class="bg-slate-50 p-5 rounded-2xl border border-slate-200/80 hover:border-sky-400 transition flex items-center gap-3.5">
+            <div class="w-11 h-11 rounded-xl bg-brand-900 text-sky-300 flex items-center justify-center text-lg shrink-0"><i class="fa-solid fa-chart-line"></i></div>
+            <h3 class="text-sm font-extrabold text-slate-900">الموظفون الطموحون الراغبون في تطوير مسارهم المهني</h3>
+          </div>
+          <div class="bg-slate-50 p-5 rounded-2xl border border-slate-200/80 hover:border-sky-400 transition flex items-center gap-3.5">
+            <div class="w-11 h-11 rounded-xl bg-brand-900 text-sky-300 flex items-center justify-center text-lg shrink-0"><i class="fa-solid fa-compass"></i></div>
+            <h3 class="text-sm font-extrabold text-slate-900">كل شخص يريد بناء رؤية واضحة لحياته ومستقبله</h3>
+          </div>
+        </div>
+
+        <div class="text-center">
+          <button type="button" onclick="switchSection('packages')" class="glow-btn text-base px-9 py-4">
+            <span>سجّل الآن واكتشف الباقة المناسبة لك</span>
+            <i class="fa-solid fa-arrow-left text-sm"></i>
+          </button>
+        </div>
+      </div>
+    </section>
+
+    <!-- القسم الخامس: رحلة البرنامج والمحاور التدريبية -->
+    <section id="curriculumSection" class="py-16 bg-slate-50 border-y border-slate-200/70 px-4 reveal">
+      <div class="max-w-5xl mx-auto">
+        <div class="text-center max-w-2xl mx-auto mb-10">
+          <span class="text-xs font-extrabold text-sky-700">رحلة متكاملة من اكتشاف الذات إلى تصميم المستقبل</span>
+          <h2 class="text-2xl sm:text-3xl font-black text-brand-950 mt-2">ماذا ستتعلم في برنامج <span class="text-gold-gradient">هندسة الحياة؟</span></h2>
+          <p class="text-xs sm:text-sm text-slate-600 mt-2">
+            هندسة الحياة برنامج تدريبي يدمج بين التخطيط الاستراتيجي الشخصي وتطوير المهارات الجوهرية والقيادية:
+          </p>
+        </div>
+
+        <!-- 7 خطوات للرحلة -->
+        <div class="grid grid-cols-2 sm:grid-cols-4 lg:grid-cols-7 gap-2.5 mb-12 text-center">
+          <div class="bg-white p-3.5 rounded-2xl border border-sky-200 shadow-sm"><span class="font-en text-xs font-black text-sky-600 block">01</span><span class="text-xs font-extrabold text-slate-900">اكتشف ذاتك</span></div>
+          <div class="bg-white p-3.5 rounded-2xl border border-sky-200 shadow-sm"><span class="font-en text-xs font-black text-sky-600 block">02</span><span class="text-xs font-extrabold text-slate-900">افهم واقعك</span></div>
+          <div class="bg-white p-3.5 rounded-2xl border border-sky-200 shadow-sm"><span class="font-en text-xs font-black text-sky-600 block">03</span><span class="text-xs font-extrabold text-slate-900">صمّم رؤيتك</span></div>
+          <div class="bg-white p-3.5 rounded-2xl border border-sky-200 shadow-sm"><span class="font-en text-xs font-black text-sky-600 block">04</span><span class="text-xs font-extrabold text-slate-900">ابنِ استراتيجيتك</span></div>
+          <div class="bg-white p-3.5 rounded-2xl border border-sky-200 shadow-sm"><span class="font-en text-xs font-black text-sky-600 block">05</span><span class="text-xs font-extrabold text-slate-900">طوّر قدراتك</span></div>
+          <div class="bg-white p-3.5 rounded-2xl border border-sky-200 shadow-sm"><span class="font-en text-xs font-black text-sky-600 block">06</span><span class="text-xs font-extrabold text-slate-900">نفّذ خطتك</span></div>
+          <div class="bg-brand-900 text-white p-3.5 rounded-2xl border border-sky-400 shadow-sm col-span-2 sm:col-span-1"><span class="font-en text-xs font-black text-sky-400 block">07</span><span class="text-xs font-extrabold">قِس نتائجك</span></div>
+        </div>
+
+        <!-- المحاور الستة -->
+        <div class="grid grid-cols-1 md:grid-cols-2 gap-4 mb-12">
+          <div class="bg-white p-5 rounded-2xl border border-slate-200/80 shadow-sm">
+            <div class="flex items-center gap-3 mb-2">
+              <span class="w-9 h-9 rounded-full bg-brand-900 text-sky-300 font-en font-black text-xs flex items-center justify-center">01</span>
+              <h3 class="text-base font-black text-slate-900">المحور الأول: هندسة الذات والوعي الشخصي والقيادي</h3>
+            </div>
+            <p class="text-xs text-slate-600 leading-relaxed">فهم الذات واكتشاف القيم • تحديد نقاط القوة ومناطق التطوير • اكتشاف القدرات والاهتمامات • عجلة الحياة والتوازن بين الأدوار • الهوية الشخصية والقيادية.</p>
+          </div>
+
+          <div class="bg-white p-5 rounded-2xl border border-slate-200/80 shadow-sm">
+            <div class="flex items-center gap-3 mb-2">
+              <span class="w-9 h-9 rounded-full bg-brand-900 text-sky-300 font-en font-black text-xs flex items-center justify-center">02</span>
+              <h3 class="text-base font-black text-slate-900">المحور الثاني: بناء الرؤية الشخصية والمهنية</h3>
+            </div>
+            <p class="text-xs text-slate-600 leading-relaxed">فهم الرؤية والرسالة والقيم • تحديد الاتجاه المستقبلي • تصور الحياة والمسار المهني • الربط بين الطموحات الشخصية والمهنية • صياغة الرؤية الشخصية والقيادية.</p>
+          </div>
+
+          <div class="bg-white p-5 rounded-2xl border-2 border-sky-400 shadow-sm">
+            <div class="flex items-center gap-3 mb-2">
+              <span class="w-9 h-9 rounded-full bg-brand-900 text-sky-300 font-en font-black text-xs flex items-center justify-center">03</span>
+              <h3 class="text-base font-black text-slate-900">المحور الثالث: التخطيط الاستراتيجي الشخصي</h3>
+            </div>
+            <p class="text-xs text-slate-600 leading-relaxed">التفكير الاستراتيجي • تحليل الواقع الحالي • تحليل SWOT • تحليل الفجوات • تحديد الأولويات • صياغة الأهداف • بناء الاستراتيجية الشخصية والمهنية.</p>
+          </div>
+
+          <div class="bg-white p-5 rounded-2xl border-2 border-sky-400 shadow-sm">
+            <div class="flex items-center gap-3 mb-2">
+              <span class="w-9 h-9 rounded-full bg-brand-900 text-sky-300 font-en font-black text-xs flex items-center justify-center">04</span>
+              <h3 class="text-base font-black text-slate-900">المحور الرابع: Power Skills – المهارات الجوهرية</h3>
+            </div>
+            <p class="text-xs text-slate-600 leading-relaxed">الوعي الذاتي والذكاء العاطفي • التفكير النقدي والاستراتيجي • اتخاذ القرار وحل المشكلات • التواصل الفعال والتأثير والتفاوض • إدارة الوقت والأولويات • الانضباط الذاتي وإدارة الذات • المرونة والتكيف مع التغيير • القيادة وبناء الثقة وإدارة الفرق.</p>
+          </div>
+
+          <div class="bg-white p-5 rounded-2xl border border-slate-200/80 shadow-sm">
+            <div class="flex items-center gap-3 mb-2">
+              <span class="w-9 h-9 rounded-full bg-brand-900 text-sky-300 font-en font-black text-xs flex items-center justify-center">05</span>
+              <h3 class="text-base font-black text-slate-900">المحور الخامس: الذكاء الاصطناعي والإنتاجية</h3>
+            </div>
+            <p class="text-xs text-slate-600 leading-relaxed">توظيف الذكاء الاصطناعي في التخطيط • استخدام أدوات AI لتحليل الأفكار والخيارات • إعداد الخطط وتنظيم المهام • دعم الإنتاجية الشخصية والتنفيذية • استخدام الأدوات الرقمية لمتابعة الأهداف.</p>
+          </div>
+
+          <div class="bg-white p-5 rounded-2xl border border-slate-200/80 shadow-sm">
+            <div class="flex items-center gap-3 mb-2">
+              <span class="w-9 h-9 rounded-full bg-brand-900 text-sky-300 font-en font-black text-xs flex items-center justify-center">06</span>
+              <h3 class="text-base font-black text-slate-900">المحور السادس: التنفيذ وتحقيق النتائج</h3>
+            </div>
+            <p class="text-xs text-slate-600 leading-relaxed">تحويل الأهداف إلى مشاريع ومبادرات • إعداد خارطة الطريق • بناء خطة 90 يومًا • إدارة الوقت والطاقة والعادات • تحديد مؤشرات الأداء KPIs • قياس التقدم ومراجعة النتائج • تعديل المسار والاستمرارية.</p>
+          </div>
+        </div>
+
+        <!-- النتائج الـ 10 -->
+        <div class="bg-white rounded-3xl border-2 border-sky-200 p-6 sm:p-8 shadow-sm">
+          <h3 class="text-xl sm:text-2xl font-black text-center text-brand-950 mb-6">
+            ماذا ستحصل عليه بعد رحلتك في <span class="text-gold-gradient">هندسة الحياة؟</span>
+          </h3>
+          <div class="grid grid-cols-1 sm:grid-cols-2 gap-3 text-xs sm:text-sm font-bold text-slate-800 mb-6">
+            <div class="bg-slate-50 p-3.5 rounded-xl border border-slate-200/80 flex items-center gap-2.5"><span class="text-sky-600 font-en font-black">1.</span><span>رؤية شخصية ومهنية أكثر وضوحًا.</span></div>
+            <div class="bg-slate-50 p-3.5 rounded-xl border border-slate-200/80 flex items-center gap-2.5"><span class="text-sky-600 font-en font-black">2.</span><span>فهم أعمق للذات والقدرات.</span></div>
+            <div class="bg-slate-50 p-3.5 rounded-xl border border-slate-200/80 flex items-center gap-2.5"><span class="text-sky-600 font-en font-black">3.</span><span>تحليل واضح للواقع ونقاط التطوير.</span></div>
+            <div class="bg-slate-50 p-3.5 rounded-xl border border-slate-200/80 flex items-center gap-2.5"><span class="text-sky-600 font-en font-black">4.</span><span>استراتيجية شخصية ومهنية.</span></div>
+            <div class="bg-slate-50 p-3.5 rounded-xl border border-slate-200/80 flex items-center gap-2.5"><span class="text-sky-600 font-en font-black">5.</span><span>أهداف وأولويات محددة.</span></div>
+            <div class="bg-slate-50 p-3.5 rounded-xl border border-slate-200/80 flex items-center gap-2.5"><span class="text-sky-600 font-en font-black">6.</span><span>خطة لتطوير المهارات الجوهرية والقيادية.</span></div>
+            <div class="bg-slate-50 p-3.5 rounded-xl border border-slate-200/80 flex items-center gap-2.5"><span class="text-sky-600 font-en font-black">7.</span><span>أدوات رقمية وذكاء اصطناعي لدعم التخطيط.</span></div>
+            <div class="bg-slate-50 p-3.5 rounded-xl border border-slate-200/80 flex items-center gap-2.5"><span class="text-sky-600 font-en font-black">8.</span><span>خارطة طريق عملية لمدة 90 يومًا.</span></div>
+            <div class="bg-slate-50 p-3.5 rounded-xl border border-slate-200/80 flex items-center gap-2.5"><span class="text-sky-600 font-en font-black">9.</span><span>مؤشرات لقياس الأداء والتقدم.</span></div>
+            <div class="bg-slate-50 p-3.5 rounded-xl border border-slate-200/80 flex items-center gap-2.5"><span class="text-sky-600 font-en font-black">10.</span><span>نظام متابعة ومراجعة مستمرة.</span></div>
+          </div>
+          <p class="text-center text-sm font-black text-sky-700 mb-6">
+            لن تكتفي بالتعلم... ستعمل على بناء استراتيجيتك الخاصة.
+          </p>
+          <div class="text-center">
+            <button type="button" onclick="switchSection('packages')" class="glow-btn text-base px-10 py-4">
+              <span>سجّل الآن وابدأ التخطيط الاستراتيجي</span>
+              <i class="fa-solid fa-arrow-left text-sm"></i>
+            </button>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- القسم السادس: المدرب أحمد رجوح والأكاديمية -->
+    <section class="py-16 bg-white px-4 reveal">
+      <div class="max-w-4xl mx-auto grid grid-cols-1 md:grid-cols-2 gap-6">
+        <div class="bg-slate-50 p-6 rounded-3xl border border-slate-200 flex items-start gap-4">
+          <div class="w-16 h-16 rounded-2xl bg-brand-900 border border-sky-400/60 text-sky-300 flex items-center justify-center text-2xl shrink-0">
+            <i class="fa-solid fa-user-tie"></i>
+          </div>
+          <div>
+            <span class="text-xs font-extrabold text-sky-700">تعرف على المدرب</span>
+            <h3 class="text-xl font-black text-brand-950 mt-0.5">أحمد رجوح – Ahmed Redjouh</h3>
+            <p class="text-xs font-bold text-slate-600 mt-1 leading-relaxed">
+              مدرب في التخطيط والقيادة والإدارة وتطوير المهارات.
+            </p>
+          </div>
+        </div>
+
+        <div class="bg-slate-50 p-6 rounded-3xl border border-slate-200 flex items-start gap-4">
+          <div class="w-16 h-16 rounded-2xl bg-brand-900 border border-sky-400/60 text-sky-300 flex items-center justify-center text-2xl shrink-0">
+            <i class="fa-solid fa-graduation-cap"></i>
+          </div>
+          <div>
+            <span class="font-en text-xs font-extrabold text-sky-700">EXCELLENCE ACADEMY</span>
+            <h3 class="text-xl font-black text-brand-950 mt-0.5">أكاديمية إكسيلانس للتدريب والتعليم</h3>
+            <p class="text-xs font-bold text-slate-600 mt-1 leading-relaxed">
+              نؤمن بأن تطوير الإنسان يبدأ من وعيه بذاته، وقدرته على تحديد رؤيته، وبناء استراتيجيته، وتحويل إمكاناته إلى نتائج ملموسة.
+            </p>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- القسم السابع: آراء بعض المشاركين في دوراتنا (بنفس ستايل الصورة مع أزرار التنقل المتوهجة) -->
+    <section class="testimonials-grid-bg py-16 sm:py-20 px-4 text-white reveal">
+      <div class="max-w-3xl mx-auto text-center">
+        <h2 class="text-2xl sm:text-4xl font-black text-white mb-3 tracking-wide">
+          آراء بعض المشاركين في دوراتنا
+        </h2>
+        <p class="text-xs sm:text-base text-sky-200/85 max-w-lg mx-auto leading-relaxed mb-8">
+          تصفح صور تعليقات وانطباعات المشاركين بعد تطبيق منهجية التخطيط الاستراتيجي الشخصي.
+        </p>
+
+        <!-- شريط التحكم وأزرار التنقل الدائرية المتوهجة -->
+        <div class="flex items-center justify-center gap-5 sm:gap-7 mb-9" dir="ltr">
+          <button type="button" onclick="prevTestimonial()" aria-label="التعليق السابق"
+            class="w-12 h-12 rounded-full bg-[#091536] border-2 border-sky-400 text-white flex items-center justify-center shadow-[0_0_20px_rgba(56,189,248,0.45)] hover:bg-sky-500/25 hover:scale-105 active:scale-95 transition">
+            <i class="fa-solid fa-chevron-left text-base"></i>
+          </button>
+
+          <div class="px-6 py-2.5 rounded-full bg-[#0A173B]/90 border border-sky-400/45 shadow-[0_0_20px_rgba(56,189,248,0.2)] text-xs sm:text-sm font-extrabold text-sky-200" dir="rtl">
+            تعليق <span id="testimonialCurrentNum" class="text-sky-400 font-black">1</span> من <span id="testimonialTotalNum" class="text-white font-black">4</span>
+          </div>
+
+          <button type="button" onclick="nextTestimonial()" aria-label="التعليق التالي"
+            class="w-12 h-12 rounded-full bg-[#091536] border-2 border-sky-400 text-white flex items-center justify-center shadow-[0_0_20px_rgba(56,189,248,0.45)] hover:bg-sky-500/25 hover:scale-105 active:scale-95 transition">
+            <i class="fa-solid fa-chevron-right text-base"></i>
+          </button>
+        </div>
+
+        <!-- البطاقة المركزية لصورة تعليق المشارك -->
+        <div class="max-w-sm sm:max-w-md mx-auto">
+          <div id="testimonialCardBox" class="testimonial-pop relative aspect-[4/5] rounded-[28px] bg-[#0B1142] border-2 border-sky-200/80 shadow-[0_0_45px_rgba(56,189,248,0.38)] p-3 flex flex-col justify-between overflow-hidden">
+            <!-- إطار داخلي أنيق -->
+            <div class="w-full h-full rounded-[20px] border border-sky-400/25 flex flex-col items-center justify-between p-5 relative">
+              <div class="w-full flex justify-end">
+                <span id="testimonialTopBadge" class="font-en text-[10px] font-bold tracking-widest text-sky-300/70 bg-sky-400/10 px-2.5 py-1 rounded-full border border-sky-400/20">
+                  VERIFIED #01
+                </span>
+              </div>
+
+              <!-- مساحة عرض صورة تعليق المشارك الحقيقية -->
+              <div id="testimonialSlotContent" class="my-auto text-center px-3">
+                <div class="w-14 h-14 rounded-2xl bg-sky-500/10 border border-sky-400/30 text-sky-300 flex items-center justify-center text-xl mx-auto mb-3">
+                  <i class="fa-regular fa-image"></i>
+                </div>
+                <p id="testimonialPlaceholderLabel" class="text-sm sm:text-base font-extrabold text-white/90">
+                  صورة تعليق مشارك 01
+                </p>
+                <p class="text-[11px] text-sky-200/60 mt-1">
+                  مساحة مخصصة لإدراج لقطة شاشة لتعليق حقيقي من المشاركين
+                </p>
+              </div>
+
+              <!-- التذييل السفلي للبطاقة المطابق للصورة -->
+              <div class="w-full flex items-center justify-between gap-2 pt-2">
+                <div class="flex items-center gap-2 text-xs sm:text-sm font-extrabold text-white">
+                  <span class="w-5 h-5 rounded-full border border-sky-400 text-sky-300 flex items-center justify-center text-[10px]">
+                    <i class="fa-solid fa-check"></i>
+                  </span>
+                  <span id="testimonialVerifiedLabel">رأي مشارك موثّق #01</span>
+                </div>
+
+                <span class="font-en text-[10px] sm:text-xs font-extrabold tracking-wider px-3.5 py-1 rounded-full bg-sky-400/10 border border-sky-400/35 text-sky-300">
+                  SCREENSHOT
+                </span>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- القسم الثامن: الأسئلة الشائعة FAQ -->
+    <section class="py-16 bg-slate-50 border-t border-slate-200/70 px-4 reveal">
+      <div class="max-w-3xl mx-auto">
+        <div class="text-center mb-8">
+          <h2 class="text-2xl sm:text-3xl font-black text-brand-950">الأسئلة الشائعة <span class="text-gold-gradient">FAQ</span></h2>
+        </div>
+        <div id="faqContainer" class="space-y-3"></div>
+      </div>
+    </section>
+
+    <!-- التذييل Footer -->
+    <footer class="bg-white border-t border-slate-200 py-8 px-4 text-center text-xs text-slate-500">
+      <p class="font-bold text-slate-700 mb-2">Excellence Academy – أكاديمية إكسيلانس للتدريب والتعليم</p>
+      <div class="flex justify-center gap-4 mb-3">
+        <button type="button" onclick="openLegal('privacy')" class="hover:text-sky-600">سياسة الخصوصية</button>
+        <button type="button" onclick="openLegal('terms')" class="hover:text-sky-600">الشروط والأحكام</button>
+        <button type="button" onclick="openLegal('refund')" class="hover:text-sky-600">سياسة الاسترجاع</button>
+      </div>
+      <p>© 2026 جميع الحقوق محفوظة لبرنامج هندسة الحياة.</p>
+    </footer>
+  </main>
+
+  <!-- ========================================================= -->
+  <!-- 3. واجهة الباقات + الشريط المنحني السفلي (داخل قسم الباقات فقط) -->
+  <!-- ========================================================= -->
+  <section id="section-packages" class="app-section flex-grow pt-6 pb-32 px-4 bg-white">
+    <div class="max-w-4xl mx-auto">
+      
+      <div class="flex items-center justify-between mb-6">
+        <button type="button" onclick="switchSection('home')" class="text-xs font-extrabold text-slate-600 hover:text-sky-700 flex items-center gap-1.5">
+          <i class="fa-solid fa-arrow-right"></i>
+          <span>الرئيسية</span>
+        </button>
+        <button type="button" onclick="openComparisonModal()" class="text-xs font-extrabold text-brand-900 bg-sky-50 border border-sky-400 px-3.5 py-1.5 rounded-full hover:bg-sky-100 transition">
+          <i class="fa-solid fa-table-columns text-sky-600 ml-1"></i> جدول المقارنة الشامل
+        </button>
+      </div>
+
+      <!-- بطاقة عرض الباقة المختارة حالياً -->
+      <div id="pkgGlowWrapper" class="package-glow-wrapper pkg-theme-silver">
+        <div id="activePackageCard" class="relative z-10 bg-white rounded-[30px] border-2 border-slate-400 p-6 sm:p-8 shadow-xl"></div>
+      </div>
+
+      <!-- قسم العرض ثلاثي الأبعاد التفاعلي الخاص بباقة GOLD BOX فقط -->
+      <div id="gold3DContainerWrapper" class="mt-8 hidden">
+        <div class="text-center max-w-2xl mx-auto mb-5">
+          <span class="inline-flex items-center gap-1.5 text-xs font-extrabold text-amber-800 bg-amber-100 border border-amber-300 px-3.5 py-1 rounded-full">
+            <i class="fa-solid fa-cube text-amber-600"></i> معاينة تفاعلية 360° لمكونات Gold Box
+          </span>
+          <h3 class="text-xl sm:text-2xl font-black text-slate-900 mt-2">
+            استكشف <span class="text-amber-600">GOLD BOX</span> بتقنية 3D
+          </h3>
+          <p class="text-xs sm:text-sm text-slate-600 mt-1">
+            افتح الغطاء واضغط على أي قطعة داخل البوكس لتخرج وتدور أمامك لمدة 15 ثانية ثم تعود لمكانها تلقائياً.
+          </p>
+        </div>
+
+        <div class="showcase-3d-wrapper rounded-[30px] border-2 border-amber-400 shadow-2xl" id="stage-container">
+          <!-- ترويسة علوية -->
+          <div class="absolute top-3.5 right-3.5 left-3.5 z-20 flex flex-wrap items-center justify-between gap-2 pointer-events-none">
+            <div class="luxury-glass-3d rounded-2xl px-3.5 py-2 pointer-events-auto flex items-center gap-2.5">
+              <div class="w-9 h-9 rounded-xl bg-gradient-to-br from-amber-300 via-amber-500 to-amber-700 flex items-center justify-center shadow-lg shrink-0">
+                <span class="font-en font-extrabold text-slate-950 text-sm tracking-tighter">EA</span>
+              </div>
+              <div>
+                <div class="flex items-center gap-2">
+                  <h4 class="text-xs sm:text-sm font-extrabold text-amber-300">التجربة الكاملة GOLD BOX</h4>
+                  <span class="hidden sm:inline-block text-[10px] font-bold px-2 py-0.5 rounded-full bg-amber-400/20 text-amber-200 border border-amber-400/30">عرض 3D تفاعلي</span>
+                </div>
+                <p class="text-[10px] sm:text-xs text-slate-300">اضغط على أي قطعة داخل البوكس لمعاينتها 15 ثانية</p>
+              </div>
+            </div>
+
+            <div id="hover-pill" class="luxury-glass-3d rounded-full px-3.5 py-1 text-xs font-bold text-amber-200 opacity-0 transition-opacity duration-200 pointer-events-none">
+              معاينة: <span id="hover-title" class="text-white">البوكس الذهبي</span>
+            </div>
+          </div>
+
+          <!-- القائمة الجانبية لمحتويات البوكس -->
+          <aside id="parts-drawer" class="absolute top-20 bottom-20 right-3.5 w-64 sm:w-72 luxury-glass-3d rounded-2xl z-20 flex flex-col overflow-hidden transition-transform duration-300 translate-x-[120%] lg:translate-x-0">
+            <div class="p-3 border-b border-amber-400/20 flex items-center justify-between">
+              <div>
+                <h4 class="text-xs font-extrabold text-amber-300">محتويات البوكس المرتبة (16 عنصر)</h4>
+                <p class="text-[10px] text-slate-400">اضغط على أي عنصر لمعاينته 15 ثانية</p>
+              </div>
+              <button id="close-drawer" class="lg:hidden text-slate-300 hover:text-white p-1">✕</button>
+            </div>
+            <div id="parts-list" class="flex-1 overflow-y-auto p-2 space-y-1"></div>
+          </aside>
+
+          <!-- بطاقة تفاصيل القطعة المختارة -->
+          <div id="detail-card" class="absolute top-20 left-3.5 w-64 sm:w-72 luxury-glass-3d rounded-2xl p-3.5 z-20 transition-all duration-300 opacity-0 -translate-x-8 pointer-events-none">
+            <div class="flex items-center justify-between mb-1.5">
+              <span id="detail-badge" class="text-[10px] font-bold px-2.5 py-0.5 rounded-full bg-amber-500/20 text-amber-300 border border-amber-400/30">محتوى البوكس</span>
+              <button id="close-detail" class="text-slate-400 hover:text-white text-sm p-1">✕</button>
+            </div>
+            <h4 id="detail-title" class="text-sm font-extrabold text-amber-200 mb-1">اسم القطعة</h4>
+            <p id="detail-desc" class="text-[11px] text-slate-200/90 leading-relaxed mb-2.5">
+              وصف تفصيلي للأداة ومواصفات الطباعة الفاخرة.
+            </p>
+            <div id="inspect-timer-wrap" class="hidden mb-2.5">
+              <div class="flex items-center justify-between text-[10px] font-bold text-amber-300 mb-1">
+                <span>✨ معاينة تفاعلية (تعود لمكانها تلقائياً)</span>
+                <span id="inspect-countdown">15 ث</span>
+              </div>
+              <div class="w-full h-1.5 bg-slate-800 rounded-full overflow-hidden">
+                <div id="inspect-progress-bar" class="h-full bg-gradient-to-l from-amber-300 to-yellow-600 transition-all duration-100" style="width: 100%"></div>
+              </div>
+            </div>
+            <div class="flex items-center justify-between pt-2 border-t border-amber-400/20 text-[10px]">
+              <span id="detail-spec" class="text-slate-400">طباعة فاخرة</span>
+              <button id="return-now-btn" class="text-amber-300 hover:text-amber-200 font-bold underline underline-offset-4">إرجاعها الآن</button>
+            </div>
+          </div>
+
+          <!-- شريط التحكم السفلي للـ 3D -->
+          <div class="absolute bottom-3.5 right-3.5 left-3.5 z-20 flex justify-center pointer-events-none">
+            <div class="luxury-glass-3d rounded-2xl p-2 pointer-events-auto flex flex-wrap items-center justify-center gap-1.5 sm:gap-2">
+              <button id="open-drawer-btn" class="lg:hidden sky-pill-3d px-3 py-1.5 rounded-xl text-xs font-bold flex items-center gap-1">
+                <span>☰</span> المحتويات
+              </button>
+
+              <button id="btn-toggle-lid" style="background: linear-gradient(135deg, #FDE047 0%, #EAB308 55%, #CA8A04 100%); border-color: #FEF9C3; color: #090D16;" class="glow-btn px-4 py-2 rounded-xl text-xs flex items-center gap-1.5">
+                <i class="fa-solid fa-crown text-[11px]"></i>
+                <span id="lid-btn-text">إغلاق غطاء البوكس</span>
+              </button>
+
+              <button id="btn-showcase" class="sky-pill-3d px-3 py-1.5 rounded-xl text-xs font-bold flex items-center gap-1.5">
+                <span>✨</span>
+                <span id="showcase-btn-text">استعراض كل المحتويات</span>
+              </button>
+
+              <button id="btn-empty" class="sky-pill-3d px-3 py-1.5 rounded-xl text-xs font-bold flex items-center gap-1.5">
+                <span>📐</span>
+                <span>معاينة البوكس فارغاً</span>
+              </button>
+
+              <button id="btn-reset" class="sky-pill-3d px-2.5 py-1.5 rounded-xl text-xs font-bold" title="إعادة ضبط الزاوية">
+                ↺
+              </button>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- الشريط المنحني السفلي الثابت للتنقل بين الباقات بالدائرة المضيئة العائمة (موجود في قسم الباقات فقط) -->
+    <div class="fixed bottom-4 left-1/2 -translate-x-1/2 z-40 w-[94%] max-w-md px-2">
+      <div class="nav-dock-container relative rounded-full h-[68px] px-4 flex items-center justify-around">
+        <!-- الدائرة المضيئة العائمة المتحركة -->
+        <div id="floatingNavIndicator" class="nav-floating-circle"></div>
+
+        <!-- الباقة البرونزية -->
+        <button id="tab-bronze" type="button" onclick="selectPackageTab('bronze')" class="relative z-20 flex flex-col items-center justify-center w-24 h-full focus:outline-none">
+          <div id="icon-wrap-bronze" class="transition-transform duration-300 flex items-center justify-center">
+            <i class="fa-solid fa-medal text-xl transition-all duration-300 text-slate-400"></i>
+          </div>
+          <span id="label-bronze" class="text-[11px] font-black mt-1 transition-colors duration-300 text-slate-400">البرونزية</span>
+        </button>
+
+        <!-- الباقة الفضية -->
+        <button id="tab-silver" type="button" onclick="selectPackageTab('silver')" class="relative z-20 flex flex-col items-center justify-center w-24 h-full focus:outline-none">
+          <div id="icon-wrap-silver" class="transition-transform duration-300 flex items-center justify-center">
+            <i class="fa-solid fa-gem text-xl transition-all duration-300 text-slate-400"></i>
+          </div>
+          <span id="label-silver" class="text-[11px] font-black mt-1 transition-colors duration-300 text-slate-400">الفضية</span>
+        </button>
+
+        <!-- الباقة الذهبية -->
+        <button id="tab-gold" type="button" onclick="selectPackageTab('gold')" class="relative z-20 flex flex-col items-center justify-center w-24 h-full focus:outline-none">
+          <div id="icon-wrap-gold" class="transition-transform duration-300 flex items-center justify-center">
+            <i class="fa-solid fa-crown text-xl transition-all duration-300 text-slate-400"></i>
+          </div>
+          <span id="label-gold" class="text-[11px] font-black mt-1 transition-colors duration-300 text-slate-400">الذهبية</span>
+        </button>
+      </div>
+    </div>
+  </section>
+
+  <!-- ========================================================= -->
+  <!-- 4. واجهة إتمام الطلب Checkout الفعلي -->
+  <!-- ========================================================= -->
+  <section id="section-checkout" class="app-section flex-grow py-10 px-4 bg-slate-50">
+    <div class="max-w-xl mx-auto">
+      <button type="button" onclick="switchSection('packages')" class="mb-5 text-xs font-extrabold text-sky-700 flex items-center gap-1.5">
+        <i class="fa-solid fa-arrow-right"></i>
+        <span>العودة لاختيار الباقة</span>
+      </button>
+
+      <div class="bg-white rounded-3xl border border-sky-200 shadow-xl overflow-hidden">
+        <div class="bg-gradient-to-l from-sky-600 to-blue-700 text-white p-6">
+          <span class="text-xs font-bold text-sky-100">أكاديمية إكسيلانس – هندسة الحياة</span>
+          <h2 class="text-2xl font-black mt-1">إتمام طلب الاشتراك</h2>
+        </div>
+
+        <form id="checkoutForm" onsubmit="handleOrderSubmit(event)" class="p-6 space-y-4">
+          <div class="bg-sky-50 border border-sky-200 rounded-2xl p-4 flex items-center justify-between">
+            <div>
+              <span class="text-[11px] font-bold text-slate-500 block">الباقة المختارة:</span>
+              <select id="checkoutPkgSelect" onchange="syncCheckoutPackage()" class="mt-1 bg-white border border-sky-200 rounded-xl px-3 py-1.5 text-sm font-black text-slate-900">
+                <option value="bronze">الباقة البرونزية (BRONZE)</option>
+                <option value="silver">الباقة الفضية (SILVER)</option>
+                <option value="gold">الباقة الذهبية (GOLD BOX)</option>
+              </select>
+            </div>
+            <div class="text-left">
+              <span class="text-[11px] font-bold text-slate-500 block">السعر:</span>
+              <span id="checkoutPriceDisplay" class="text-2xl font-black text-sky-700">6,900 دج</span>
+              <span id="checkoutFreeShipping" class="hidden text-[11px] font-extrabold text-emerald-600 block">+ توصيل مجاني</span>
+            </div>
+          </div>
+
+          <div class="grid grid-cols-1 sm:grid-cols-2 gap-3.5">
+            <div>
+              <label class="block text-xs font-extrabold text-slate-800 mb-1">الاسم الكامل *</label>
+              <input type="text" id="orderName" required placeholder="أدخل اسمك الكامل" class="w-full px-3.5 py-2.5 rounded-xl border border-slate-300 text-sm">
+            </div>
+            <div>
+              <label class="block text-xs font-extrabold text-slate-800 mb-1">رقم الهاتف *</label>
+              <input type="tel" id="orderPhone" required placeholder="0550000000" class="w-full px-3.5 py-2.5 rounded-xl border border-slate-300 text-sm" dir="ltr">
+            </div>
+          </div>
+
+          <div class="grid grid-cols-1 sm:grid-cols-3 gap-3.5">
+            <div>
+              <label class="block text-xs font-extrabold text-slate-800 mb-1">البريد الإلكتروني (اختياري)</label>
+              <input type="email" id="orderEmail" placeholder="email@domain.com" class="w-full px-3.5 py-2.5 rounded-xl border border-slate-300 text-sm" dir="ltr">
+            </div>
+            <div>
+              <label class="block text-xs font-extrabold text-slate-800 mb-1">البلد *</label>
+              <input type="text" id="orderCountry" required value="الجزائر" class="w-full px-3.5 py-2.5 rounded-xl border border-slate-300 text-sm">
+            </div>
+            <div>
+              <label class="block text-xs font-extrabold text-slate-800 mb-1">الولاية *</label>
+              <input type="text" id="orderWilaya" required placeholder="اسم الولاية" class="w-full px-3.5 py-2.5 rounded-xl border border-slate-300 text-sm">
+            </div>
+          </div>
+
+          <!-- عنوان التوصيل يظهر ويصبح إلزامياً فقط عند اختيار Gold Box -->
+          <div id="goldShippingBox" class="hidden bg-sky-50/80 border border-sky-300 rounded-2xl p-4 space-y-3">
+            <p class="text-xs font-black text-sky-800"><i class="fa-solid fa-truck-fast ml-1"></i> معلومات التوصيل المنزلي المجاني لـ Gold Box:</p>
+            <div class="grid grid-cols-1 sm:grid-cols-2 gap-3">
+              <div>
+                <label class="block text-xs font-bold text-slate-700 mb-1">اسم المستلم *</label>
+                <input type="text" id="orderRecipient" placeholder="اسم المستلم" class="w-full px-3 py-2 rounded-xl border border-slate-300 bg-white text-sm">
+              </div>
+              <div>
+                <label class="block text-xs font-bold text-slate-700 mb-1">عنوان التوصيل الكامل *</label>
+                <input type="text" id="orderAddress" placeholder="البلدية / الحي / العنوان" class="w-full px-3 py-2 rounded-xl border border-slate-300 bg-white text-sm">
+              </div>
+            </div>
+          </div>
+
+          <div>
+            <label class="block text-xs font-extrabold text-slate-800 mb-1.5">طريقة الدفع المعتمدة *</label>
+            <div id="checkoutPaymentList" class="space-y-2"></div>
+          </div>
+
+          <div>
+            <label class="block text-xs font-extrabold text-slate-800 mb-1">ملاحظات إضافية (اختياري)</label>
+            <textarea id="orderNotes" rows="2" placeholder="أي ملاحظة إضافية..." class="w-full px-3.5 py-2 rounded-xl border border-slate-300 text-sm"></textarea>
+          </div>
+
+          <button type="submit" class="glow-btn w-full py-4 text-base">
+            <i class="fa-solid fa-circle-check"></i>
+            <span>تأكيد الطلب الآن</span>
+          </button>
+        </form>
+      </div>
+    </div>
+  </section>
+
+  <!-- ========================================================= -->
+  <!-- 5. واجهة تأكيد الطلب Order Confirmation -->
+  <!-- ========================================================= -->
+  <section id="section-confirmation" class="app-section flex-grow py-12 px-4">
+    <div class="max-w-lg mx-auto bg-white rounded-3xl border border-sky-200 shadow-xl p-7 text-center">
+      <div class="w-16 h-16 rounded-full bg-emerald-100 text-emerald-600 flex items-center justify-center text-3xl mx-auto mb-4">
+        <i class="fa-solid fa-check"></i>
+      </div>
+      <h2 class="text-2xl font-black text-slate-900 mb-2">تم تسجيل طلبك بنجاح!</h2>
+      <p class="text-xs sm:text-sm text-slate-600 mb-6">احتفظ برقم طلبك، وسيتواصل معك فريق Excellence Academy لتأكيد اشتراكك.</p>
+      <div id="orderConfirmationDetails" class="bg-slate-50 border border-slate-200 rounded-2xl p-4 text-right space-y-2 text-xs sm:text-sm mb-6"></div>
+      <button type="button" onclick="switchSection('home')" class="glow-btn px-8 py-3 text-sm">العودة إلى الرئيسية</button>
+    </div>
+  </section>
+
+  <!-- ========================================================= -->
+  <!-- 6. لوحة تحكم الإدارة Admin Dashboard -->
+  <!-- ========================================================= -->
+  <section id="section-admin" class="app-section flex-grow py-8 px-4 max-w-6xl mx-auto w-full">
+    <div class="bg-sky-700 text-white rounded-3xl p-6 mb-6 flex flex-col sm:flex-row sm:items-center justify-between gap-4">
+      <div>
+        <span class="text-xs font-bold text-sky-200">Excellence Academy CMS</span>
+        <h2 class="text-2xl font-black">لوحة تحكم الإدارة</h2>
+      </div>
+      <div class="flex gap-2">
+        <button type="button" onclick="exportOrdersCSV()" class="px-4 py-2 rounded-xl bg-emerald-500 hover:bg-emerald-600 text-white text-xs font-bold">تصدير CSV</button>
+        <button type="button" onclick="switchSection('home')" class="px-4 py-2 rounded-xl bg-white/15 hover:bg-white/25 text-white text-xs font-bold">خروج</button>
+      </div>
+    </div>
+
+    <div class="bg-white rounded-3xl border border-slate-200 p-6 shadow-sm mb-6">
+      <h3 class="text-base font-black text-slate-900 mb-4">إدارة الطلبات المستلمة (<span id="adminOrderCount">0</span>)</h3>
+      <div class="overflow-x-auto">
+        <table class="w-full text-right border-collapse min-w-[680px] text-xs">
+          <thead>
+            <tr class="bg-slate-100 text-slate-800 font-black">
+              <th class="p-3">رقم الطلب</th>
+              <th class="p-3">العميل</th>
+              <th class="p-3">الباقة</th>
+              <th class="p-3">الولاية / التوصيل</th>
+              <th class="p-3">الدفع</th>
+              <th class="p-3">الحالة</th>
+            </tr>
+          </thead>
+          <tbody id="adminOrdersBody" class="divide-y divide-slate-100"></tbody>
+        </table>
+      </div>
+    </div>
+
+    <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
+      <div class="bg-white rounded-3xl border border-slate-200 p-6 shadow-sm space-y-3">
+        <h3 class="text-base font-black text-slate-900">تعديل الأسعار</h3>
+        <div class="grid grid-cols-3 gap-2">
+          <div><label class="text-[11px] font-bold">Bronze</label><input type="number" id="admPriceBronze" value="4900" class="w-full p-2 border rounded-xl text-xs font-bold"></div>
+          <div><label class="text-[11px] font-bold">Silver</label><input type="number" id="admPriceSilver" value="6900" class="w-full p-2 border rounded-xl text-xs font-bold"></div>
+          <div><label class="text-[11px] font-bold">Gold Box</label><input type="number" id="admPriceGold" value="12900" class="w-full p-2 border rounded-xl text-xs font-bold"></div>
+        </div>
+        <button type="button" onclick="updatePricesFromAdmin()" class="px-5 py-2.5 rounded-xl bg-sky-600 text-white text-xs font-bold">حفظ الأسعار</button>
+      </div>
+
+      <div class="bg-white rounded-3xl border border-slate-200 p-6 shadow-sm space-y-2.5">
+        <h3 class="text-base font-black text-slate-900">تفعيل / تعطيل وسائل الدفع</h3>
+        <div id="adminPaymentSwitches" class="space-y-2"></div>
+      </div>
+    </div>
+  </section>
+
+  <!-- نافذة منبثقة عامة -->
+  <div id="modalOverlay" class="hidden fixed inset-0 z-50 bg-slate-900/70 backdrop-blur-sm flex items-center justify-center p-4">
+    <div class="bg-white rounded-3xl max-w-2xl w-full p-6 max-h-[88vh] overflow-y-auto relative shadow-2xl">
+      <button type="button" onclick="closeModal()" class="absolute top-4 left-4 w-8 h-8 rounded-full bg-slate-100 hover:bg-slate-200 flex items-center justify-center text-slate-600">
+        <i class="fa-solid fa-xmark"></i>
+      </button>
+      <div id="modalBody"></div>
+    </div>
+  </div>
+
+  <script>
+    // =========================================================
+    // البيانات الأساسية لبرنامج هندسة الحياة
+    // =========================================================
+    const packagesData = {
+      bronze: {
+        key: 'bronze',
+        badge: 'BRONZE',
+        name: 'الباقة البرونزية',
+        price: 4900,
+        slogan: 'ابدأ رحلة التغيير من أي مكان.',
+        desc: 'الخيار المناسب لمن يريد الاستفادة من المحتوى التدريبي الرقمي والانطلاق في رحلة تطوير ذاته وتخطيط مستقبله.',
+        videoTitle: 'فيديو توضيحي: محتوى الباقة البرونزية وكيفية الاستفادة من المنصة الرقمية',
+        btnText: 'اشترك في الباقة البرونزية',
+        items: [
+          'الوصول إلى المحتوى الرقمي للدورة.',
+          'مشاهدة الفيديوهات التعليمية.',
+          'الموارد والملفات الرقمية المرافقة.',
+          'شهادة مشاركة إلكترونية.',
+          'مزايا: تعلم مرن، الوصول إلى المحتوى الرقمي، تطبيق المعرفة بشكل ذاتي، الاستفادة من الموارد الإلكترونية.'
+        ]
+      },
+      silver: {
+        key: 'silver',
+        badge: 'SILVER',
+        name: 'الباقة الفضية',
+        price: 6900,
+        slogan: 'تعلّم، طبّق، وتابع تقدمك.',
+        desc: 'تجربة تجمع بين المحتوى الرقمي والأدوات العملية المطبوعة، مع متابعة تساعدك على تحويل التعلم إلى تطبيق.',
+        videoTitle: 'فيديو توضيحي: معاينة دفتر التخطيط الاستراتيجي ودفتر الفوائد المطبوعين',
+        btnText: 'اشترك في الباقة الفضية',
+        items: [
+          'كل ما تتضمنه الباقة البرونزية (المحتوى الرقمي + الفيديوهات + الموارد + الشهادة).',
+          'دفتر عملي مطبوع للتخطيط الاستراتيجي الشخصي.',
+          'دفتر الفوائد لتدوين الأفكار والتطبيقات.',
+          'متابعة ومرافقة لمدة شهر كامل.'
+        ]
+      },
+      gold: {
+        key: 'gold',
+        badge: 'GOLD BOX',
+        name: 'الباقة الذهبية (Gold Box)',
+        price: 12900,
+        slogan: 'التجربة المتكاملة لهندسة حياتك.',
+        desc: 'تجربة مميزة تجمع بين التعلم الرقمي، والأدوات المطبوعة، وصندوق التخطيط الاستراتيجي، والمتابعة والمرافقة الشخصية.',
+        videoTitle: 'فيديو فتح الصندوق (Unboxing): استعراض مكونات Gold Box الـ 19 بالتفصيل',
+        btnText: 'احصل على Gold Box الآن',
+        items: [
+          'كل ما تتضمنه الباقة الفضية، بالإضافة إلى تجربة Gold Box التي تشمل:',
+          '1. صندوق التخطيط الاستراتيجي الشخصي.',
+          '2. خارطة طريق الدورة.',
+          '3. بطاقة الدخول لمشاهدة فيديوهات الدورة.',
+          '4. دفتر عملي للتخطيط الاستراتيجي الشخصي.',
+          '5. دفتر الفوائد.',
+          '6. عجلة الحياة.',
+          '7. جدارية بنك الأحلام.',
+          '8. جدارية المتحف الشخصي.',
+          '9. جدارية خطتي الشخصية.',
+          '10. 40 بطاقة تحفيزية.',
+          '11. مكتبة رحلتي التعليمية.',
+          '12. فاصلة كتاب.',
+          '13. شهادة المشاركة.',
+          '14. تطبيقان على الهاتف.',
+          '15. بطاقة الدعم والمتابعة.',
+          '16. متابعة لمدة ثلاثة أشهر.',
+          '17. جلسات استشارية فردية.',
+          '18. هدية خاصة: جواز سفر أحلامي.',
+          '19. توصيل مجاني إلى المنزل.'
+        ]
+      }
+    };
+
+    const faqData = [
+      { q: '1. ما هو برنامج هندسة الحياة؟', a: 'برنامج تدريبي يدمج بين التخطيط الاستراتيجي الشخصي وتطوير المهارات الجوهرية والقيادية لمساعدة المشارك على فهم واقعه، وتحديد اتجاهه، وبناء استراتيجية شخصية ومهنية وتحويلها إلى خطوات عملية قابلة للتنفيذ والقياس.' },
+      { q: '2. هل البرنامج مناسب للمدراء وأصحاب المشاريع؟', a: 'نعم، البرنامج مصمم للمدراء التنفيذيين، أصحاب المؤسسات والمشاريع، رواد الأعمال، مسؤولي الفرق وقادة العمل، والموظفين الطموحين.' },
+      { q: '3. هل أحتاج إلى خبرة سابقة في التخطيط الاستراتيجي؟', a: 'لا، يبدأ البرنامج معك من اكتشاف الذات وفهم الواقع خطوة بخطوة.' },
+      { q: '4. هل يمكنني متابعة الدورة من الهاتف؟', a: 'نعم، المحتوى الرقمي والفيديوهات التعليمية متاحة للمتابعة عبر الهاتف أو الحاسوب.' },
+      { q: '5. ما الفرق بين الباقات الثلاث؟', a: 'البرونزية (4,900 دج) للمحتوى الرقمي؛ الفضية (6,900 دج) تضيف الدفترين المطبوعين ومتابعة شهر؛ الذهبية Gold Box (12,900 دج) تضم 19 عنصرًا متكاملًا مع متابعة 3 أشهر وجلسات استشارية فردية وتوصيل مجاني.' },
+      { q: '6. ماذا تتضمن الباقة البرونزية؟', a: 'الوصول إلى المحتوى الرقمي للدورة، مشاهدة الفيديوهات التعليمية، الموارد والملفات الرقمية المرافقة، وشهادة مشاركة إلكترونية.' },
+      { q: '7. ما الذي يميز الباقة الفضية؟', a: 'تتضمن محتوى الباقة البرونزية بالإضافة إلى دفتر عملي مطبوع للتخطيط الاستراتيجي الشخصي، دفتر الفوائد، ومتابعة ومرافقة لمدة شهر كامل.' },
+      { q: '8. ماذا يوجد داخل Gold Box؟', a: 'يحتوي على 19 عنصرًا تشمل صندوق التخطيط الاستراتيجي، خارطة طريق الدورة، بطاقة الدخول، دفتر التخطيط، دفتر الفوائد، عجلة الحياة، 3 جداريات، 40 بطاقة تحفيزية، مكتبة رحلتي التعليمية، فاصلة كتاب، شهادة المشاركة، تطبيقين على الهاتف، بطاقة الدعم، متابعة 3 أشهر، جلسات استشارية فردية، هدية جواز سفر أحلامي، وتوصيل مجاني.' },
+      { q: '9. كيف أحصل على الصندوق الذهبي؟', a: 'اختر باقة Gold Box واضغط على «احصل على Gold Box الآن» ثم املأ بياناتك وعنوان التوصيل في نموذج الطلب.' },
+      { q: '10. هل التوصيل مجاني؟', a: 'نعم، التوصيل المنزلي مجاني للباقة الذهبية Gold Box.' },
+      { q: '11. كم مدة المتابعة في كل باقة؟', a: 'البرونزية: تعلم ذاتي؛ الفضية: متابعة لمدة شهر كامل؛ Gold Box: متابعة لمدة ثلاثة أشهر.' },
+      { q: '12. هل توجد جلسات استشارية فردية؟', a: 'نعم، الجلسات الاستشارية الفردية متوفرة ضمن مزايا باقة Gold Box.' },
+      { q: '13. كيف أحصل على شهادة المشاركة؟', a: 'تُمنح شهادة مشاركة إلكترونية في الباقة البرونزية، وشهادة مشاركة وفق صيغة الباقة المعتمدة في الفضية والذهبية.' },
+      { q: '14. كيف يمكنني إتمام عملية التسجيل والدفع؟', a: 'عبر تعبئة نموذج الطلب في المتجر وتأكيد طلبك للحصول على رقم الطلب ووسيلة الدفع المعتمدة.' },
+      { q: '15. كيف أتواصل مع فريق الأكاديمية؟', a: 'بعد إرسال طلبك أو عبر القنوات الرسمية المعتمدة لأكاديمية إكسيلانس.' }
+    ];
+
+    // خانات آراء المشاركين القابلة للإضافة بصور حقيقية بدون نصوص وهمية
+    const testimonialsSlots = [
+      { code: '01', imageUrl: '' },
+      { code: '02', imageUrl: '' },
+      { code: '03', imageUrl: '' },
+      { code: '04', imageUrl: '' }
+    ];
+    let currentTestimonialIdx = 0;
+
+    let activePkgKey = 'silver';
+    let ordersList = [];
+    let paymentOptions = [
+      { id: 'bank', label: 'التحويل البنكي أو البريدي', enabled: true },
+      { id: 'cod', label: 'الدفع عند الاستلام (خاص بـ Gold Box)', enabled: true },
+      { id: 'online', label: 'الدفع الإلكتروني', enabled: false }
+    ];
+
+    // =========================================================
+    // التهيئة عند فتح الصفحة
+    // =========================================================
+    function initApp() {
+      // إخفاء شاشة البداية بسلاسة
+      setTimeout(() => {
+        const splash = document.getElementById('splashScreen');
+        if (splash) {
+          splash.style.opacity = '0';
+          setTimeout(() => { splash.style.display = 'none'; }, 900);
+        }
+      }, 1300);
+
+      // تعبئة الأسئلة الشائعة
+      const faqContainer = document.getElementById('faqContainer');
+      if (faqContainer) {
+        faqContainer.innerHTML = faqData.map((item, i) => `
+          <div class="bg-white border border-slate-200 hover:border-sky-400 rounded-2xl overflow-hidden shadow-sm transition">
+            <button type="button" onclick="toggleFAQItem(${i})" class="w-full p-4 text-right flex items-center justify-between gap-3 font-extrabold text-xs sm:text-sm text-slate-900">
+              <span>${item.q}</span>
+              <i id="faqIcon-${i}" class="fa-solid fa-chevron-down text-sky-600 text-xs transition-transform duration-300"></i>
+            </button>
+            <div id="faqAns-${i}" class="hidden px-4 pb-4 text-xs sm:text-sm text-slate-600 leading-relaxed border-t border-slate-100 pt-2.5">
+              ${item.a}
+            </div>
+          </div>
+        `).join('');
+      }
+
+      // تفعيل السكرول والباقة الافتراضية وآراء المشاركين
+      renderTestimonialCard();
+      selectPackageTab('silver');
+      initRevealOnScroll();
+      initGoldBox3DShowcase();
+    }
+
+    if (document.readyState === 'loading') {
+      document.addEventListener('DOMContentLoaded', initApp);
+    } else {
+      initApp();
+    }
+
+    function renderTestimonialCard() {
+      const slot = testimonialsSlots[currentTestimonialIdx];
+      const total = testimonialsSlots.length;
+      const numEl = document.getElementById('testimonialCurrentNum');
+      const totEl = document.getElementById('testimonialTotalNum');
+      const topBadge = document.getElementById('testimonialTopBadge');
+      const verifiedLabel = document.getElementById('testimonialVerifiedLabel');
+      const slotContent = document.getElementById('testimonialSlotContent');
+      const cardBox = document.getElementById('testimonialCardBox');
+
+      if (numEl) numEl.textContent = currentTestimonialIdx + 1;
+      if (totEl) totEl.textContent = total;
+      if (topBadge) topBadge.textContent = `VERIFIED #${slot.code}`;
+      if (verifiedLabel) verifiedLabel.textContent = `رأي مشارك موثّق #${slot.code}`;
+
+      if (slotContent) {
+        if (slot.imageUrl) {
+          slotContent.innerHTML = `<img src="${slot.imageUrl}" alt="رأي مشارك موثق #${slot.code}" class="w-full h-full object-contain rounded-xl">`;
+        } else {
+          slotContent.innerHTML = `
+            <div class="w-14 h-14 rounded-2xl bg-sky-500/10 border border-sky-400/30 text-sky-300 flex items-center justify-center text-xl mx-auto mb-3">
+              <i class="fa-regular fa-image"></i>
+            </div>
+            <p class="text-sm sm:text-base font-extrabold text-white/90">صورة تعليق مشارك ${slot.code}</p>
+            <p class="text-[11px] text-sky-200/60 mt-1">مساحة مخصصة لإدراج لقطة شاشة لتعليق حقيقي من المشاركين</p>
+          `;
+        }
+      }
+
+      if (cardBox) {
+        cardBox.classList.remove('testimonial-pop');
+        void cardBox.offsetWidth;
+        cardBox.classList.add('testimonial-pop');
+      }
+    }
+
+    function nextTestimonial() {
+      currentTestimonialIdx = (currentTestimonialIdx + 1) % testimonialsSlots.length;
+      renderTestimonialCard();
+    }
+
+    function prevTestimonial() {
+      currentTestimonialIdx = (currentTestimonialIdx - 1 + testimonialsSlots.length) % testimonialsSlots.length;
+      renderTestimonialCard();
+    }
+
+    function toggleFAQItem(i) {
+      const ans = document.getElementById(`faqAns-${i}`);
+      const icon = document.getElementById(`faqIcon-${i}`);
+      if (ans && icon) {
+        ans.classList.toggle('hidden');
+        icon.classList.toggle('rotate-180');
+      }
+    }
+
+    function scrollToCurriculum() {
+      const el = document.getElementById('curriculumSection');
+      if (el) el.scrollIntoView({ behavior: 'smooth' });
+    }
+
+    function initRevealOnScroll() {
+      const obs = new IntersectionObserver((entries) => {
+        entries.forEach(e => {
+          if (e.isIntersecting) e.target.classList.add('visible');
+        });
+      }, { threshold: 0.08 });
+      document.querySelectorAll('.reveal').forEach(el => obs.observe(el));
+    }
+
+    function switchSection(secId) {
+      document.querySelectorAll('.app-section').forEach(s => s.classList.remove('active'));
+      const target = document.getElementById(`section-${secId}`);
+      if (target) {
+        target.classList.add('active');
+        window.scrollTo({ top: 0, behavior: 'smooth' });
+        if (secId === 'packages') {
+          setTimeout(() => {
+            selectPackageTab(activePkgKey);
+            window.dispatchEvent(new Event('resize'));
+          }, 60);
+        }
+      }
+    }
+
+    function playMainPromoVideo() {
+      document.getElementById('mainVideoCard').innerHTML = `
+        <div class="w-full h-full bg-slate-900 flex flex-col items-center justify-center p-6 text-white text-center">
+          <i class="fa-solid fa-film text-4xl text-sky-400 mb-3"></i>
+          <h4 class="text-base sm:text-lg font-black mb-1">مشغل الفيديو التعريفي – برنامج هندسة الحياة</h4>
+          <p class="text-xs text-slate-300 max-w-md mb-4">مساحة مخصصة لعرض الفيديو التعريفي الرسمي للبرنامج من تقديم المدرب أحمد رجوح.</p>
+          <button type="button" onclick="switchSection('packages')" class="glow-btn text-xs py-2.5 px-6">استعرض الباقات الآن</button>
+        </div>
+      `;
+    }
+
+    // =========================================================
+    // واجهة الباقات + الشريط المنحني السفلي (داخل قسم الباقات فقط)
+    // =========================================================
+    function selectPackageTab(pkgKey) {
+      activePkgKey = pkgKey;
+
+      const themeStyles = {
+        bronze: {
+          themeClass: 'pkg-theme-bronze',
+          circleBg: 'linear-gradient(135deg, #F59E0B 0%, #B45309 100%)',
+          circleShadow: '0 0 24px rgba(245, 158, 11, 0.85)',
+          activeLabelColor: '#FBBF24',
+          cardClass: 'relative z-10 bg-gradient-to-br from-amber-50/90 via-white to-orange-50/70 text-slate-900 rounded-[30px] border-2 border-amber-500 p-6 sm:p-8 shadow-xl',
+          headerBorder: 'border-amber-200',
+          badgeClass: 'bg-amber-100 text-amber-800 border border-amber-300',
+          titleColor: 'text-slate-900',
+          sloganColor: 'text-amber-700',
+          priceBoxClass: 'bg-amber-100/80 border border-amber-300',
+          priceLabelColor: 'text-amber-800',
+          priceColor: 'text-amber-900',
+          descColor: 'text-slate-700',
+          videoBorder: 'border-amber-400',
+          playBtnClass: 'bg-gradient-to-br from-amber-400 to-amber-600 text-white shadow-amber-500/50',
+          secTitleColor: 'text-amber-900',
+          itemBg: 'bg-white/90 border-amber-200/80 text-slate-800',
+          checkColor: 'text-amber-600',
+          ctaStyle: 'background: linear-gradient(135deg, #D97706 0%, #92400E 100%); border-color: #FBBF24; box-shadow: 0 0 20px rgba(217, 119, 6, 0.55); color: #FFFFFF;'
+        },
+        silver: {
+          themeClass: 'pkg-theme-silver',
+          circleBg: 'linear-gradient(135deg, #E2E8F0 0%, #64748B 100%)',
+          circleShadow: '0 0 24px rgba(203, 213, 225, 0.85)',
+          activeLabelColor: '#E2E8F0',
+          cardClass: 'relative z-10 bg-gradient-to-br from-slate-100 via-white to-slate-200/70 text-slate-900 rounded-[30px] border-2 border-slate-400 p-6 sm:p-8 shadow-xl',
+          headerBorder: 'border-slate-300',
+          badgeClass: 'bg-slate-200 text-slate-800 border border-slate-400',
+          titleColor: 'text-slate-900',
+          sloganColor: 'text-slate-600',
+          priceBoxClass: 'bg-slate-200/80 border border-slate-400',
+          priceLabelColor: 'text-slate-600',
+          priceColor: 'text-slate-900',
+          descColor: 'text-slate-700',
+          videoBorder: 'border-slate-400',
+          playBtnClass: 'bg-gradient-to-br from-slate-400 to-slate-600 text-white shadow-slate-500/50',
+          secTitleColor: 'text-slate-900',
+          itemBg: 'bg-white/95 border-slate-300 text-slate-800',
+          checkColor: 'text-slate-600',
+          ctaStyle: 'background: linear-gradient(135deg, #475569 0%, #1E293B 100%); border-color: #CBD5E1; box-shadow: 0 0 20px rgba(100, 116, 139, 0.55); color: #FFFFFF;'
+        },
+        gold: {
+          themeClass: 'pkg-theme-gold',
+          circleBg: 'linear-gradient(135deg, #FEF08A 0%, #EAB308 60%, #CA8A04 100%)',
+          circleShadow: '0 0 28px rgba(250, 204, 21, 0.9)',
+          activeLabelColor: '#FACC15',
+          cardClass: 'relative z-10 bg-gradient-to-br from-slate-950 via-slate-900 to-amber-950 text-white rounded-[30px] border-2 border-amber-400 p-6 sm:p-8 shadow-2xl',
+          headerBorder: 'border-amber-400/25',
+          badgeClass: 'bg-amber-400/20 text-amber-300 border border-amber-400/50',
+          titleColor: 'text-white',
+          sloganColor: 'text-amber-300',
+          priceBoxClass: 'bg-amber-400/15 border border-amber-400',
+          priceLabelColor: 'text-amber-200',
+          priceColor: 'text-amber-300',
+          descColor: 'text-slate-200',
+          videoBorder: 'border-amber-400',
+          playBtnClass: 'bg-gradient-to-br from-amber-300 to-amber-500 text-slate-950 shadow-amber-400/50',
+          secTitleColor: 'text-amber-300',
+          itemBg: 'bg-white/5 border-amber-400/20 text-slate-100',
+          checkColor: 'text-amber-400',
+          ctaStyle: 'background: linear-gradient(135deg, #FDE047 0%, #EAB308 55%, #CA8A04 100%); border-color: #FEF9C3; box-shadow: 0 0 26px rgba(250, 204, 21, 0.75); color: #090D16;'
+        }
+      };
+
+      const style = themeStyles[pkgKey];
+
+      // تحريك الدائرة المضيئة العائمة بدقة فوق الزر المختار وتلوينها بلون الباقة
+      const indicator = document.getElementById('floatingNavIndicator');
+      const activeTabBtn = document.getElementById(`tab-${pkgKey}`);
+      if (indicator && activeTabBtn) {
+        const dockRect = activeTabBtn.parentElement.getBoundingClientRect();
+        const btnRect = activeTabBtn.getBoundingClientRect();
+        const centerOffset = (btnRect.left - dockRect.left) + (btnRect.width / 2) - 30;
+        indicator.style.left = `${centerOffset}px`;
+        indicator.style.background = style.circleBg;
+        indicator.style.boxShadow = style.circleShadow;
+      }
+
+      // رفع أيقونة الباقة المختارة وتغيير لون النص
+      ['bronze', 'silver', 'gold'].forEach(k => {
+        const iconWrap = document.getElementById(`icon-wrap-${k}`);
+        const label = document.getElementById(`label-${k}`);
+        const icon = iconWrap ? iconWrap.querySelector('i') : null;
+        if (k === pkgKey) {
+          if (iconWrap) iconWrap.style.transform = 'translateY(-19px)';
+          if (icon) {
+            icon.style.color = '#0B1221';
+            icon.style.transform = 'scale(1.15)';
+          }
+          if (label) label.style.color = style.activeLabelColor;
+        } else {
+          if (iconWrap) iconWrap.style.transform = 'translateY(0px)';
+          if (icon) {
+            icon.style.color = '#94A3B8';
+            icon.style.transform = 'scale(1)';
+          }
+          if (label) label.style.color = '#94A3B8';
+        }
+      });
+
+      // تحديث الإضاءة الخلفية للبطاقة بلون الباقة
+      const glowWrapper = document.getElementById('pkgGlowWrapper');
+      if (glowWrapper) {
+        glowWrapper.className = `package-glow-wrapper ${style.themeClass}`;
+      }
+
+      // إظهار العرض ثلاثي الأبعاد 3D فقط عند اختيار الباقة الذهبية Gold Box
+      const gold3DWrapper = document.getElementById('gold3DContainerWrapper');
+      if (gold3DWrapper) {
+        if (pkgKey === 'gold') {
+          gold3DWrapper.classList.remove('hidden');
+          setTimeout(() => window.dispatchEvent(new Event('resize')), 50);
+        } else {
+          gold3DWrapper.classList.add('hidden');
+        }
+      }
+
+      const pkg = packagesData[pkgKey];
+      const isGold = pkgKey === 'gold';
+      const card = document.getElementById('activePackageCard');
+      card.className = style.cardClass;
+
+      card.innerHTML = `
+        <div class="flex flex-col sm:flex-row sm:items-center justify-between gap-3 pb-5 mb-5 border-b ${style.headerBorder}">
+          <div>
+            <span class="font-en text-xs font-extrabold px-3 py-1 rounded-full ${style.badgeClass}">${pkg.badge}</span>
+            <h2 class="text-2xl sm:text-3xl font-black ${style.titleColor} mt-2">${pkg.name}</h2>
+            <p class="text-xs sm:text-sm font-extrabold ${style.sloganColor} mt-1">${pkg.slogan}</p>
+          </div>
+          <div class="${style.priceBoxClass} rounded-2xl px-5 py-3 text-center sm:text-left shrink-0">
+            <span class="text-[11px] font-bold ${style.priceLabelColor} block">سعر الباقة</span>
+            <span class="text-3xl font-black ${style.priceColor}">${pkg.price.toLocaleString()} دج</span>
+          </div>
+        </div>
+
+        <p class="text-xs sm:text-sm ${style.descColor} leading-relaxed mb-6">${pkg.desc}</p>
+
+        <!-- مشغل الفيديو المخصص للباقة -->
+        <div onclick="playPackageVideo('${pkg.key}')" id="pkgVideoBox-${pkg.key}" class="mb-6 rounded-2xl overflow-hidden bg-slate-950 border-2 ${style.videoBorder} aspect-video flex flex-col items-center justify-center p-5 text-white text-center cursor-pointer group relative">
+          <div class="w-14 h-14 rounded-full ${style.playBtnClass} flex items-center justify-center text-xl shadow-lg transition transform group-hover:scale-110 mb-2.5">
+            <i class="fa-solid fa-play ml-0.5"></i>
+          </div>
+          <h4 class="text-xs sm:text-sm font-black max-w-md">${pkg.videoTitle}</h4>
+          <span class="text-[11px] text-slate-300 mt-1">اضغط لتشغيل الفيديو التوضيحي للباقة</span>
+        </div>
+
+        ${isGold ? `
+          <div class="mb-6 bg-amber-400/15 border border-amber-400/50 rounded-2xl p-4 flex flex-col sm:flex-row items-center justify-between gap-3">
+            <div class="flex items-center gap-3">
+              <div class="w-10 h-10 rounded-xl bg-amber-400/20 border border-amber-400 text-amber-300 flex items-center justify-center text-lg shrink-0">
+                <i class="fa-solid fa-cube"></i>
+              </div>
+              <div>
+                <h4 class="text-xs sm:text-sm font-black text-white">معاينة Gold Box بتقنية 3D التفاعلية</h4>
+                <p class="text-[11px] text-amber-200">انزل للأسفل لفتح البوكس وفحص جميع محتوياته الـ 16 ثلاثية الأبعاد</p>
+              </div>
+            </div>
+            <button type="button" onclick="scrollTo3DBox()" class="px-4 py-2 rounded-full bg-amber-400 hover:bg-amber-300 text-slate-950 font-black text-xs shrink-0 transition">
+              معاينة 3D بالأسفل ↓
+            </button>
+          </div>
+        ` : ''}
+
+        <div class="mb-7">
+          <h3 class="text-sm font-black ${style.secTitleColor} mb-3">محتويات ومزايا الباقة بالتفصيل:</h3>
+          <ul class="space-y-2.5 text-xs sm:text-sm font-semibold">
+            ${pkg.items.map(item => `
+              <li class="flex items-start gap-2.5 ${style.itemBg} p-2.5 rounded-xl border">
+                <i class="fa-solid fa-circle-check ${style.checkColor} mt-1 shrink-0"></i>
+                <span>${item}</span>
+              </li>
+            `).join('')}
+          </ul>
+        </div>
+
+        <button type="button" onclick="goToCheckout('${pkg.key}')" style="${style.ctaStyle}" class="glow-btn w-full py-4 text-base">
+          <span>${pkg.btnText}</span>
+          <i class="fa-solid fa-arrow-left text-sm"></i>
+        </button>
+      `;
+    }
+
+    function playPackageVideo(key) {
+      const pkg = packagesData[key];
+      const box = document.getElementById(`pkgVideoBox-${key}`);
+      if (box) {
+        box.innerHTML = `
+          <i class="fa-solid fa-video text-3xl text-sky-400 mb-2"></i>
+          <h4 class="text-sm font-black mb-1">${pkg.videoTitle}</h4>
+          <p class="text-xs text-slate-300 max-w-sm">مساحة الفيديو المخصصة لاستعراض مكونات ${pkg.name} من تقديم Excellence Academy.</p>
+        `;
+      }
+    }
+
+    function openComparisonModal() {
+      const rows = [
+        ['المحتوى الرقمي', 'نعم', 'نعم', 'نعم'],
+        ['الفيديوهات التعليمية', 'نعم', 'نعم', 'نعم'],
+        ['الموارد الرقمية', 'نعم', 'نعم', 'نعم'],
+        ['شهادة المشاركة', 'إلكترونية', 'معتمدة', 'شهادة مشاركة'],
+        ['دفتر التخطيط المطبوع', 'لا', 'نعم', 'نعم'],
+        ['دفتر الفوائد المطبوع', 'لا', 'نعم', 'نعم'],
+        ['المتابعة', 'لا', 'شهر', '3 أشهر'],
+        ['صندوق التخطيط', 'لا', 'لا', 'نعم'],
+        ['عجلة الحياة والجداريات', 'لا', 'لا', 'نعم'],
+        ['40 بطاقة تحفيزية', 'لا', 'لا', 'نعم'],
+        ['تطبيقان للهاتف', 'لا', 'لا', 'نعم'],
+        ['جلسات استشارية فردية', 'لا', 'لا', 'نعم'],
+        ['جواز سفر أحلامي', 'لا', 'لا', 'نعم'],
+        ['التوصيل المنزلي المجاني', 'لا', 'لا', 'نعم']
+      ];
+      openModal(`
+        <h3 class="text-lg font-black text-slate-900 mb-4 text-center">جدول المقارنة الشامل بين الباقات</h3>
+        <div class="overflow-x-auto mb-5">
+          <table class="w-full text-right border-collapse text-xs">
+            <thead>
+              <tr class="bg-slate-900 text-white">
+                <th class="p-2.5 rounded-tr-xl">المزايا</th>
+                <th class="p-2.5 text-amber-400">Bronze<br><span class="text-[10px]">${packagesData.bronze.price.toLocaleString()} دج</span></th>
+                <th class="p-2.5 text-slate-300">Silver<br><span class="text-[10px]">${packagesData.silver.price.toLocaleString()} دج</span></th>
+                <th class="p-2.5 text-yellow-300 rounded-tl-xl">Gold Box<br><span class="text-[10px]">${packagesData.gold.price.toLocaleString()} دج</span></th>
+              </tr>
+            </thead>
+            <tbody class="divide-y divide-slate-200">
+              ${rows.map(r => `
+                <tr>
+                  <td class="p-2.5 font-extrabold text-slate-800">${r[0]}</td>
+                  <td class="p-2.5 font-bold ${r[1] === 'لا' ? 'text-slate-400' : 'text-amber-700'}">${r[1]}</td>
+                  <td class="p-2.5 font-bold ${r[2] === 'لا' ? 'text-slate-400' : 'text-slate-700'}">${r[2]}</td>
+                  <td class="p-2.5 font-black text-amber-600">${r[3]}</td>
+                </tr>
+              `).join('')}
+            </tbody>
+          </table>
+        </div>
+        <div class="grid grid-cols-3 gap-2">
+          <button type="button" onclick="closeModal(); goToCheckout('bronze')" class="py-2.5 rounded-xl bg-amber-600 text-white font-extrabold text-xs">اختر Bronze</button>
+          <button type="button" onclick="closeModal(); goToCheckout('silver')" class="py-2.5 rounded-xl bg-slate-600 text-white font-extrabold text-xs">اختر Silver</button>
+          <button type="button" onclick="closeModal(); goToCheckout('gold')" class="py-2.5 rounded-xl bg-slate-900 text-amber-300 font-extrabold text-xs">اختر Gold Box</button>
+        </div>
+      `);
+    }
+
+    function goToCheckout(pkgKey) {
+      activePkgKey = pkgKey || activePkgKey;
+      const selectEl = document.getElementById('checkoutPkgSelect');
+      if (selectEl) selectEl.value = activePkgKey;
+      syncCheckoutPackage();
+      switchSection('checkout');
+    }
+
+    function syncCheckoutPackage() {
+      const key = document.getElementById('checkoutPkgSelect').value;
+      const pkg = packagesData[key];
+      if (!pkg) return;
+
+      document.getElementById('checkoutPriceDisplay').textContent = `${pkg.price.toLocaleString()} دج`;
+      const isGold = key === 'gold';
+      document.getElementById('checkoutFreeShipping').classList.toggle('hidden', !isGold);
+      document.getElementById('goldShippingBox').classList.toggle('hidden', !isGold);
+      document.getElementById('orderRecipient').required = isGold;
+      document.getElementById('orderAddress').required = isGold;
+
+      const enabledPayments = paymentOptions.filter(p => p.enabled && (p.id !== 'cod' || isGold));
+      document.getElementById('checkoutPaymentList').innerHTML = enabledPayments.map((p, idx) => `
+        <label class="flex items-center gap-2.5 p-3 rounded-xl border border-slate-200 hover:border-sky-400 cursor-pointer text-xs font-bold">
+          <input type="radio" name="paymentMethod" value="${p.label}" ${idx === 0 ? 'checked' : ''} class="accent-sky-600">
+          <span>${p.label}</span>
+        </label>
+      `).join('');
+    }
+
+    function handleOrderSubmit(e) {
+      e.preventDefault();
+      const key = document.getElementById('checkoutPkgSelect').value;
+      const pkg = packagesData[key];
+      const paymentRadio = document.querySelector('input[name="paymentMethod"]:checked');
+
+      const order = {
+        id: 'EA-' + Math.floor(100000 + Math.random() * 900000),
+        date: new Date().toLocaleDateString('ar-DZ'),
+        name: document.getElementById('orderName').value.trim(),
+        phone: document.getElementById('orderPhone').value.trim(),
+        email: document.getElementById('orderEmail').value.trim(),
+        country: document.getElementById('orderCountry').value.trim(),
+        wilaya: document.getElementById('orderWilaya').value.trim(),
+        address: key === 'gold' ? `${document.getElementById('orderRecipient').value.trim()} - ${document.getElementById('orderAddress').value.trim()}` : 'باقة رقمية / إلكترونية',
+        pkgName: pkg.name,
+        price: pkg.price,
+        payment: paymentRadio ? paymentRadio.value : 'التحويل البنكي أو البريدي',
+        notes: document.getElementById('orderNotes').value.trim(),
+        status: 'Pending'
+      };
+
+      ordersList.unshift(order);
+
+      document.getElementById('orderConfirmationDetails').innerHTML = `
+        <div class="flex justify-between"><span class="text-slate-500">رقم الطلب:</span><span class="font-en font-black text-sky-700">${order.id}</span></div>
+        <div class="flex justify-between"><span class="text-slate-500">المشترك:</span><span class="font-bold">${order.name}</span></div>
+        <div class="flex justify-between"><span class="text-slate-500">الباقة:</span><span class="font-bold">${order.pkgName}</span></div>
+        <div class="flex justify-between"><span class="text-slate-500">المبلغ:</span><span class="font-black text-sky-700">${order.price.toLocaleString()} دج</span></div>
+        <div class="flex justify-between"><span class="text-slate-500">طريقة الدفع:</span><span class="font-bold">${order.payment}</span></div>
+        <div class="flex justify-between"><span class="text-slate-500">الولاية / التوصيل:</span><span class="font-bold">${order.wilaya} (${order.address})</span></div>
+      `;
+
+      e.target.reset();
+      switchSection('confirmation');
+    }
+
+    // =========================================================
+    // لوحة الإدارة
+    // =========================================================
+    function openAdminModal() {
+      openModal(`
+        <div class="text-center max-w-xs mx-auto py-2">
+          <h3 class="text-lg font-black text-slate-900 mb-1">لوحة إدارة Excellence Academy</h3>
+          <p class="text-xs text-slate-500 mb-4">أدخل رمز الإدارة (الرمز: admin123)</p>
+          <input type="password" id="admPass" placeholder="رمز الدخول" class="w-full p-3 border rounded-xl text-center text-sm mb-3">
+          <button type="button" onclick="loginAdmin()" class="glow-btn w-full py-2.5 text-xs">دخول</button>
+        </div>
+      `);
+    }
+
+    function loginAdmin() {
+      if (document.getElementById('admPass').value === 'admin123') {
+        closeModal();
+        switchSection('admin');
+        renderAdminOrders();
+        renderAdminPayments();
+      }
+    }
+
+    function renderAdminOrders() {
+      document.getElementById('adminOrderCount').textContent = ordersList.length;
+      const tbody = document.getElementById('adminOrdersBody');
+      if (ordersList.length === 0) {
+        tbody.innerHTML = `<tr><td colspan="6" class="p-6 text-center text-slate-400 font-bold">لا توجد طلبات مسجلة حالياً</td></tr>`;
+        return;
+      }
+      const statuses = ['Pending', 'Confirmed', 'Paid', 'Processing', 'Shipped', 'Completed', 'Cancelled'];
+      tbody.innerHTML = ordersList.map(o => `
+        <tr>
+          <td class="p-3 font-en font-black text-sky-700">${o.id}</td>
+          <td class="p-3 font-bold">${o.name}<br><span class="text-slate-500" dir="ltr">${o.phone}</span></td>
+          <td class="p-3 font-bold">${o.pkgName} (${o.price.toLocaleString()} دج)</td>
+          <td class="p-3">${o.wilaya} - ${o.address}</td>
+          <td class="p-3">${o.payment}</td>
+          <td class="p-3">
+            <select onchange="ordersList.find(x=>x.id==='${o.id}').status=this.value" class="p-1.5 border rounded-lg font-bold text-xs">
+              ${statuses.map(st => `<option value="${st}" ${o.status === st ? 'selected' : ''}>${st}</option>`).join('')}
+            </select>
+          </td>
+        </tr>
+      `).join('');
+    }
+
+    function updatePricesFromAdmin() {
+      packagesData.bronze.price = parseInt(document.getElementById('admPriceBronze').value) || 4900;
+      packagesData.silver.price = parseInt(document.getElementById('admPriceSilver').value) || 6900;
+      packagesData.gold.price = parseInt(document.getElementById('admPriceGold').value) || 12900;
+      selectPackageTab(activePkgKey);
+      openModal(`<div class="text-center py-4 font-black text-emerald-600">تم تحديث الأسعار بنجاح!</div>`);
+    }
+
+    function renderAdminPayments() {
+      document.getElementById('adminPaymentSwitches').innerHTML = paymentOptions.map((p, i) => `
+        <label class="flex items-center justify-between p-3 bg-slate-50 rounded-xl border text-xs font-bold">
+          <span>${p.label}</span>
+          <input type="checkbox" ${p.enabled ? 'checked' : ''} onchange="paymentOptions[${i}].enabled=this.checked" class="w-4 h-4 accent-sky-600">
+        </label>
+      `).join('');
+    }
+
+    function exportOrdersCSV() {
+      if (ordersList.length === 0) return;
+      const csv = '\uFEFF' + ['ID,Date,Name,Phone,Package,Price,Wilaya,Address,Payment,Status', ...ordersList.map(o => `${o.id},${o.date},${o.name},${o.phone},${o.pkgName},${o.price},${o.wilaya},${o.address},${o.payment},${o.status}`)].join('\n');
+      const a = document.createElement('a');
+      a.href = URL.createObjectURL(new Blob([csv], { type: 'text/csv;charset=utf-8;' }));
+      a.download = 'Excellence_Academy_Orders.csv';
+      a.click();
+    }
+
+    function openLegal(type) {
+      const map = {
+        privacy: { t: 'سياسة الخصوصية', b: 'تلتزم أكاديمية إكسيلانس بحماية بيانات المشتركين واستخدامها فقط لتفعيل الاشتراك وشحن صندوق Gold Box.' },
+        terms: { t: 'الشروط والأحكام', b: 'جميع المواد التدريبية ومحتويات برنامج هندسة الحياة محمية لأكاديمية إكسيلانس والمدرب أحمد رجوح.' },
+        refund: { t: 'سياسة الاسترجاع', b: 'تخضع اشتراكات الباقات الرقمية وصندوق Gold Box لسياسة الأكاديمية المعتمدة.' }
+      };
+      openModal(`<h3 class="text-lg font-black mb-2">${map[type].t}</h3><p class="text-xs sm:text-sm text-slate-600 leading-relaxed">${map[type].b}</p>`);
+    }
+
+    function openModal(html) {
+      document.getElementById('modalBody').innerHTML = html;
+      document.getElementById('modalOverlay').classList.remove('hidden');
+    }
+    function closeModal() {
+      document.getElementById('modalOverlay').classList.add('hidden');
+    }
+
+    function scrollTo3DBox() {
+      const el = document.getElementById('gold3DContainerWrapper');
+      if (el) el.scrollIntoView({ behavior: 'smooth', block: 'center' });
+    }
+
+    // =========================================================
+    // محرك العرض ثلاثي الأبعاد التفاعلي (EXCELLENCE ACADEMY — 3D GOLD BOX)
+    // =========================================================
+    function initGoldBox3DShowcase() {
+      const container = document.getElementById('stage-container');
+      if (!container || typeof THREE === 'undefined') return;
+
+      const state = {
+        lidOpen: true,
+        lidProgress: 1,
+        showcaseMode: false,
+        showcaseProgress: 0,
+        emptyBox: false,
+        selectedId: null,
+        hoveredId: null,
+        inspectTimer: 0,
+        inspectDuration: 15.0
+      };
+
+      const registry = [];
+      const scene = new THREE.Scene();
+
+      const camera = new THREE.PerspectiveCamera(38, (container.clientWidth || 800) / (container.clientHeight || 640), 0.1, 150);
+      camera.position.set(1.2, 13.5, 16.5);
+
+      const renderer = new THREE.WebGLRenderer({ antialias: true, alpha: true, powerPreference: 'high-performance' });
+      renderer.setSize(container.clientWidth || 800, container.clientHeight || 640);
+      renderer.setPixelRatio(Math.min(window.devicePixelRatio, 2));
+      renderer.shadowMap.enabled = true;
+      renderer.shadowMap.type = THREE.PCFSoftShadowMap;
+      renderer.toneMapping = THREE.ACESFilmicToneMapping;
+      renderer.toneMappingExposure = 1.25;
+      container.appendChild(renderer.domElement);
+
+      const controls = new THREE.OrbitControls(camera, renderer.domElement);
+      controls.enableDamping = true;
+      controls.dampingFactor = 0.06;
+      controls.maxPolarAngle = Math.PI * 0.48;
+      controls.minDistance = 8;
+      controls.maxDistance = 32;
+      controls.target.set(0, 1.8, 0);
+
+      const hemiLight = new THREE.HemisphereLight(0xfff4d6, 0x0b1636, 0.95);
+      scene.add(hemiLight);
+
+      const keyLight = new THREE.DirectionalLight(0xfff6e0, 1.45);
+      keyLight.position.set(12, 22, 14);
+      keyLight.castShadow = true;
+      keyLight.shadow.mapSize.set(2048, 2048);
+      keyLight.shadow.bias = -0.0005;
+      scene.add(keyLight);
+
+      const rimLight = new THREE.DirectionalLight(0xf3d479, 0.85);
+      rimLight.position.set(-14, 16, -12);
+      scene.add(rimLight);
+
+      const frontFill = new THREE.PointLight(0xffe7a8, 0.65, 45);
+      frontFill.position.set(0, 9, 14);
+      scene.add(frontFill);
+
+      const pedestal = new THREE.Mesh(
+        new THREE.CylinderGeometry(8.8, 9.2, 0.25, 64),
+        new THREE.MeshStandardMaterial({ color: 0x070e22, roughness: 0.45, metalness: 0.55 })
+      );
+      pedestal.position.y = -0.14;
+      pedestal.receiveShadow = true;
+      scene.add(pedestal);
+
+      const pedestalRing = new THREE.Mesh(
+        new THREE.TorusGeometry(8.82, 0.04, 16, 96),
+        new THREE.MeshStandardMaterial({ color: 0xd4af37, roughness: 0.25, metalness: 0.9 })
+      );
+      pedestalRing.rotation.x = Math.PI / 2;
+      pedestalRing.position.y = -0.02;
+      scene.add(pedestalRing);
+
+      const ArtEngine = {
+        makeTexture(w, h, drawFn) {
+          const canvas = document.createElement('canvas');
+          canvas.width = w;
+          canvas.height = h;
+          const ctx = canvas.getContext('2d');
+          drawFn(ctx, w, h);
+          const tex = new THREE.CanvasTexture(canvas);
+          tex.anisotropy = 4;
+          return tex;
+        },
+        drawEALogo(ctx, cx, cy, scale = 1, color = '#f4d06f') {
+          ctx.save();
+          ctx.translate(cx, cy);
+          ctx.scale(scale, scale);
+          ctx.fillStyle = color;
+          ctx.strokeStyle = color;
+          ctx.font = 'bold 64px Georgia, serif';
+          ctx.textAlign = 'center';
+          ctx.textBaseline = 'middle';
+          ctx.fillText('EA', 0, -4);
+          ctx.lineWidth = 4;
+          ctx.beginPath();
+          ctx.moveTo(-48, 30);
+          ctx.quadraticCurveTo(-22, 22, 0, 34);
+          ctx.quadraticCurveTo(22, 22, 48, 30);
+          ctx.stroke();
+          ctx.restore();
+        },
+        drawCrown(ctx, cx, cy, scale = 1, color = '#f4d06f') {
+          ctx.save();
+          ctx.translate(cx, cy);
+          ctx.scale(scale, scale);
+          ctx.fillStyle = color;
+          ctx.beginPath();
+          ctx.moveTo(-28, 14);
+          ctx.lineTo(-34, -12);
+          ctx.lineTo(-14, 2);
+          ctx.lineTo(0, -18);
+          ctx.lineTo(14, 2);
+          ctx.lineTo(34, -12);
+          ctx.lineTo(28, 14);
+          ctx.closePath();
+          ctx.fill();
+          ctx.restore();
+        },
+        drawQRCode(ctx, x, y, size, fg = '#09142e', bg = '#f4d06f') {
+          ctx.fillStyle = bg;
+          ctx.fillRect(x, y, size, size);
+          ctx.fillStyle = fg;
+          const cells = 11;
+          const step = size / cells;
+          for (let r = 0; r < cells; r++) {
+            for (let c = 0; c < cells; c++) {
+              const isFinder = (r < 3 && c < 3) || (r < 3 && c > cells - 4) || (r > cells - 4 && c < 3);
+              const hash = ((r * 7 + c * 13) % 5 === 0) || ((r + c) % 3 === 0);
+              if (isFinder || hash) {
+                ctx.fillRect(x + c * step + 1, y + r * step + 1, step - 2, step - 2);
+              }
+            }
+          }
+        }
+      };
+
+      const leatherBump = ArtEngine.makeTexture(256, 256, (ctx, w, h) => {
+        ctx.fillStyle = '#808080';
+        ctx.fillRect(0, 0, w, h);
+        for (let i = 0; i < 3500; i++) {
+          const v = 115 + Math.floor(Math.random() * 26);
+          ctx.fillStyle = `rgb(${v},${v},${v})`;
+          ctx.fillRect(Math.random() * w, Math.random() * h, 2, 2);
+        }
+      });
+      leatherBump.wrapS = leatherBump.wrapT = THREE.RepeatWrapping;
+      leatherBump.repeat.set(4, 4);
+
+      const Mat = {
+        navyBox: new THREE.MeshStandardMaterial({
+          color: 0x08132e,
+          roughness: 0.42,
+          metalness: 0.18,
+          bumpMap: leatherBump,
+          bumpScale: 0.012
+        }),
+        navyVelvet: new THREE.MeshStandardMaterial({
+          color: 0x0b193d,
+          roughness: 0.85,
+          metalness: 0.05
+        }),
+        goldMetallic: new THREE.MeshStandardMaterial({
+          color: 0xe6be5a,
+          roughness: 0.22,
+          metalness: 0.92
+        }),
+        creamCover: new THREE.MeshStandardMaterial({
+          color: 0xfbf8f1,
+          roughness: 0.38,
+          metalness: 0.08
+        }),
+        pageEdge: new THREE.MeshStandardMaterial({
+          color: 0xf1ebd9,
+          roughness: 0.65
+        })
+      };
+
+      const rootAssembly = new THREE.Group();
+      scene.add(rootAssembly);
+
+      function addPart(cfg) {
+        cfg.group.traverse(obj => {
+          if (obj.isMesh) {
+            obj.castShadow = true;
+            obj.receiveShadow = true;
+            obj.userData.partId = cfg.id;
+          }
+        });
+        registry.push({
+          ...cfg,
+          closedPos: cfg.closedPos.clone(),
+          closedRot: cfg.closedRot ? cfg.closedRot.clone() : cfg.group.rotation.clone(),
+          showcasePos: cfg.showcasePos.clone(),
+          showcaseRot: cfg.showcaseRot || new THREE.Euler(0, 0, 0),
+          isContent: cfg.isContent !== false,
+          inspectBlend: 0
+        });
+        return cfg.group;
+      }
+
+      const BW = 11.4, BD = 8.4, BH = 2.15, WT = 0.28;
+      const bodyGroup = new THREE.Group();
+
+      const baseFloor = new THREE.Mesh(new THREE.BoxGeometry(BW, 0.28, BD), Mat.navyBox);
+      baseFloor.position.y = 0.14;
+      bodyGroup.add(baseFloor);
+
+      const frontBadgeTex = ArtEngine.makeTexture(1024, 240, (ctx, w, h) => {
+        const g = ctx.createLinearGradient(0, 0, 0, h);
+        g.addColorStop(0, '#0a1736');
+        g.addColorStop(1, '#050b1c');
+        ctx.fillStyle = g;
+        ctx.fillRect(0, 0, w, h);
+
+        ctx.strokeStyle = '#ebc35b';
+        ctx.lineWidth = 5;
+        ctx.strokeRect(14, 14, w - 28, h - 28);
+
+        ArtEngine.drawCrown(ctx, w * 0.34, h * 0.44, 1.05, '#f4d06f');
+
+        ctx.fillStyle = '#f4d06f';
+        ctx.font = 'bold 56px Georgia, serif';
+        ctx.textAlign = 'left';
+        ctx.textBaseline = 'middle';
+        ctx.fillText('GOLD BOX', w * 0.40, h * 0.42);
+
+        ctx.font = 'bold 28px sans-serif';
+        ctx.textAlign = 'center';
+        ctx.fillText('★  ★  ★  ★  ★', w * 0.54, h * 0.76);
+      });
+
+      const frontWall = new THREE.Mesh(
+        new THREE.BoxGeometry(BW, BH, WT),
+        [
+          Mat.navyBox, Mat.navyBox, Mat.goldMetallic, Mat.navyBox,
+          new THREE.MeshStandardMaterial({ map: frontBadgeTex, roughness: 0.35, metalness: 0.3 }),
+          Mat.navyBox
+        ]
+      );
+      frontWall.position.set(0, BH / 2, BD / 2 - WT / 2);
+      bodyGroup.add(frontWall);
+
+      const backWall = new THREE.Mesh(new THREE.BoxGeometry(BW, BH, WT), Mat.navyBox);
+      backWall.position.set(0, BH / 2, -BD / 2 + WT / 2);
+      bodyGroup.add(backWall);
+
+      const leftWall = new THREE.Mesh(new THREE.BoxGeometry(WT, BH, BD - WT * 2), Mat.navyBox);
+      leftWall.position.set(-BW / 2 + WT / 2, BH / 2, 0);
+      bodyGroup.add(leftWall);
+
+      const rightWall = new THREE.Mesh(new THREE.BoxGeometry(WT, BH, BD - WT * 2), Mat.navyBox);
+      rightWall.position.set(BW / 2 - WT / 2, BH / 2, 0);
+      bodyGroup.add(rightWall);
+
+      const neckH = 0.38, neckT = 0.08;
+      const NW = BW - WT * 2 + 0.04, ND = BD - WT * 2 + 0.04;
+      const neckF = new THREE.Mesh(new THREE.BoxGeometry(NW, neckH, neckT), Mat.goldMetallic);
+      neckF.position.set(0, BH + neckH / 2 - 0.1, ND / 2 - neckT / 2);
+      bodyGroup.add(neckF);
+
+      const neckB = new THREE.Mesh(new THREE.BoxGeometry(NW, neckH, neckT), Mat.goldMetallic);
+      neckB.position.set(0, BH + neckH / 2 - 0.1, -ND / 2 + neckT / 2);
+      bodyGroup.add(neckB);
+
+      const neckL = new THREE.Mesh(new THREE.BoxGeometry(neckT, neckH, ND), Mat.goldMetallic);
+      neckL.position.set(-NW / 2 + neckT / 2, BH + neckH / 2 - 0.1, 0);
+      bodyGroup.add(neckL);
+
+      const neckR = new THREE.Mesh(new THREE.BoxGeometry(neckT, neckH, ND), Mat.goldMetallic);
+      neckR.position.set(NW / 2 - neckT / 2, BH + neckH / 2 - 0.1, 0);
+      bodyGroup.add(neckR);
+
+      const bottomTrim = new THREE.Mesh(new THREE.BoxGeometry(BW + 0.06, 0.12, BD + 0.06), Mat.goldMetallic);
+      bottomTrim.position.y = 0.06;
+      bodyGroup.add(bottomTrim);
+
+      rootAssembly.add(bodyGroup);
+      addPart({
+        id: 'box_body',
+        name: 'هيكل البوكس الرئيسي (GOLD BOX)',
+        category: 'الهيكل الخارجي',
+        description: 'صندوق صلب فاخر مكسو باللون الكحلي الملكي المطفي مع رقبة داخلية ذهبية لامعة وواجهة محفورة بشعار التاج و GOLD BOX ★★★★★.',
+        spec: 'كرتون مقوى فاخر + رقبة ذهبية معدنية',
+        group: bodyGroup,
+        closedPos: new THREE.Vector3(0, 0, 0),
+        showcasePos: new THREE.Vector3(0, 0, 0),
+        isContent: false
+      });
+
+      const interiorGroup = new THREE.Group();
+      const IW = BW - WT * 2 - 0.08;
+      const ID = BD - WT * 2 - 0.08;
+
+      const velvetBase = new THREE.Mesh(new THREE.BoxGeometry(IW, 0.16, ID), Mat.navyVelvet);
+      velvetBase.position.y = 0.34;
+      interiorGroup.add(velvetBase);
+
+      function addCompartmentWall(x, z, w, d, h = 1.48) {
+        const wall = new THREE.Mesh(new THREE.BoxGeometry(w, h, d), Mat.navyVelvet);
+        wall.position.set(x, 0.34 + h / 2, z);
+        interiorGroup.add(wall);
+
+        const goldCap = new THREE.Mesh(new THREE.BoxGeometry(w + 0.02, 0.05, d + 0.02), Mat.goldMetallic);
+        goldCap.position.set(x, 0.34 + h + 0.025, z);
+        interiorGroup.add(goldCap);
+      }
+
+      addCompartmentWall(0, -1.55, IW, 0.14, 1.48);
+      addCompartmentWall(-2.65, -2.7, 0.14, 2.3, 1.48);
+      addCompartmentWall(0, -2.7, 0.14, 2.3, 1.48);
+      addCompartmentWall(2.65, -2.7, 0.14, 2.3, 1.48);
+
+      addCompartmentWall(0, 1.35, IW, 0.14, 1.48);
+      addCompartmentWall(-1.2, -0.1, 0.14, 2.9, 1.48);
+      addCompartmentWall(2.1, -0.1, 0.14, 2.9, 1.48);
+
+      addCompartmentWall(-1.5, 2.6, 0.14, 2.5, 1.48);
+      addCompartmentWall(1.9, 2.6, 0.14, 2.5, 1.48);
+
+      rootAssembly.add(interiorGroup);
+      addPart({
+        id: 'box_interior',
+        name: 'التقسيم الداخلي المنظم (10 خانات)',
+        category: 'التجويف الداخلي',
+        description: 'بطانة مخملية كحلية مقسمة هندسياً بحواف ذهبية بارزة بحيث تستقر كل أداة في خانتها الخاصة بنظام وأناقة تامة.',
+        spec: 'مخمل كحلي + فواصل ذهبية هندسية',
+        group: interiorGroup,
+        closedPos: new THREE.Vector3(0, 0, 0),
+        showcasePos: new THREE.Vector3(0, 0, 0),
+        isContent: false
+      });
+
+      const lidGroup = new THREE.Group();
+      const LW = BW + 0.18, LD = BD + 0.18, LH = 0.68;
+
+      const lidOuterTex = ArtEngine.makeTexture(1024, 768, (ctx, w, h) => {
+        const g = ctx.createLinearGradient(0, 0, w, h);
+        g.addColorStop(0, '#0c1a3b'); g.addColorStop(1, '#050b1c');
+        ctx.fillStyle = g;
+        ctx.fillRect(0, 0, w, h);
+
+        ctx.strokeStyle = '#ebc35b';
+        ctx.lineWidth = 8;
+        ctx.strokeRect(32, 32, w - 64, h - 64);
+        ctx.lineWidth = 2;
+        ctx.strokeRect(48, 48, w - 96, h - 96);
+
+        ArtEngine.drawEALogo(ctx, w / 2, h * 0.36, 1.85, '#f4d06f');
+
+        ctx.fillStyle = '#f4d06f';
+        ctx.font = 'bold 52px Georgia, serif';
+        ctx.textAlign = 'center';
+        ctx.fillText('EXCELLENCE ACADEMY', w / 2, h * 0.58);
+
+        ctx.font = 'bold 30px Cairo, sans-serif';
+        ctx.fillStyle = '#f8e5a5';
+        ctx.fillText('التجربة الكاملة • GOLD BOX', w / 2, h * 0.69);
+      });
+
+      const lidInnerTex = ArtEngine.makeTexture(1024, 768, (ctx, w, h) => {
+        const g = ctx.createLinearGradient(0, 0, 0, h);
+        g.addColorStop(0, '#0a1633'); g.addColorStop(1, '#060d20');
+        ctx.fillStyle = g;
+        ctx.fillRect(0, 0, w, h);
+
+        ctx.strokeStyle = '#ebc35b';
+        ctx.lineWidth = 6;
+        ctx.strokeRect(28, 28, w - 56, h - 56);
+
+        ctx.fillStyle = '#f4d06f';
+        ctx.font = 'bold 54px Georgia, serif';
+        ctx.textAlign = 'center';
+        ctx.fillText('EXCELLENCE', w / 2, h * 0.34);
+
+        ctx.font = 'bold 34px Georgia, serif';
+        ctx.fillText('— ACADEMY —', w / 2, h * 0.45);
+
+        ctx.font = 'italic 46px Georgia, serif';
+        ctx.fillStyle = '#fae6a2';
+        ctx.fillText('Your Success, Our Mission', w / 2, h * 0.60);
+      });
+
+      const lidTopPlate = new THREE.Mesh(
+        new THREE.BoxGeometry(LW, 0.18, LD),
+        [
+          Mat.goldMetallic, Mat.goldMetallic,
+          new THREE.MeshStandardMaterial({ map: lidOuterTex, roughness: 0.32, metalness: 0.35 }),
+          new THREE.MeshStandardMaterial({ map: lidInnerTex, roughness: 0.38, metalness: 0.25 }),
+          Mat.goldMetallic, Mat.goldMetallic
+        ]
+      );
+      lidTopPlate.position.y = LH - 0.09;
+      lidGroup.add(lidTopPlate);
+
+      const skH = LH - 0.16, skT = 0.2;
+      const lF = new THREE.Mesh(new THREE.BoxGeometry(LW, skH, skT), Mat.navyBox);
+      lF.position.set(0, skH / 2, LD / 2 - skT / 2);
+      lidGroup.add(lF);
+
+      const lB = new THREE.Mesh(new THREE.BoxGeometry(LW, skH, skT), Mat.navyBox);
+      lB.position.set(0, skH / 2, -LD / 2 + skT / 2);
+      lidGroup.add(lB);
+
+      const lL = new THREE.Mesh(new THREE.BoxGeometry(skT, skH, LD - skT * 2), Mat.navyBox);
+      lL.position.set(-LW / 2 + skT / 2, skH / 2, 0);
+      lidGroup.add(lL);
+
+      const lR = new THREE.Mesh(new THREE.BoxGeometry(skT, skH, LD - skT * 2), Mat.navyBox);
+      lR.position.set(LW / 2 - skT / 2, skH / 2, 0);
+      lidGroup.add(lR);
+
+      const lidRim = new THREE.Mesh(new THREE.BoxGeometry(LW + 0.03, 0.08, LD + 0.03), Mat.goldMetallic);
+      lidRim.position.y = 0.04;
+      lidGroup.add(lidRim);
+
+      rootAssembly.add(lidGroup);
+      const lidClosedPos = new THREE.Vector3(0, BH + 0.02, 0);
+      const lidOpenPos = new THREE.Vector3(0, 5.45, -4.35);
+      const lidOpenRot = new THREE.Euler(1.18, 0, 0);
+
+      addPart({
+        id: 'box_lid',
+        name: 'غطاء البوكس المنفصل',
+        category: 'الغطاء الخارجي',
+        description: 'غطاء منفصل تماماً عن جسم البوكس يحمل شعار EA الذهبي من الخارج وعبارة "EXCELLENCE ACADEMY - Your Success, Our Mission" من الداخل.',
+        spec: 'قابل للفتح والإغلاق بسلاسة',
+        group: lidGroup,
+        closedPos: lidClosedPos,
+        showcasePos: new THREE.Vector3(0, 6.8, -5.2),
+        showcaseRot: new THREE.Euler(1.05, 0, 0),
+        isContent: false
+      });
+
+      const itemsRoot = new THREE.Group();
+      rootAssembly.add(itemsRoot);
+
+      function buildSpiralNotebook(opts) {
+        const { w, h, d, isWhite = false, starCover = false, titleEn = 'EXCELLENCE\nACADEMY', titleAr = '' } = opts;
+        const nb = new THREE.Group();
+
+        const coverTex = ArtEngine.makeTexture(512, 680, (ctx, cw, ch) => {
+          ctx.fillStyle = isWhite ? '#fbf8f1' : '#091533';
+          ctx.fillRect(0, 0, cw, ch);
+
+          const gold = isWhite ? '#b8860b' : '#f4d06f';
+          ctx.strokeStyle = gold;
+          ctx.lineWidth = 6;
+          ctx.strokeRect(26, 26, cw - 52, ch - 52);
+
+          if (starCover) {
+            ctx.save();
+            ctx.translate(cw / 2, ch * 0.42);
+            ctx.fillStyle = '#f4d06f';
+            ctx.beginPath();
+            for (let i = 0; i < 5; i++) {
+              ctx.lineTo(Math.cos((18 + i * 72) * Math.PI / 180) * 85, -Math.sin((18 + i * 72) * Math.PI / 180) * 85);
+              ctx.lineTo(Math.cos((54 + i * 72) * Math.PI / 180) * 36, -Math.sin((54 + i * 72) * Math.PI / 180) * 36);
+            }
+            ctx.closePath();
+            ctx.fill();
+            ctx.restore();
+          } else {
+            ArtEngine.drawEALogo(ctx, cw / 2, ch * 0.36, 1.3, isWhite ? '#091533' : '#f4d06f');
+            ctx.fillStyle = isWhite ? '#091533' : '#f4d06f';
+            ctx.font = 'bold 34px Georgia, serif';
+            ctx.textAlign = 'center';
+            titleEn.split('\n').forEach((line, idx) => {
+              ctx.fillText(line, cw / 2, ch * 0.56 + idx * 42);
+            });
+          }
+
+          if (titleAr) {
+            ctx.fillStyle = isWhite ? '#8a6205' : '#fae6a2';
+            ctx.font = 'bold 26px Cairo, sans-serif';
+            ctx.textAlign = 'center';
+            ctx.fillText(titleAr, cw / 2, ch * 0.82);
+          }
+        });
+
+        const topMat = new THREE.MeshStandardMaterial({
+          map: coverTex,
+          roughness: 0.34,
+          metalness: 0.22,
+          bumpMap: leatherBump,
+          bumpScale: 0.01
+        });
+
+        const front = new THREE.Mesh(new THREE.BoxGeometry(w, 0.05, d), topMat);
+        front.position.y = h / 2 - 0.025;
+        nb.add(front);
+
+        const back = new THREE.Mesh(new THREE.BoxGeometry(w, 0.05, d), isWhite ? Mat.creamCover : Mat.navyBox);
+        back.position.y = -h / 2 + 0.025;
+        nb.add(back);
+
+        const pages = new THREE.Mesh(new THREE.BoxGeometry(w - 0.14, h - 0.1, d - 0.14), Mat.pageEdge);
+        pages.position.x = 0.04;
+        nb.add(pages);
+
+        const ringCount = 14;
+        for (let i = 0; i < ringCount; i++) {
+          const z = -d * 0.44 + (i / (ringCount - 1)) * (d * 0.88);
+          const ring = new THREE.Mesh(
+            new THREE.TorusGeometry(h * 0.54, 0.024, 10, 22),
+            Mat.goldMetallic
+          );
+          ring.position.set(-w / 2 - 0.02, 0, z);
+          nb.add(ring);
+        }
+
+        return nb;
+      }
+
+      function buildCard(w, h, d, tex, isMetallic = false) {
+        const topMat = new THREE.MeshStandardMaterial({
+          map: tex,
+          roughness: isMetallic ? 0.2 : 0.34,
+          metalness: isMetallic ? 0.88 : 0.18
+        });
+        return new THREE.Mesh(
+          new THREE.BoxGeometry(w, h, d),
+          [Mat.goldMetallic, Mat.goldMetallic, topMat, Mat.navyBox, Mat.goldMetallic, Mat.goldMetallic]
+        );
+      }
+
+      // 1. دفتر عملي للتخطيط الاستراتيجي الشخصي
+      const strategicNotebook = buildSpiralNotebook({
+        w: 3.65, h: 0.34, d: 2.55,
+        isWhite: false,
+        titleEn: 'EXCELLENCE\nACADEMY',
+        titleAr: 'دفتر التخطيط الاستراتيجي'
+      });
+      itemsRoot.add(strategicNotebook);
+      addPart({
+        id: 'strategic_notebook',
+        name: 'دفتر عملي للتخطيط الاستراتيجي الشخصي',
+        category: 'الأداة الأساسية 01',
+        description: 'دفتر عملي فاخر بغلاف كحلي ملكي وسلك حلزوني ذهبي معدني مع شعار EA المحفور بالذهب لتخطيط أهدافك خطوة بخطوة.',
+        spec: 'غلاف كحلي مقوى + سلك ذهبي Wire-O',
+        group: strategicNotebook,
+        closedPos: new THREE.Vector3(-3.25, 1.52, -0.1),
+        showcasePos: new THREE.Vector3(-7.4, 3.6, -2.2),
+        showcaseRot: new THREE.Euler(0.45, 0.32, 0)
+      });
+
+      // 2. الدفتر الأبيض/الكريمي للتخطيط والتطبيق
+      const whitePlannerNotebook = buildSpiralNotebook({
+        w: 2.95, h: 0.34, d: 2.55,
+        isWhite: true,
+        titleEn: 'EXCELLENCE\nACADEMY',
+        titleAr: 'دليل التطبيق العملي'
+      });
+      itemsRoot.add(whitePlannerNotebook);
+      addPart({
+        id: 'white_notebook',
+        name: 'دفتر التخطيط التنفيذي الأبيض',
+        category: 'الأداة الأساسية 02',
+        description: 'دفتر أنيق بغلاف عاجي فاخر وسلك ذهبي مزدوج مكمل لدفتر التخطيط الاستراتيجي لتدوين الإنجازات والمهام اليومية.',
+        spec: 'غلاف عاجي فاخر + سلك ذهبي',
+        group: whitePlannerNotebook,
+        closedPos: new THREE.Vector3(0.45, 1.52, -0.1),
+        showcasePos: new THREE.Vector3(-3.8, 4.2, -3.0),
+        showcaseRot: new THREE.Euler(0.45, 0.16, 0)
+      });
+
+      // 3. بطاقة GOLD ACCESS CARD الذهبية اللامعة مع QR Code
+      const goldAccessTex = ArtEngine.makeTexture(600, 380, (ctx, w, h) => {
+        const g = ctx.createLinearGradient(0, 0, w, h);
+        g.addColorStop(0, '#fae39c');
+        g.addColorStop(0.5, '#d4af37');
+        g.addColorStop(1, '#9e7418');
+        ctx.fillStyle = g;
+        ctx.fillRect(0, 0, w, h);
+
+        ctx.strokeStyle = '#09142e';
+        ctx.lineWidth = 4;
+        ctx.strokeRect(16, 16, w - 32, h - 32);
+
+        ctx.fillStyle = '#09142e';
+        ctx.font = 'bold 42px Georgia, serif';
+        ctx.textAlign = 'left';
+        ctx.fillText('GOLD', 42, 95);
+        ctx.font = 'bold 28px Georgia, serif';
+        ctx.fillText('EXCELLENCE', 42, 145);
+        ctx.fillText('ACADEMY', 42, 180);
+        ctx.font = 'bold 22px sans-serif';
+        ctx.fillText('ACCESS CARD', 42, 235);
+
+        ArtEngine.drawQRCode(ctx, w - 185, h - 185, 135, '#09142e', '#f4d06f');
+      });
+      const goldAccessCard = buildCard(2.3, 0.06, 1.85, goldAccessTex, true);
+      itemsRoot.add(goldAccessCard);
+      addPart({
+        id: 'gold_access_card',
+        name: 'بطاقة GOLD ACCESS CARD الذهبية',
+        category: 'بطاقة العضوية الذهبية',
+        description: 'بطاقة معدنية ذهبية لامعة مزودة برمز QR خاص تمنحك صلاحية الدخول الكامل والحصري لمنصة الأكاديمية وفيديوهات الدورة.',
+        spec: 'بطاقة ذهبية معدنية + رمز QR',
+        group: goldAccessCard,
+        closedPos: new THREE.Vector3(-3.95, 1.58, -2.7),
+        showcasePos: new THREE.Vector3(-5.8, 1.5, 4.4),
+        showcaseRot: new THREE.Euler(0.65, 0.25, 0)
+      });
+
+      // 4. بطاقة دخول لمشاهدة فيديوهات الدورة
+      const blueVideoCardTex = ArtEngine.makeTexture(600, 380, (ctx, w, h) => {
+        ctx.fillStyle = '#091533';
+        ctx.fillRect(0, 0, w, h);
+        ctx.strokeStyle = '#f4d06f';
+        ctx.lineWidth = 5;
+        ctx.strokeRect(16, 16, w - 32, h - 32);
+
+        ArtEngine.drawEALogo(ctx, 130, 120, 0.9, '#f4d06f');
+        ctx.fillStyle = '#f4d06f';
+        ctx.font = 'bold 24px Georgia, serif';
+        ctx.textAlign = 'left';
+        ctx.fillText('EXCELLENCE ACADEMY', 40, 225);
+        ctx.font = 'bold 20px Cairo, sans-serif';
+        ctx.fillStyle = '#ffffff';
+        ctx.fillText('بطاقة دخول لمشاهدة فيديوهات الدورة', 40, 275);
+
+        ArtEngine.drawQRCode(ctx, w - 190, 95, 145, '#f4d06f', '#091533');
+      });
+      const blueVideoCard = buildCard(2.3, 0.06, 1.85, blueVideoCardTex, false);
+      itemsRoot.add(blueVideoCard);
+      addPart({
+        id: 'video_access_card',
+        name: 'بطاقة دخول لمشاهدة فيديوهات الدورة',
+        category: 'وصول رقمي',
+        description: 'بطاقة كحلية مذهبة برمز QR سريع الوصول تتيح لك مشاهدة جميع دروس وفيديوهات الدورة التدريبية بجودة عالية في أي وقت.',
+        spec: 'بطاقة PVC فاخرة + QR Code',
+        group: blueVideoCard,
+        closedPos: new THREE.Vector3(-1.32, 1.58, -2.7),
+        showcasePos: new THREE.Vector3(-3.0, 1.5, 4.6),
+        showcaseRot: new THREE.Euler(0.65, 0.12, 0)
+      });
+
+      // 5. دفتر الفوائد
+      const benefitsNotebook = buildSpiralNotebook({
+        w: 3.65, h: 0.32, d: 2.55,
+        isWhite: false,
+        starCover: true,
+        titleAr: 'دفتر الفوائد'
+      });
+      itemsRoot.add(benefitsNotebook);
+      addPart({
+        id: 'benefits_book',
+        name: 'دفتر الفوائد',
+        category: 'محتوى البوكس',
+        description: 'دفتر خاص بنجمة ذهبية بارزة لتدوين أهم الفوائد والدرر المعرفية والخلاصات العملية أثناء رحلتك التعليمية.',
+        spec: 'غلاف كحلي بنجمة ذهبية + سلك ذهبي',
+        group: benefitsNotebook,
+        closedPos: new THREE.Vector3(-3.25, 1.12, -0.1),
+        showcasePos: new THREE.Vector3(-0.2, 4.5, -3.4),
+        showcaseRot: new THREE.Euler(0.45, 0, 0)
+      });
+
+      // 6. خارطة طريق الدورة
+      const roadmapTex = ArtEngine.makeTexture(720, 480, (ctx, w, h) => {
+        ctx.fillStyle = '#fbf8f1';
+        ctx.fillRect(0, 0, w, h);
+        ctx.strokeStyle = '#d4af37';
+        ctx.lineWidth = 8;
+        ctx.strokeRect(18, 18, w - 36, h - 36);
+
+        ctx.fillStyle = '#091533';
+        ctx.font = 'bold 34px Cairo, sans-serif';
+        ctx.textAlign = 'center';
+        ctx.fillText('خارطة طريق الدورة التدريبية', w / 2, 72);
+
+        ctx.strokeStyle = '#d4af37';
+        ctx.lineWidth = 7;
+        ctx.beginPath();
+        ctx.moveTo(100, 220);
+        ctx.bezierCurveTo(260, 110, 460, 340, 620, 210);
+        ctx.stroke();
+
+        [100, 270, 450, 620].forEach((x, idx) => {
+          const y = idx % 2 === 0 ? 215 : 230;
+          ctx.fillStyle = '#091533';
+          ctx.beginPath(); ctx.arc(x, y, 22, 0, Math.PI * 2); ctx.fill();
+          ctx.fillStyle = '#f4d06f';
+          ctx.font = 'bold 18px sans-serif';
+          ctx.fillText(`0${idx + 1}`, x, y + 6);
+        });
+      });
+      const courseRoadmap = buildCard(3.05, 0.07, 2.15, roadmapTex);
+      itemsRoot.add(courseRoadmap);
+      addPart({
+        id: 'course_roadmap',
+        name: 'خارطة طريق الدورة',
+        category: 'دليل بصري',
+        description: 'خارطة بصرية واضحة ترسم لك مراحل الرحلة التدريبية من البداية وحتى الإتقان والتطبيق العملي.',
+        spec: 'طباعة فاخرة مقاومة للطي',
+        group: courseRoadmap,
+        closedPos: new THREE.Vector3(0.2, 1.58, 2.6),
+        showcasePos: new THREE.Vector3(3.4, 4.3, -3.1),
+        showcaseRot: new THREE.Euler(0.45, -0.15, 0)
+      });
+
+      // 7. عجلة الحياة
+      const wheelGroup = new THREE.Group();
+      const wheelTex = ArtEngine.makeTexture(512, 512, (ctx, w, h) => {
+        const cx = w / 2, cy = h / 2, r = 235;
+        const colors = ['#ef4444', '#f97316', '#eab308', '#22c55e', '#06b6d4', '#3b82f6', '#8b5cf6', '#ec4899'];
+        const labels = ['الصحي', 'المهني', 'المالي', 'الروحي', 'العائلي', 'العلمي', 'الاجتماعي', 'الشخصي'];
+        colors.forEach((col, i) => {
+          const a1 = (i / 8) * Math.PI * 2;
+          const a2 = ((i + 1) / 8) * Math.PI * 2;
+          ctx.fillStyle = col;
+          ctx.beginPath();
+          ctx.moveTo(cx, cy);
+          ctx.arc(cx, cy, r, a1, a2);
+          ctx.closePath();
+          ctx.fill();
+          ctx.strokeStyle = '#ffffff';
+          ctx.lineWidth = 4;
+          ctx.stroke();
+
+          const mid = (a1 + a2) / 2;
+          ctx.fillStyle = '#ffffff';
+          ctx.font = 'bold 22px Cairo, sans-serif';
+          ctx.textAlign = 'center';
+          ctx.fillText(labels[i], cx + Math.cos(mid) * 145, cy + Math.sin(mid) * 145);
+        });
+        ctx.fillStyle = '#091533';
+        ctx.beginPath(); ctx.arc(cx, cy, 45, 0, Math.PI * 2); ctx.fill();
+        ctx.strokeStyle = '#f4d06f'; ctx.lineWidth = 4; ctx.stroke();
+        ctx.fillStyle = '#f4d06f'; ctx.font = 'bold 24px Georgia, serif'; ctx.fillText('EA', cx, cy + 8);
+      });
+      const wheelDisc = new THREE.Mesh(
+        new THREE.CylinderGeometry(1.28, 1.28, 0.09, 48),
+        [Mat.goldMetallic, new THREE.MeshStandardMaterial({ map: wheelTex, roughness: 0.3 }), Mat.navyBox]
+      );
+      wheelGroup.add(wheelDisc);
+      itemsRoot.add(wheelGroup);
+      addPart({
+        id: 'life_wheel',
+        name: 'عجلة الحياة',
+        category: 'أداة تقييم',
+        description: 'أداة تفاعلية لتقييم توازنك في جوانب الحياة الثمانية (الصحي، المالي، المهني، العائلي، الروحي، العلمي، الاجتماعي، الشخصي).',
+        spec: 'قرص دائري مقوى بحواف ذهبية',
+        group: wheelGroup,
+        closedPos: new THREE.Vector3(3.68, 1.56, -0.1),
+        showcasePos: new THREE.Vector3(7.2, 3.6, -2.2),
+        showcaseRot: new THREE.Euler(0.55, -0.32, 0)
+      });
+
+      // 8. جدارية بنك الأحلام
+      const dreamWallTex = ArtEngine.makeTexture(640, 440, (ctx, w, h) => {
+        const g = ctx.createLinearGradient(0, 0, 0, h);
+        g.addColorStop(0, '#1e3a8a'); g.addColorStop(1, '#091533');
+        ctx.fillStyle = g; ctx.fillRect(0, 0, w, h);
+        ctx.strokeStyle = '#f4d06f'; ctx.lineWidth = 10; ctx.strokeRect(16, 16, w - 32, h - 32);
+        ctx.fillStyle = '#d4af37';
+        ctx.beginPath(); ctx.moveTo(140, h - 40); ctx.lineTo(w / 2, 135); ctx.lineTo(w - 140, h - 40); ctx.closePath(); ctx.fill();
+        ctx.fillStyle = '#ffffff';
+        ctx.font = 'bold 34px Cairo, sans-serif'; ctx.textAlign = 'center';
+        ctx.fillText('جدارية بنك الأحلام', w / 2, 82);
+      });
+      const dreamWall = buildCard(2.95, 0.07, 2.55, dreamWallTex);
+      itemsRoot.add(dreamWall);
+      addPart({
+        id: 'dream_bank_wall',
+        name: 'جدارية بنك الأحلام',
+        category: 'جدارية تحفيزية',
+        description: 'لوحة جدارية ملهمة لتعليق وتوثيق أكبر أحلامك وأهدافك البعيدة لتبقى أمام عينيك كل يوم.',
+        spec: 'لوحة جدارية فاخرة',
+        group: dreamWall,
+        closedPos: new THREE.Vector3(0.45, 1.15, -0.1),
+        showcasePos: new THREE.Vector3(-6.8, 2.4, 1.2),
+        showcaseRot: new THREE.Euler(0.45, 0.28, 0)
+      });
+
+      // 9. جدارية المتحف الشخصي
+      const museumWallTex = ArtEngine.makeTexture(640, 440, (ctx, w, h) => {
+        ctx.fillStyle = '#f5efe2'; ctx.fillRect(0, 0, w, h);
+        ctx.strokeStyle = '#b8860b'; ctx.lineWidth = 10; ctx.strokeRect(16, 16, w - 32, h - 32);
+        ctx.fillStyle = '#091533'; ctx.font = 'bold 34px Cairo, sans-serif'; ctx.textAlign = 'center';
+        ctx.fillText('جدارية المتحف الشخصي', w / 2, 82);
+        [110, 265, 420].forEach(x => {
+          ctx.strokeStyle = '#091533'; ctx.lineWidth = 4;
+          ctx.strokeRect(x, 140, 110, 150);
+        });
+      });
+      const museumWall = buildCard(2.95, 0.07, 2.55, museumWallTex);
+      itemsRoot.add(museumWall);
+      addPart({
+        id: 'personal_museum_wall',
+        name: 'جدارية المتحف الشخصي',
+        category: 'جدارية الإنجازات',
+        description: 'مساحة بصرية مخصصة لتوثيق محطات فخرك، نجاحاتك السابقة، واللحظات التي صنعت شخصيتك.',
+        spec: 'لوحة جدارية فاخرة',
+        group: museumWall,
+        closedPos: new THREE.Vector3(0.45, 0.85, -0.1),
+        showcasePos: new THREE.Vector3(-3.5, 2.6, 1.5),
+        showcaseRot: new THREE.Euler(0.45, 0.14, 0)
+      });
+
+      // 10. جدارية خطتي الشخصية
+      const plansWallTex = ArtEngine.makeTexture(640, 440, (ctx, w, h) => {
+        ctx.fillStyle = '#091533'; ctx.fillRect(0, 0, w, h);
+        ctx.strokeStyle = '#f4d06f'; ctx.lineWidth = 10; ctx.strokeRect(16, 16, w - 32, h - 32);
+        ctx.fillStyle = '#f4d06f'; ctx.font = 'bold 34px Cairo, sans-serif'; ctx.textAlign = 'center';
+        ctx.fillText('جدارية خطتي الشخصية', w / 2, 78);
+        for (let r = 0; r < 2; r++) {
+          for (let c = 0; c < 4; c++) {
+            ctx.fillStyle = '#fbf8f1';
+            ctx.fillRect(65 + c * 135, 125 + r * 135, 110, 105);
+          }
+        }
+      });
+      const plansWall = buildCard(2.85, 0.07, 2.55, plansWallTex);
+      itemsRoot.add(plansWall);
+      addPart({
+        id: 'personal_plans_wall',
+        name: 'جدارية خطتي الشخصية',
+        category: 'جدارية التنفيذ',
+        description: 'لوحة تنظيمية لتوزيع خططك الشهرية والأسبوعية ومتابعة تقدمك العملي بوضوح تام.',
+        spec: 'لوحة جدارية منظمة',
+        group: plansWall,
+        closedPos: new THREE.Vector3(3.68, 1.12, -0.1),
+        showcasePos: new THREE.Vector3(0.0, 2.7, 1.6),
+        showcaseRot: new THREE.Euler(0.45, 0, 0)
+      });
+
+      // 11. 40 بطاقة تحفيزية
+      const motivDeckGroup = new THREE.Group();
+      const motivCardTex = ArtEngine.makeTexture(380, 520, (ctx, w, h) => {
+        ctx.fillStyle = '#091533'; ctx.fillRect(0, 0, w, h);
+        ctx.strokeStyle = '#f4d06f'; ctx.lineWidth = 8; ctx.strokeRect(18, 18, w - 36, h - 36);
+        ctx.save(); ctx.translate(w / 2, h / 2); ctx.fillStyle = '#f4d06f';
+        ctx.beginPath();
+        for (let i = 0; i < 5; i++) {
+          ctx.lineTo(Math.cos((18 + i * 72) * Math.PI / 180) * 65, -Math.sin((18 + i * 72) * Math.PI / 180) * 65);
+          ctx.lineTo(Math.cos((54 + i * 72) * Math.PI / 180) * 28, -Math.sin((54 + i * 72) * Math.PI / 180) * 28);
+        }
+        ctx.closePath(); ctx.fill(); ctx.restore();
+      });
+      for (let i = 0; i < 8; i++) {
+        const card = buildCard(2.15, 0.04, 1.85, motivCardTex);
+        card.position.y = i * 0.045;
+        card.rotation.y = (i - 3.5) * 0.015;
+        motivDeckGroup.add(card);
+      }
+      itemsRoot.add(motivDeckGroup);
+      addPart({
+        id: 'motivational_cards_40',
+        name: '40 بطاقة تحفيزية',
+        category: 'مجموعة بطاقات',
+        description: 'مجموعة متكاملة من 40 بطاقة تحفيزية ملهمة بحواف ذهبية تمنحك دفعة إيجابية وحكمة يومية.',
+        spec: '40 بطاقة مقواة بحواف ذهبية',
+        group: motivDeckGroup,
+        closedPos: new THREE.Vector3(3.95, 1.25, -2.7),
+        showcasePos: new THREE.Vector3(3.5, 2.6, 1.5),
+        showcaseRot: new THREE.Euler(0.45, -0.14, 0)
+      });
+
+      // 12. شهادة مشاركة
+      const certGroup = new THREE.Group();
+      const certTex = ArtEngine.makeTexture(640, 460, (ctx, w, h) => {
+        ctx.fillStyle = '#fbf8f1'; ctx.fillRect(0, 0, w, h);
+        ctx.strokeStyle = '#b8860b'; ctx.lineWidth = 10; ctx.strokeRect(20, 20, w - 40, h - 40);
+        ctx.fillStyle = '#091533'; ctx.font = 'bold 34px Cairo, sans-serif'; ctx.textAlign = 'center';
+        ctx.fillText('شهادة مشاركة معتمدة', w / 2, 110);
+        ctx.font = '22px Cairo, sans-serif'; ctx.fillStyle = '#334155';
+        ctx.fillText('تمنحها أكاديمية إكسيلانس للتدريب والتعليم', w / 2, 165);
+        ctx.strokeStyle = '#d4af37'; ctx.lineWidth = 3;
+        ctx.beginPath(); ctx.moveTo(150, 280); ctx.lineTo(w - 150, 280); ctx.stroke();
+      });
+      certGroup.add(buildCard(3.45, 0.06, 2.15, certTex));
+      const certSeal = new THREE.Mesh(new THREE.CylinderGeometry(0.3, 0.3, 0.08, 28), Mat.goldMetallic);
+      certSeal.position.set(1.05, 0.02, 0.55);
+      certGroup.add(certSeal);
+      itemsRoot.add(certGroup);
+      addPart({
+        id: 'participation_certificate',
+        name: 'شهادة مشاركة',
+        category: 'وثيقة رسمية',
+        description: 'شهادة مشاركة رسمية مطبوعة على ورق فاخر بختم الأكاديمية الذهبي البارز توثق إتمامك للتجربة التدريبية.',
+        spec: 'ورق فاخر + ختم ذهبي بارز',
+        group: certGroup,
+        closedPos: new THREE.Vector3(-3.4, 1.58, 2.6),
+        showcasePos: new THREE.Vector3(6.8, 2.4, 1.2),
+        showcaseRot: new THREE.Euler(0.45, -0.28, 0)
+      });
+
+      // 13. مكتبة رحلتي التعليمية
+      const libraryTex = ArtEngine.makeTexture(520, 680, (ctx, w, h) => {
+        ctx.fillStyle = '#091533'; ctx.fillRect(0, 0, w, h);
+        ctx.strokeStyle = '#f4d06f'; ctx.lineWidth = 8; ctx.strokeRect(22, 22, w - 44, h - 44);
+        ArtEngine.drawEALogo(ctx, w / 2, h * 0.34, 1.2, '#f4d06f');
+        ctx.fillStyle = '#f4d06f'; ctx.font = 'bold 34px Cairo, sans-serif'; ctx.textAlign = 'center';
+        ctx.fillText('مكتبة رحلتي التعليمية', w / 2, h * 0.6);
+      });
+      const eduLibrary = buildCard(3.45, 0.16, 2.15, libraryTex);
+      itemsRoot.add(eduLibrary);
+      addPart({
+        id: 'educational_library',
+        name: 'مكتبة رحلتي التعليمية',
+        category: 'مرجع معرفي',
+        description: 'دليل شامل يضم أهم المراجع والكتب المقترحة والملخصات المعرفية لمواصلة التطور الذاتي.',
+        spec: 'دليل معرفي مطبوع',
+        group: eduLibrary,
+        closedPos: new THREE.Vector3(-3.4, 1.15, 2.6),
+        showcasePos: new THREE.Vector3(-0.6, 1.5, 4.7),
+        showcaseRot: new THREE.Euler(0.65, 0, 0)
+      });
+
+      // 14. فاصلة كتاب (Dream Big)
+      const bookmarkGroup = new THREE.Group();
+      const bmTex = ArtEngine.makeTexture(240, 640, (ctx, w, h) => {
+        ctx.fillStyle = '#091533'; ctx.fillRect(0, 0, w, h);
+        ctx.strokeStyle = '#f4d06f'; ctx.lineWidth = 8; ctx.strokeRect(14, 14, w - 28, h - 28);
+        ctx.fillStyle = '#f4d06f'; ctx.font = 'italic bold 44px Georgia, serif'; ctx.textAlign = 'center';
+        ctx.fillText('Dream', w / 2, h * 0.46);
+        ctx.fillText('Big', w / 2, h * 0.56);
+      });
+      bookmarkGroup.add(buildCard(0.85, 0.05, 1.85, bmTex));
+      const bmTassel = new THREE.Mesh(new THREE.CylinderGeometry(0.05, 0.09, 0.35, 16), Mat.goldMetallic);
+      bmTassel.rotation.x = Math.PI / 2;
+      bmTassel.position.set(0, 0.01, -1.05);
+      bookmarkGroup.add(bmTassel);
+      itemsRoot.add(bookmarkGroup);
+      addPart({
+        id: 'bookmark',
+        name: 'فاصلة كتاب (Dream Big)',
+        category: 'إكسسوار قراءة',
+        description: 'فاصلة كتاب أنيقة باللون الكحلي والذهبي مع عبارة "Dream Big" وشرابة ذهبية فاخرة.',
+        spec: 'طباعة ذهبية + شرابة حريرية',
+        group: bookmarkGroup,
+        closedPos: new THREE.Vector3(1.32, 1.58, -2.7),
+        showcasePos: new THREE.Vector3(1.5, 1.5, 4.7),
+        showcaseRot: new THREE.Euler(0.65, -0.06, 0)
+      });
+
+      // 15. بطاقة الدعم والمتابعة + 3 أشهر + تطبيقين على الهاتف
+      const supportTex = ArtEngine.makeTexture(600, 380, (ctx, w, h) => {
+        ctx.fillStyle = '#091533'; ctx.fillRect(0, 0, w, h);
+        ctx.strokeStyle = '#f4d06f'; ctx.lineWidth = 6; ctx.strokeRect(16, 16, w - 32, h - 32);
+        ArtEngine.drawEALogo(ctx, w / 2, 115, 0.85, '#f4d06f');
+        ctx.fillStyle = '#f4d06f'; ctx.font = 'bold 28px Cairo, sans-serif'; ctx.textAlign = 'center';
+        ctx.fillText('بطاقة الدعم والمتابعة • 3 أشهر', w / 2, 235);
+        ctx.fillStyle = '#e2e8f0'; ctx.font = '20px Cairo, sans-serif';
+        ctx.fillText('وصول لتطبيقين على الهاتف + مرافقة مستمرة', w / 2, 290);
+      });
+      const supportAndAppsCard = buildCard(3.05, 0.07, 2.15, supportTex);
+      itemsRoot.add(supportAndAppsCard);
+      addPart({
+        id: 'support_and_apps',
+        name: 'بطاقة الدعم والمتابعة (3 أشهر) + التطبيقين',
+        category: 'مرافقة وتطبيقات',
+        description: 'تمنحك مرافقة ومتابعة شخصية لمدة ثلاثة أشهر كاملة مع تفعيل تطبيقين ذكيين على الهاتف لمتابعة عاداتك وأهدافك.',
+        spec: 'متابعة 3 أشهر + تطبيقين للهاتف',
+        group: supportAndAppsCard,
+        closedPos: new THREE.Vector3(0.2, 1.18, 2.6),
+        showcasePos: new THREE.Vector3(3.8, 1.5, 4.6),
+        showcaseRot: new THREE.Euler(0.65, -0.16, 0)
+      });
+
+      // 16. هدية خاصة: جواز سفر أحلامي
+      const passportGroup = new THREE.Group();
+      const passportTex = ArtEngine.makeTexture(440, 620, (ctx, w, h) => {
+        ctx.fillStyle = '#07122b'; ctx.fillRect(0, 0, w, h);
+        ctx.strokeStyle = '#f4d06f'; ctx.lineWidth = 8; ctx.strokeRect(20, 20, w - 40, h - 40);
+        ctx.fillStyle = '#f4d06f'; ctx.font = 'bold 34px Cairo, sans-serif'; ctx.textAlign = 'center';
+        ctx.fillText('جواز سفر أحلامي', w / 2, 115);
+        ctx.strokeStyle = '#f4d06f'; ctx.lineWidth = 4;
+        ctx.beginPath(); ctx.arc(w / 2, h * 0.48, 85, 0, Math.PI * 2); ctx.stroke();
+        ctx.beginPath(); ctx.ellipse(w / 2, h * 0.48, 42, 85, 0, 0, Math.PI * 2); ctx.stroke();
+        ctx.beginPath(); ctx.moveTo(w / 2 - 85, h * 0.48); ctx.lineTo(w / 2 + 85, h * 0.48); ctx.stroke();
+        ctx.font = 'bold 22px Cairo, sans-serif';
+        ctx.fillText('هدية خاصة • يرافقك أينما كنت', w / 2, h * 0.82);
+      });
+      passportGroup.add(buildCard(3.05, 0.18, 2.15, passportTex));
+      itemsRoot.add(passportGroup);
+      addPart({
+        id: 'dream_passport',
+        name: 'هدية خاصة: جواز سفر أحلامي',
+        category: 'هدية حصرية',
+        description: 'كتيب جواز سفر أحلامي الفاخر بشعار الكرة الأرضية الذهبية — هدية خاصة مصممة لترافقك في كل مكان وتوثق رحلة تحقيق أحلامك.',
+        spec: 'طبعة ذهبية خاصة + صفحات تأشيرة الأحلام',
+        group: passportGroup,
+        closedPos: new THREE.Vector3(3.58, 1.52, 2.6),
+        showcasePos: new THREE.Vector3(6.3, 1.5, 4.3),
+        showcaseRot: new THREE.Euler(0.65, -0.25, 0)
+      });
+
+      const partsListEl = document.getElementById('parts-list');
+      registry.forEach((item, idx) => {
+        const btn = document.createElement('button');
+        btn.id = `nav-${item.id}`;
+        btn.className = 'w-full text-right px-2.5 py-2 rounded-xl border border-transparent hover:border-sky-400/40 hover:bg-sky-400/10 transition-all flex items-center justify-between gap-2 group';
+        btn.innerHTML = `
+          <div class="min-w-0">
+            <div class="text-[10px] font-bold text-sky-400/85">${String(idx + 1).padStart(2, '0')} • ${item.category}</div>
+            <div class="text-xs font-bold text-slate-100 truncate group-hover:text-sky-200">${item.name}</div>
+          </div>
+          <span class="text-sky-400/60 group-hover:text-sky-300 text-xs">←</span>
+        `;
+        btn.addEventListener('click', () => selectPart(item.id, true));
+        partsListEl.appendChild(btn);
+      });
+
+      const detailCard = document.getElementById('detail-card');
+      const detailBadge = document.getElementById('detail-badge');
+      const detailTitle = document.getElementById('detail-title');
+      const detailDesc = document.getElementById('detail-desc');
+      const detailSpec = document.getElementById('detail-spec');
+      const inspectTimerWrap = document.getElementById('inspect-timer-wrap');
+      const inspectCountdown = document.getElementById('inspect-countdown');
+      const inspectProgressBar = document.getElementById('inspect-progress-bar');
+      const hoverPill = document.getElementById('hover-pill');
+      const hoverTitle = document.getElementById('hover-title');
+
+      function selectPart(id, autoOpen = false) {
+        state.selectedId = id;
+        document.querySelectorAll('#parts-list button').forEach(b => b.classList.remove('bg-sky-500/20', 'border-sky-400/60'));
+        const active = document.getElementById(`nav-${id}`);
+        if (active) {
+          active.classList.add('bg-sky-500/20', 'border-sky-400/60');
+          active.scrollIntoView({ behavior: 'smooth', block: 'nearest' });
+        }
+
+        const item = registry.find(r => r.id === id);
+        if (!item) return;
+
+        if (autoOpen && item.isContent && !state.lidOpen) setLid(true);
+
+        if (item.isContent) {
+          state.inspectTimer = state.inspectDuration;
+          inspectTimerWrap.classList.remove('hidden');
+        } else {
+          state.inspectTimer = 0;
+          inspectTimerWrap.classList.add('hidden');
+        }
+
+        detailBadge.textContent = item.category;
+        detailTitle.textContent = item.name;
+        detailDesc.textContent = item.description;
+        detailSpec.textContent = item.spec;
+
+        detailCard.classList.remove('opacity-0', '-translate-x-8', 'pointer-events-none');
+        detailCard.classList.add('opacity-100', 'translate-x-0', 'pointer-events-auto');
+      }
+
+      function clearSelection() {
+        state.selectedId = null;
+        state.inspectTimer = 0;
+        inspectTimerWrap.classList.add('hidden');
+        document.querySelectorAll('#parts-list button').forEach(b => b.classList.remove('bg-sky-500/20', 'border-sky-400/60'));
+        detailCard.classList.add('opacity-0', '-translate-x-8', 'pointer-events-none');
+        detailCard.classList.remove('opacity-100', 'translate-x-0', 'pointer-events-auto');
+      }
+
+      document.getElementById('close-detail').addEventListener('click', clearSelection);
+      document.getElementById('return-now-btn').addEventListener('click', clearSelection);
+
+      const raycaster = new THREE.Raycaster();
+      const pointer = new THREE.Vector2();
+      let downPos = { x: 0, y: 0 };
+
+      function updatePointer(clientX, clientY) {
+        const rect = renderer.domElement.getBoundingClientRect();
+        pointer.x = ((clientX - rect.left) / rect.width) * 2 - 1;
+        pointer.y = -((clientY - rect.top) / rect.height) * 2 + 1;
+      }
+
+      function getHitPart(clientX, clientY) {
+        updatePointer(clientX, clientY);
+        raycaster.setFromCamera(pointer, camera);
+        const hits = raycaster.intersectObjects(rootAssembly.children, true);
+        for (const h of hits) {
+          if (h.object.visible && h.object.userData && h.object.userData.partId) {
+            return h.object.userData.partId;
+          }
+        }
+        return null;
+      }
+
+      renderer.domElement.addEventListener('pointerdown', (e) => {
+        downPos = { x: e.clientX, y: e.clientY };
+      });
+
+      renderer.domElement.addEventListener('pointermove', (e) => {
+        const hitId = getHitPart(e.clientX, e.clientY);
+        if (hitId) {
+          const item = registry.find(r => r.id === hitId);
+          if (item) {
+            hoverTitle.textContent = item.name;
+            hoverPill.classList.remove('opacity-0');
+            renderer.domElement.style.cursor = 'pointer';
+            return;
+          }
+        }
+        hoverPill.classList.add('opacity-0');
+        renderer.domElement.style.cursor = 'grab';
+      });
+
+      renderer.domElement.addEventListener('pointerup', (e) => {
+        const dist = Math.hypot(e.clientX - downPos.x, e.clientY - downPos.y);
+        if (dist > 6) return;
+        const hitId = getHitPart(e.clientX, e.clientY);
+        if (!hitId) return;
+
+        if (hitId === 'box_lid') {
+          setLid(!state.lidOpen);
+        } else {
+          selectPart(hitId, true);
+        }
+      });
+
+      const lidBtnText = document.getElementById('lid-btn-text');
+      const showcaseBtnText = document.getElementById('showcase-btn-text');
+      const btnShowcase = document.getElementById('btn-showcase');
+      const btnEmpty = document.getElementById('btn-empty');
+
+      function setLid(open) {
+        state.lidOpen = open;
+        lidBtnText.textContent = state.lidOpen ? 'إغلاق غطاء البوكس' : 'فتح غطاء البوكس';
+        if (!state.lidOpen && state.showcaseMode) setShowcase(false);
+      }
+
+      function setShowcase(active) {
+        state.showcaseMode = active;
+        showcaseBtnText.textContent = state.showcaseMode ? 'إعادة ترتيب المحتويات داخل البوكس' : 'استعراض كل المحتويات';
+        btnShowcase.classList.toggle('active', state.showcaseMode);
+        if (state.showcaseMode) {
+          if (!state.lidOpen) setLid(true);
+          if (state.emptyBox) setEmptyBox(false);
+        }
+      }
+
+      function setEmptyBox(empty) {
+        state.emptyBox = empty;
+        btnEmpty.classList.toggle('active', state.emptyBox);
+        itemsRoot.visible = !state.emptyBox;
+        if (state.emptyBox && !state.lidOpen) setLid(true);
+      }
+
+      lidBtnText.textContent = 'إغلاق غطاء البوكس';
+
+      document.getElementById('btn-toggle-lid').addEventListener('click', () => setLid(!state.lidOpen));
+      document.getElementById('btn-showcase').addEventListener('click', () => setShowcase(!state.showcaseMode));
+      document.getElementById('btn-empty').addEventListener('click', () => setEmptyBox(!state.emptyBox));
+      document.getElementById('btn-reset').addEventListener('click', () => {
+        clearSelection();
+        setShowcase(false);
+        setEmptyBox(false);
+        setLid(true);
+        camera.position.set(1.2, 13.5, 16.5);
+        controls.target.set(0, 1.8, 0);
+      });
+
+      const partsDrawer = document.getElementById('parts-drawer');
+      document.getElementById('open-drawer-btn').addEventListener('click', () => partsDrawer.classList.remove('translate-x-[120%]'));
+      document.getElementById('close-drawer').addEventListener('click', () => partsDrawer.classList.add('translate-x-[120%]'));
+
+      const clock = new THREE.Clock();
+      const inspectHeroPos = new THREE.Vector3(0, 5.6, 3.2);
+
+      function animate3D() {
+        requestAnimationFrame(animate3D);
+        if (container.clientWidth === 0 || container.clientHeight === 0) return;
+
+        const dt = Math.min(clock.getDelta(), 0.05);
+        const elapsed = clock.getElapsedTime();
+        const speed = 5.5 * dt;
+
+        if (state.selectedId && state.inspectTimer > 0) {
+          state.inspectTimer -= dt;
+          if (state.inspectTimer <= 0) {
+            clearSelection();
+          } else {
+            const secs = Math.ceil(state.inspectTimer);
+            inspectCountdown.textContent = `${secs} ث`;
+            inspectProgressBar.style.width = `${(state.inspectTimer / state.inspectDuration) * 100}%`;
+          }
+        }
+
+        const targetLid = state.lidOpen ? 1 : 0;
+        state.lidProgress += (targetLid - state.lidProgress) * speed;
+        const p = state.lidProgress;
+
+        const lidObj = registry.find(r => r.id === 'box_lid');
+        if (lidObj) {
+          const arc = Math.sin(p * Math.PI) * 1.4;
+          lidObj.group.position.x = 0;
+          lidObj.group.position.y = THREE.MathUtils.lerp(lidClosedPos.y, lidOpenPos.y, p) + arc;
+          lidObj.group.position.z = THREE.MathUtils.lerp(lidClosedPos.z, lidOpenPos.z, p);
+          lidObj.group.rotation.x = THREE.MathUtils.lerp(0, lidOpenRot.x, p);
+        }
+
+        const targetShow = state.showcaseMode ? 1 : 0;
+        state.showcaseProgress += (targetShow - state.showcaseProgress) * speed;
+        const sp = state.showcaseProgress;
+
+        registry.forEach(item => {
+          if (!item.isContent) return;
+
+          const isInspecting = (state.selectedId === item.id && state.lidOpen && state.inspectTimer > 0);
+          const targetBlend = isInspecting ? 1 : 0;
+          item.inspectBlend += (targetBlend - item.inspectBlend) * (4.8 * dt);
+          const ib = item.inspectBlend;
+
+          const baseX = THREE.MathUtils.lerp(item.closedPos.x, item.showcasePos.x, sp);
+          const baseY = THREE.MathUtils.lerp(item.closedPos.y, item.showcasePos.y, sp);
+          const baseZ = THREE.MathUtils.lerp(item.closedPos.z, item.showcasePos.z, sp);
+
+          const baseRotX = THREE.MathUtils.lerp(item.closedRot.x, item.showcaseRot.x, sp);
+          const baseRotY = THREE.MathUtils.lerp(item.closedRot.y, item.showcaseRot.y, sp);
+          const baseRotZ = THREE.MathUtils.lerp(item.closedRot.z, item.showcaseRot.z, sp);
+
+          const hoverBob = Math.sin(elapsed * 2.4) * 0.14 * ib;
+          const spinRotY = Math.sin(elapsed * 0.95) * 0.42 * ib;
+
+          item.group.position.x = THREE.MathUtils.lerp(baseX, inspectHeroPos.x, ib);
+          item.group.position.y = THREE.MathUtils.lerp(baseY, inspectHeroPos.y, ib) + hoverBob;
+          item.group.position.z = THREE.MathUtils.lerp(baseZ, inspectHeroPos.z, ib);
+
+          item.group.rotation.x = THREE.MathUtils.lerp(baseRotX, 0.72, ib);
+          item.group.rotation.y = THREE.MathUtils.lerp(baseRotY, spinRotY, ib);
+          item.group.rotation.z = THREE.MathUtils.lerp(baseRotZ, 0, ib);
+        });
+
+        controls.update();
+        renderer.render(scene, camera);
+      }
+
+      window.addEventListener('resize', () => {
+        if (container.clientWidth > 0 && container.clientHeight > 0) {
+          camera.aspect = container.clientWidth / container.clientHeight;
+          camera.updateProjectionMatrix();
+          renderer.setSize(container.clientWidth, container.clientHeight);
+        }
+      });
+
+      animate3D();
+    }
+  </script>
+</body>
+</html>
