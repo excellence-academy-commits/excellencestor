@@ -552,32 +552,107 @@
 
     <!-- القسم السادس: المدرب أحمد رجوح والأكاديمية -->
     <section class="py-16 bg-white px-4 reveal">
-      <div class="max-w-4xl mx-auto grid grid-cols-1 md:grid-cols-2 gap-6">
-        <div class="bg-slate-50 p-6 rounded-3xl border border-slate-200 flex items-start gap-4">
-          <div class="w-16 h-16 rounded-2xl bg-brand-900 border border-sky-400/60 text-sky-300 flex items-center justify-center text-2xl shrink-0">
-            <i class="fa-solid fa-user-tie"></i>
-          </div>
-          <div>
-            <span class="text-xs font-extrabold text-sky-700">تعرف على المدرب</span>
-            <h3 class="text-xl font-black text-brand-950 mt-0.5">أحمد رجوح – Ahmed Redjouh</h3>
-            <p class="text-xs font-bold text-slate-600 mt-1 leading-relaxed">
-              مدرب في التخطيط والقيادة والإدارة وتطوير المهارات.
-            </p>
+      <div class="max-w-5xl mx-auto space-y-6">
+        
+        <!-- بطاقة المدرب أحمد رجوح المتكاملة -->
+        <div class="bg-gradient-to-br from-slate-50 via-white to-sky-50/60 p-6 sm:p-8 rounded-3xl border-2 border-sky-200 shadow-lg">
+          <div class="flex flex-col md:flex-row items-center md:items-start gap-6 sm:gap-8">
+            
+            <!-- مساحة صورة المدرب (ارفع ملف الصورة في GitHub باسم: ahmed-redjouh.jpg) -->
+            <div class="relative shrink-0">
+              <div class="w-36 h-36 sm:w-44 sm:h-44 rounded-3xl bg-brand-900 border-2 border-sky-400 shadow-[0_12px_30px_-8px_rgba(2,132,199,0.4)] overflow-hidden flex items-center justify-center">
+                <img
+                  src="ahmed-redjouh.jpg"
+                  alt="المدرب الدولي أحمد رجوح - Ahmed Redjouh"
+                  class="w-full h-full object-cover"
+                  onerror="this.style.display='none'; this.nextElementSibling.style.display='flex';"
+                />
+                <div class="hidden w-full h-full flex-col items-center justify-center text-sky-300 p-3 text-center">
+                  <i class="fa-solid fa-user-tie text-4xl mb-2"></i>
+                  <span class="font-en text-[10px] text-sky-200/80">ahmed-redjouh.jpg</span>
+                </div>
+              </div>
+              <div class="mt-2.5 text-center">
+                <span class="inline-flex items-center gap-1.5 text-[11px] font-extrabold text-sky-800 bg-sky-100 border border-sky-300 px-3 py-1 rounded-full">
+                  <i class="fa-solid fa-globe text-sky-600"></i> درّب وزار وحاضر في 10 دول
+                </span>
+              </div>
+            </div>
+
+            <!-- معلومات المدرب والإحصائيات -->
+            <div class="flex-1 text-center md:text-right w-full">
+              <div class="inline-flex items-center gap-2 px-3.5 py-1 rounded-full bg-brand-900 text-sky-300 text-xs font-extrabold mb-2">
+                <i class="fa-solid fa-award text-sky-400"></i>
+                <span>مدرب ومحاضر دولي</span>
+              </div>
+
+              <h3 class="text-2xl sm:text-3xl font-black text-brand-950">
+                أحمد رجوح <span class="font-en text-sm sm:text-base font-bold text-sky-600 block sm:inline sm:mr-2">Ahmed Redjouh</span>
+              </h3>
+
+              <div class="mt-2.5 space-y-1 text-xs sm:text-sm font-bold text-slate-700">
+                <p class="flex items-center justify-center md:justify-start gap-2">
+                  <i class="fa-solid fa-circle-check text-sky-600"></i>
+                  <span>مدرب دولي في التخطيط الاستراتيجي والقيادة والإدارة</span>
+                </p>
+                <p class="flex items-center justify-center md:justify-start gap-2">
+                  <i class="fa-solid fa-circle-check text-sky-600"></i>
+                  <span>كوتش معتمد في الثقة بالنفس</span>
+                </p>
+              </div>
+
+              <!-- شبكة الإحصائيات الستة -->
+              <div class="grid grid-cols-2 sm:grid-cols-3 gap-2.5 sm:gap-3 mt-5">
+                <div class="bg-white p-3 rounded-2xl border border-sky-200/90 shadow-sm text-center">
+                  <span class="font-en text-xl sm:text-2xl font-black text-sky-600 block" dir="ltr">+100</span>
+                  <span class="text-[11px] sm:text-xs font-extrabold text-slate-800">دورة تدريبية</span>
+                </div>
+                <div class="bg-white p-3 rounded-2xl border border-sky-200/90 shadow-sm text-center">
+                  <span class="font-en text-xl sm:text-2xl font-black text-sky-600 block" dir="ltr">8</span>
+                  <span class="text-[11px] sm:text-xs font-extrabold text-slate-800">سنوات خبرة في التدريب</span>
+                </div>
+                <div class="bg-white p-3 rounded-2xl border border-sky-200/90 shadow-sm text-center">
+                  <span class="font-en text-xl sm:text-2xl font-black text-sky-600 block" dir="ltr">+5000</span>
+                  <span class="text-[11px] sm:text-xs font-extrabold text-slate-800">مستفيد من الدورات</span>
+                </div>
+                <div class="bg-white p-3 rounded-2xl border border-sky-200/90 shadow-sm text-center">
+                  <span class="font-en text-xl sm:text-2xl font-black text-sky-600 block" dir="ltr">26</span>
+                  <span class="text-[11px] sm:text-xs font-extrabold text-slate-800">دولة مستفيدة من الدورات</span>
+                </div>
+                <div class="bg-white p-3 rounded-2xl border border-sky-200/90 shadow-sm text-center">
+                  <span class="font-en text-xl sm:text-2xl font-black text-sky-600 block" dir="ltr">+100</span>
+                  <span class="text-[11px] sm:text-xs font-extrabold text-slate-800">شهادة علمية وتدريبية وتقديرية</span>
+                </div>
+                <div class="bg-white p-3 rounded-2xl border border-sky-200/90 shadow-sm text-center">
+                  <span class="font-en text-xl sm:text-2xl font-black text-sky-600 block" dir="ltr">+15</span>
+                  <span class="text-[11px] sm:text-xs font-extrabold text-slate-800">مؤتمر وملتقى دولي</span>
+                </div>
+              </div>
+
+              <!-- القيم الأساسية -->
+              <div class="mt-4 bg-brand-900 text-white rounded-2xl p-3.5 sm:p-4 border border-sky-400/50 flex flex-col sm:flex-row items-center justify-center md:justify-start gap-2 text-xs sm:text-sm">
+                <span class="font-black text-sky-300 shrink-0"><i class="fa-solid fa-heart text-sky-400 ml-1"></i> قيمه الأساسية:</span>
+                <span class="font-bold text-slate-100">الإخلاص في البداية، الصدق في الطريق، وعطاء مستمر</span>
+              </div>
+            </div>
+
           </div>
         </div>
 
+        <!-- بطاقة الأكاديمية -->
         <div class="bg-slate-50 p-6 rounded-3xl border border-slate-200 flex items-start gap-4">
-          <div class="w-16 h-16 rounded-2xl bg-brand-900 border border-sky-400/60 text-sky-300 flex items-center justify-center text-2xl shrink-0">
+          <div class="w-14 h-14 sm:w-16 sm:h-16 rounded-2xl bg-brand-900 border border-sky-400/60 text-sky-300 flex items-center justify-center text-2xl shrink-0">
             <i class="fa-solid fa-graduation-cap"></i>
           </div>
           <div>
             <span class="font-en text-xs font-extrabold text-sky-700">EXCELLENCE ACADEMY</span>
-            <h3 class="text-xl font-black text-brand-950 mt-0.5">أكاديمية إكسيلانس للتدريب والتعليم</h3>
-            <p class="text-xs font-bold text-slate-600 mt-1 leading-relaxed">
+            <h3 class="text-lg sm:text-xl font-black text-brand-950 mt-0.5">أكاديمية إكسيلانس للتدريب والتعليم</h3>
+            <p class="text-xs sm:text-sm font-bold text-slate-600 mt-1 leading-relaxed">
               نؤمن بأن تطوير الإنسان يبدأ من وعيه بذاته، وقدرته على تحديد رؤيته، وبناء استراتيجيته، وتحويل إمكاناته إلى نتائج ملموسة.
             </p>
           </div>
         </div>
+
       </div>
     </section>
 
