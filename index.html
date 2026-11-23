@@ -2780,34 +2780,7 @@
         showcaseRot: new THREE.Euler(0.65, 0, 0)
       });
 
-      // 14. فاصلة كتاب (Dream Big)
-      const bookmarkGroup = new THREE.Group();
-      const bmTex = ArtEngine.makeTexture(240, 640, (ctx, w, h) => {
-        ctx.fillStyle = '#091533'; ctx.fillRect(0, 0, w, h);
-        ctx.strokeStyle = '#f4d06f'; ctx.lineWidth = 8; ctx.strokeRect(14, 14, w - 28, h - 28);
-        ctx.fillStyle = '#f4d06f'; ctx.font = 'italic bold 44px Georgia, serif'; ctx.textAlign = 'center';
-        ctx.fillText('Dream', w / 2, h * 0.46);
-        ctx.fillText('Big', w / 2, h * 0.56);
-      });
-      bookmarkGroup.add(buildCard(0.85, 0.05, 1.85, bmTex));
-      const bmTassel = new THREE.Mesh(new THREE.CylinderGeometry(0.05, 0.09, 0.35, 16), Mat.goldMetallic);
-      bmTassel.rotation.x = Math.PI / 2;
-      bmTassel.position.set(0, 0.01, -1.05);
-      bookmarkGroup.add(bmTassel);
-      itemsRoot.add(bookmarkGroup);
-      addPart({
-        id: 'bookmark',
-        name: 'فاصلة كتاب (Dream Big)',
-        category: 'إكسسوار قراءة',
-        description: 'فاصلة كتاب أنيقة باللون الكحلي والذهبي مع عبارة "Dream Big" وشرابة ذهبية فاخرة.',
-        spec: 'طباعة ذهبية + شرابة حريرية',
-        group: bookmarkGroup,
-        closedPos: new THREE.Vector3(1.32, 1.58, -2.7),
-        showcasePos: new THREE.Vector3(1.5, 1.5, 4.7),
-        showcaseRot: new THREE.Euler(0.65, -0.06, 0)
-      });
-
-      // 15. بطاقة الدعم والمتابعة + 3 أشهر + تطبيقين على الهاتف
+      // 14. بطاقة الدعم والمتابعة + 3 أشهر + تطبيقين على الهاتف
       const supportTex = ArtEngine.makeTexture(600, 380, (ctx, w, h) => {
         ctx.fillStyle = '#091533'; ctx.fillRect(0, 0, w, h);
         ctx.strokeStyle = '#f4d06f'; ctx.lineWidth = 6; ctx.strokeRect(16, 16, w - 32, h - 32);
@@ -2831,7 +2804,7 @@
         showcaseRot: new THREE.Euler(0.65, -0.16, 0)
       });
 
-      // 16. هدية خاصة: جواز سفر أحلامي
+      // 15. هدية خاصة: جواز سفر أحلامي
       const passportGroup = new THREE.Group();
       const passportTex = ArtEngine.makeTexture(440, 620, (ctx, w, h) => {
         ctx.fillStyle = '#07122b'; ctx.fillRect(0, 0, w, h);
