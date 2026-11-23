@@ -243,8 +243,15 @@
   <!-- 0. شاشة البداية الترحيبية مع تحريك الشعار (fondu) -->
   <!-- ========================================================= -->
   <div id="splashScreen" class="fixed inset-0 z-[100] bg-gradient-to-br from-brand-950 via-brand-900 to-sky-900 flex flex-col items-center justify-center text-white px-6 text-center transition-opacity duration-1000 ease-in-out">
-    <div class="splash-logo-anim w-24 h-24 rounded-3xl bg-sky-500/15 backdrop-blur-md border-2 border-sky-400 flex items-center justify-center mb-6">
-      <svg class="w-12 h-12 text-sky-400" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+    <!-- ضع صورة شعار الأكاديمية في GitHub باسم: academy-logo.png -->
+    <div class="splash-logo-anim w-24 h-24 rounded-3xl bg-sky-500/15 backdrop-blur-md border-2 border-sky-400 flex items-center justify-center mb-6 overflow-hidden p-2">
+      <img
+        src="academy-logo.png"
+        alt="شعار أكاديمية إكسيلانس - Excellence Academy"
+        class="w-full h-full object-contain rounded-2xl"
+        onerror="this.style.display='none'; this.nextElementSibling.style.display='block';"
+      />
+      <svg class="hidden w-12 h-12 text-sky-400" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
         <path d="M12 2L2 7l10 5 10-5-10-5zM2 17l10 5 10-5M2 12l10 5 10-5" stroke-linecap="round" stroke-linejoin="round"/>
       </svg>
     </div>
@@ -261,8 +268,15 @@
     <!-- شريط علوي نظيف -->
     <header class="w-full max-w-6xl mx-auto px-4 pt-5 pb-3 flex items-center justify-between">
       <div class="flex items-center gap-3">
-        <div class="w-10 h-10 rounded-xl bg-brand-900 border border-sky-400/70 text-sky-300 flex items-center justify-center shadow-md">
-          <svg class="w-5 h-5" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2">
+        <!-- ضع صورة شعار الأكاديمية في GitHub باسم: academy-logo.png -->
+        <div class="w-11 h-11 rounded-xl bg-brand-900 border border-sky-400/70 text-sky-300 flex items-center justify-center shadow-md overflow-hidden p-1 shrink-0">
+          <img
+            src="academy-logo.png"
+            alt="شعار أكاديمية إكسيلانس"
+            class="w-full h-full object-contain rounded-lg"
+            onerror="this.style.display='none'; this.nextElementSibling.style.display='block';"
+          />
+          <svg class="hidden w-5 h-5" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2">
             <path d="M12 2L2 7l10 5 10-5-10-5zM2 17l10 5 10-5M2 12l10 5 10-5" stroke-linecap="round" stroke-linejoin="round"/>
           </svg>
         </div>
@@ -350,202 +364,254 @@
       </div>
     </section>
 
-    <!-- القسم الثالث: المشكلة التي يعالجها البرنامج -->
-    <section class="py-16 bg-slate-50 border-y border-slate-200/70 px-4 reveal">
+    <!-- القسم الثالث المدمج: التحديات + الفئات المستهدفة (نظام تبويبات ذكي لتقليص طول الصفحة دون حذف أي معلومة) -->
+    <section class="py-12 bg-slate-50 border-y border-slate-200/70 px-4 reveal">
       <div class="max-w-4xl mx-auto">
-        <div class="text-center max-w-2xl mx-auto mb-10">
-          <span class="text-xs font-extrabold text-sky-700 bg-sky-50 border border-sky-300 px-3.5 py-1 rounded-full">هل تواجه هذه التحديات؟</span>
-          <h2 class="text-2xl sm:text-3xl font-black text-brand-950 mt-3 leading-snug">
+        <div class="text-center max-w-2xl mx-auto mb-6">
+          <h2 class="text-xl sm:text-3xl font-black text-brand-950 leading-snug">
             هل تشعر أنك تعمل كثيرًا، لكنك لا تتقدم بالقدر الذي تطمح إليه؟
           </h2>
+          <p class="text-xs sm:text-sm font-bold text-slate-500 mt-1.5">اختر التبويب لاستعراض التحديات أو الفئات المستهدفة</p>
         </div>
 
-        <div class="grid grid-cols-1 sm:grid-cols-2 gap-3.5 mb-8">
-          <div class="bg-white p-4 rounded-2xl border border-slate-200/80 shadow-sm flex items-center gap-3.5">
-            <div class="w-9 h-9 rounded-xl bg-sky-50 border border-sky-300 text-sky-600 flex items-center justify-center shrink-0"><i class="fa-solid fa-compass"></i></div>
-            <span class="text-xs sm:text-sm font-bold text-slate-800">الانشغال اليومي دون رؤية واضحة.</span>
-          </div>
-          <div class="bg-white p-4 rounded-2xl border border-slate-200/80 shadow-sm flex items-center gap-3.5">
-            <div class="w-9 h-9 rounded-xl bg-sky-50 border border-sky-300 text-sky-600 flex items-center justify-center shrink-0"><i class="fa-solid fa-list-ol"></i></div>
-            <span class="text-xs sm:text-sm font-bold text-slate-800">تعدد الأهداف وصعوبة ترتيب الأولويات.</span>
-          </div>
-          <div class="bg-white p-4 rounded-2xl border border-slate-200/80 shadow-sm flex items-center gap-3.5">
-            <div class="w-9 h-9 rounded-xl bg-sky-50 border border-sky-300 text-sky-600 flex items-center justify-center shrink-0"><i class="fa-solid fa-anchor"></i></div>
-            <span class="text-xs sm:text-sm font-bold text-slate-800">الشعور بالجمود الشخصي أو المهني.</span>
-          </div>
-          <div class="bg-white p-4 rounded-2xl border border-slate-200/80 shadow-sm flex items-center gap-3.5">
-            <div class="w-9 h-9 rounded-xl bg-sky-50 border border-sky-300 text-sky-600 flex items-center justify-center shrink-0"><i class="fa-solid fa-scale-balanced"></i></div>
-            <span class="text-xs sm:text-sm font-bold text-slate-800">صعوبة اتخاذ القرارات المهمة.</span>
-          </div>
-          <div class="bg-white p-4 rounded-2xl border border-slate-200/80 shadow-sm flex items-center gap-3.5">
-            <div class="w-9 h-9 rounded-xl bg-sky-50 border border-sky-300 text-sky-600 flex items-center justify-center shrink-0"><i class="fa-solid fa-battery-quarter"></i></div>
-            <span class="text-xs sm:text-sm font-bold text-slate-800">ضعف الانضباط والاستمرارية.</span>
-          </div>
-          <div class="bg-white p-4 rounded-2xl border border-slate-200/80 shadow-sm flex items-center gap-3.5">
-            <div class="w-9 h-9 rounded-xl bg-sky-50 border border-sky-300 text-sky-600 flex items-center justify-center shrink-0"><i class="fa-solid fa-map"></i></div>
-            <span class="text-xs sm:text-sm font-bold text-slate-800">امتلاك الطموح دون وجود خطة واضحة.</span>
-          </div>
-          <div class="bg-white p-4 rounded-2xl border border-slate-200/80 shadow-sm flex items-center gap-3.5">
-            <div class="w-9 h-9 rounded-xl bg-sky-50 border border-sky-300 text-sky-600 flex items-center justify-center shrink-0"><i class="fa-solid fa-yin-yang"></i></div>
-            <span class="text-xs sm:text-sm font-bold text-slate-800">صعوبة الموازنة بين الحياة الشخصية والمهنية.</span>
-          </div>
-          <div class="bg-white p-4 rounded-2xl border border-slate-200/80 shadow-sm flex items-center gap-3.5">
-            <div class="w-9 h-9 rounded-xl bg-sky-50 border border-sky-300 text-sky-600 flex items-center justify-center shrink-0"><i class="fa-solid fa-bullseye"></i></div>
-            <span class="text-xs sm:text-sm font-bold text-slate-800">عدم القدرة على تحويل الأفكار إلى نتائج ملموسة.</span>
-          </div>
-        </div>
-
-        <div class="bg-brand-900 text-white border border-sky-400/50 rounded-2xl p-5 text-center shadow-md">
-          <p class="text-xs sm:text-sm font-black text-sky-300">
-            المشكلة ليست دائمًا في قلة الجهد، بل قد تكون في غياب الرؤية والاستراتيجية المناسبة.
-          </p>
-        </div>
-      </div>
-    </section>
-
-    <!-- القسم الرابع: الفئات المستهدفة -->
-    <section class="py-16 bg-white px-4 reveal">
-      <div class="max-w-4xl mx-auto">
-        <div class="text-center max-w-2xl mx-auto mb-10">
-          <span class="text-xs font-extrabold text-sky-700 bg-sky-50 border border-sky-300 px-3.5 py-1 rounded-full">الجمهور المستهدف</span>
-          <h2 class="text-2xl sm:text-3xl font-black text-brand-950 mt-2">لمن صُمّم هذا البرنامج؟</h2>
-        </div>
-
-        <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4 mb-10">
-          <div class="bg-slate-50 p-5 rounded-2xl border border-slate-200/80 hover:border-sky-400 transition flex items-center gap-3.5">
-            <div class="w-11 h-11 rounded-xl bg-brand-900 text-sky-300 flex items-center justify-center text-lg shrink-0"><i class="fa-solid fa-user-tie"></i></div>
-            <h3 class="text-sm font-extrabold text-slate-900">المدراء التنفيذيون</h3>
-          </div>
-          <div class="bg-slate-50 p-5 rounded-2xl border border-slate-200/80 hover:border-sky-400 transition flex items-center gap-3.5">
-            <div class="w-11 h-11 rounded-xl bg-brand-900 text-sky-300 flex items-center justify-center text-lg shrink-0"><i class="fa-solid fa-building"></i></div>
-            <h3 class="text-sm font-extrabold text-slate-900">أصحاب المؤسسات والمشاريع</h3>
-          </div>
-          <div class="bg-slate-50 p-5 rounded-2xl border border-slate-200/80 hover:border-sky-400 transition flex items-center gap-3.5">
-            <div class="w-11 h-11 rounded-xl bg-brand-900 text-sky-300 flex items-center justify-center text-lg shrink-0"><i class="fa-solid fa-rocket"></i></div>
-            <h3 class="text-sm font-extrabold text-slate-900">رواد الأعمال</h3>
-          </div>
-          <div class="bg-slate-50 p-5 rounded-2xl border border-slate-200/80 hover:border-sky-400 transition flex items-center gap-3.5">
-            <div class="w-11 h-11 rounded-xl bg-brand-900 text-sky-300 flex items-center justify-center text-lg shrink-0"><i class="fa-solid fa-users-gear"></i></div>
-            <h3 class="text-sm font-extrabold text-slate-900">مسؤولو الفرق وقادة العمل</h3>
-          </div>
-          <div class="bg-slate-50 p-5 rounded-2xl border border-slate-200/80 hover:border-sky-400 transition flex items-center gap-3.5">
-            <div class="w-11 h-11 rounded-xl bg-brand-900 text-sky-300 flex items-center justify-center text-lg shrink-0"><i class="fa-solid fa-chart-line"></i></div>
-            <h3 class="text-sm font-extrabold text-slate-900">الموظفون الطموحون الراغبون في تطوير مسارهم المهني</h3>
-          </div>
-          <div class="bg-slate-50 p-5 rounded-2xl border border-slate-200/80 hover:border-sky-400 transition flex items-center gap-3.5">
-            <div class="w-11 h-11 rounded-xl bg-brand-900 text-sky-300 flex items-center justify-center text-lg shrink-0"><i class="fa-solid fa-compass"></i></div>
-            <h3 class="text-sm font-extrabold text-slate-900">كل شخص يريد بناء رؤية واضحة لحياته ومستقبله</h3>
-          </div>
-        </div>
-
-        <div class="text-center">
-          <button type="button" onclick="switchSection('packages')" class="glow-btn text-base px-9 py-4">
-            <span>سجّل الآن واكتشف الباقة المناسبة لك</span>
-            <i class="fa-solid fa-arrow-left text-sm"></i>
-          </button>
-        </div>
-      </div>
-    </section>
-
-    <!-- القسم الخامس: رحلة البرنامج والمحاور التدريبية -->
-    <section id="curriculumSection" class="py-16 bg-slate-50 border-y border-slate-200/70 px-4 reveal">
-      <div class="max-w-5xl mx-auto">
-        <div class="text-center max-w-2xl mx-auto mb-10">
-          <span class="text-xs font-extrabold text-sky-700">رحلة متكاملة من اكتشاف الذات إلى تصميم المستقبل</span>
-          <h2 class="text-2xl sm:text-3xl font-black text-brand-950 mt-2">ماذا ستتعلم في برنامج <span class="text-gold-gradient">هندسة الحياة؟</span></h2>
-          <p class="text-xs sm:text-sm text-slate-600 mt-2">
-            هندسة الحياة برنامج تدريبي يدمج بين التخطيط الاستراتيجي الشخصي وتطوير المهارات الجوهرية والقيادية:
-          </p>
-        </div>
-
-        <!-- 7 خطوات للرحلة -->
-        <div class="grid grid-cols-2 sm:grid-cols-4 lg:grid-cols-7 gap-2.5 mb-12 text-center">
-          <div class="bg-white p-3.5 rounded-2xl border border-sky-200 shadow-sm"><span class="font-en text-xs font-black text-sky-600 block">01</span><span class="text-xs font-extrabold text-slate-900">اكتشف ذاتك</span></div>
-          <div class="bg-white p-3.5 rounded-2xl border border-sky-200 shadow-sm"><span class="font-en text-xs font-black text-sky-600 block">02</span><span class="text-xs font-extrabold text-slate-900">افهم واقعك</span></div>
-          <div class="bg-white p-3.5 rounded-2xl border border-sky-200 shadow-sm"><span class="font-en text-xs font-black text-sky-600 block">03</span><span class="text-xs font-extrabold text-slate-900">صمّم رؤيتك</span></div>
-          <div class="bg-white p-3.5 rounded-2xl border border-sky-200 shadow-sm"><span class="font-en text-xs font-black text-sky-600 block">04</span><span class="text-xs font-extrabold text-slate-900">ابنِ استراتيجيتك</span></div>
-          <div class="bg-white p-3.5 rounded-2xl border border-sky-200 shadow-sm"><span class="font-en text-xs font-black text-sky-600 block">05</span><span class="text-xs font-extrabold text-slate-900">طوّر قدراتك</span></div>
-          <div class="bg-white p-3.5 rounded-2xl border border-sky-200 shadow-sm"><span class="font-en text-xs font-black text-sky-600 block">06</span><span class="text-xs font-extrabold text-slate-900">نفّذ خطتك</span></div>
-          <div class="bg-brand-900 text-white p-3.5 rounded-2xl border border-sky-400 shadow-sm col-span-2 sm:col-span-1"><span class="font-en text-xs font-black text-sky-400 block">07</span><span class="text-xs font-extrabold">قِس نتائجك</span></div>
-        </div>
-
-        <!-- المحاور الستة -->
-        <div class="grid grid-cols-1 md:grid-cols-2 gap-4 mb-12">
-          <div class="bg-white p-5 rounded-2xl border border-slate-200/80 shadow-sm">
-            <div class="flex items-center gap-3 mb-2">
-              <span class="w-9 h-9 rounded-full bg-brand-900 text-sky-300 font-en font-black text-xs flex items-center justify-center">01</span>
-              <h3 class="text-base font-black text-slate-900">المحور الأول: هندسة الذات والوعي الشخصي والقيادي</h3>
-            </div>
-            <p class="text-xs text-slate-600 leading-relaxed">فهم الذات واكتشاف القيم • تحديد نقاط القوة ومناطق التطوير • اكتشاف القدرات والاهتمامات • عجلة الحياة والتوازن بين الأدوار • الهوية الشخصية والقيادية.</p>
-          </div>
-
-          <div class="bg-white p-5 rounded-2xl border border-slate-200/80 shadow-sm">
-            <div class="flex items-center gap-3 mb-2">
-              <span class="w-9 h-9 rounded-full bg-brand-900 text-sky-300 font-en font-black text-xs flex items-center justify-center">02</span>
-              <h3 class="text-base font-black text-slate-900">المحور الثاني: بناء الرؤية الشخصية والمهنية</h3>
-            </div>
-            <p class="text-xs text-slate-600 leading-relaxed">فهم الرؤية والرسالة والقيم • تحديد الاتجاه المستقبلي • تصور الحياة والمسار المهني • الربط بين الطموحات الشخصية والمهنية • صياغة الرؤية الشخصية والقيادية.</p>
-          </div>
-
-          <div class="bg-white p-5 rounded-2xl border-2 border-sky-400 shadow-sm">
-            <div class="flex items-center gap-3 mb-2">
-              <span class="w-9 h-9 rounded-full bg-brand-900 text-sky-300 font-en font-black text-xs flex items-center justify-center">03</span>
-              <h3 class="text-base font-black text-slate-900">المحور الثالث: التخطيط الاستراتيجي الشخصي</h3>
-            </div>
-            <p class="text-xs text-slate-600 leading-relaxed">التفكير الاستراتيجي • تحليل الواقع الحالي • تحليل SWOT • تحليل الفجوات • تحديد الأولويات • صياغة الأهداف • بناء الاستراتيجية الشخصية والمهنية.</p>
-          </div>
-
-          <div class="bg-white p-5 rounded-2xl border-2 border-sky-400 shadow-sm">
-            <div class="flex items-center gap-3 mb-2">
-              <span class="w-9 h-9 rounded-full bg-brand-900 text-sky-300 font-en font-black text-xs flex items-center justify-center">04</span>
-              <h3 class="text-base font-black text-slate-900">المحور الرابع: Power Skills – المهارات الجوهرية</h3>
-            </div>
-            <p class="text-xs text-slate-600 leading-relaxed">الوعي الذاتي والذكاء العاطفي • التفكير النقدي والاستراتيجي • اتخاذ القرار وحل المشكلات • التواصل الفعال والتأثير والتفاوض • إدارة الوقت والأولويات • الانضباط الذاتي وإدارة الذات • المرونة والتكيف مع التغيير • القيادة وبناء الثقة وإدارة الفرق.</p>
-          </div>
-
-          <div class="bg-white p-5 rounded-2xl border border-slate-200/80 shadow-sm">
-            <div class="flex items-center gap-3 mb-2">
-              <span class="w-9 h-9 rounded-full bg-brand-900 text-sky-300 font-en font-black text-xs flex items-center justify-center">05</span>
-              <h3 class="text-base font-black text-slate-900">المحور الخامس: الذكاء الاصطناعي والإنتاجية</h3>
-            </div>
-            <p class="text-xs text-slate-600 leading-relaxed">توظيف الذكاء الاصطناعي في التخطيط • استخدام أدوات AI لتحليل الأفكار والخيارات • إعداد الخطط وتنظيم المهام • دعم الإنتاجية الشخصية والتنفيذية • استخدام الأدوات الرقمية لمتابعة الأهداف.</p>
-          </div>
-
-          <div class="bg-white p-5 rounded-2xl border border-slate-200/80 shadow-sm">
-            <div class="flex items-center gap-3 mb-2">
-              <span class="w-9 h-9 rounded-full bg-brand-900 text-sky-300 font-en font-black text-xs flex items-center justify-center">06</span>
-              <h3 class="text-base font-black text-slate-900">المحور السادس: التنفيذ وتحقيق النتائج</h3>
-            </div>
-            <p class="text-xs text-slate-600 leading-relaxed">تحويل الأهداف إلى مشاريع ومبادرات • إعداد خارطة الطريق • بناء خطة 90 يومًا • إدارة الوقت والطاقة والعادات • تحديد مؤشرات الأداء KPIs • قياس التقدم ومراجعة النتائج • تعديل المسار والاستمرارية.</p>
-          </div>
-        </div>
-
-        <!-- النتائج الـ 10 -->
-        <div class="bg-white rounded-3xl border-2 border-sky-200 p-6 sm:p-8 shadow-sm">
-          <h3 class="text-xl sm:text-2xl font-black text-center text-brand-950 mb-6">
-            ماذا ستحصل عليه بعد رحلتك في <span class="text-gold-gradient">هندسة الحياة؟</span>
-          </h3>
-          <div class="grid grid-cols-1 sm:grid-cols-2 gap-3 text-xs sm:text-sm font-bold text-slate-800 mb-6">
-            <div class="bg-slate-50 p-3.5 rounded-xl border border-slate-200/80 flex items-center gap-2.5"><span class="text-sky-600 font-en font-black">1.</span><span>رؤية شخصية ومهنية أكثر وضوحًا.</span></div>
-            <div class="bg-slate-50 p-3.5 rounded-xl border border-slate-200/80 flex items-center gap-2.5"><span class="text-sky-600 font-en font-black">2.</span><span>فهم أعمق للذات والقدرات.</span></div>
-            <div class="bg-slate-50 p-3.5 rounded-xl border border-slate-200/80 flex items-center gap-2.5"><span class="text-sky-600 font-en font-black">3.</span><span>تحليل واضح للواقع ونقاط التطوير.</span></div>
-            <div class="bg-slate-50 p-3.5 rounded-xl border border-slate-200/80 flex items-center gap-2.5"><span class="text-sky-600 font-en font-black">4.</span><span>استراتيجية شخصية ومهنية.</span></div>
-            <div class="bg-slate-50 p-3.5 rounded-xl border border-slate-200/80 flex items-center gap-2.5"><span class="text-sky-600 font-en font-black">5.</span><span>أهداف وأولويات محددة.</span></div>
-            <div class="bg-slate-50 p-3.5 rounded-xl border border-slate-200/80 flex items-center gap-2.5"><span class="text-sky-600 font-en font-black">6.</span><span>خطة لتطوير المهارات الجوهرية والقيادية.</span></div>
-            <div class="bg-slate-50 p-3.5 rounded-xl border border-slate-200/80 flex items-center gap-2.5"><span class="text-sky-600 font-en font-black">7.</span><span>أدوات رقمية وذكاء اصطناعي لدعم التخطيط.</span></div>
-            <div class="bg-slate-50 p-3.5 rounded-xl border border-slate-200/80 flex items-center gap-2.5"><span class="text-sky-600 font-en font-black">8.</span><span>خارطة طريق عملية لمدة 90 يومًا.</span></div>
-            <div class="bg-slate-50 p-3.5 rounded-xl border border-slate-200/80 flex items-center gap-2.5"><span class="text-sky-600 font-en font-black">9.</span><span>مؤشرات لقياس الأداء والتقدم.</span></div>
-            <div class="bg-slate-50 p-3.5 rounded-xl border border-slate-200/80 flex items-center gap-2.5"><span class="text-sky-600 font-en font-black">10.</span><span>نظام متابعة ومراجعة مستمرة.</span></div>
-          </div>
-          <p class="text-center text-sm font-black text-sky-700 mb-6">
-            لن تكتفي بالتعلم... ستعمل على بناء استراتيجيتك الخاصة.
-          </p>
-          <div class="text-center">
-            <button type="button" onclick="switchSection('packages')" class="glow-btn text-base px-10 py-4">
-              <span>سجّل الآن وابدأ التخطيط الاستراتيجي</span>
-              <i class="fa-solid fa-arrow-left text-sm"></i>
+        <!-- أزرار التبديل بين التحديات والفئات المستهدفة -->
+        <div class="flex justify-center mb-6">
+          <div class="inline-flex bg-white p-1.5 rounded-full border border-sky-200 shadow-sm gap-1">
+            <button type="button" id="audienceTabBtn-challenges" onclick="switchAudienceTab('challenges')" class="px-4 sm:px-6 py-2.5 rounded-full text-xs sm:text-sm font-black transition bg-brand-900 text-sky-300 shadow">
+              <i class="fa-solid fa-triangle-exclamation ml-1"></i> التحديات التي يعالجها (8)
+            </button>
+            <button type="button" id="audienceTabBtn-target" onclick="switchAudienceTab('target')" class="px-4 sm:px-6 py-2.5 rounded-full text-xs sm:text-sm font-black transition text-slate-600 hover:text-brand-900">
+              <i class="fa-solid fa-users ml-1"></i> لمن صُمّم البرنامج؟ (6)
             </button>
           </div>
+        </div>
+
+        <!-- محتوى تبويب التحديات الثمانية -->
+        <div id="audiencePanel-challenges" class="space-y-5">
+          <div class="grid grid-cols-1 sm:grid-cols-2 gap-3">
+            <div class="bg-white p-3.5 rounded-2xl border border-slate-200/80 shadow-sm flex items-center gap-3">
+              <div class="w-8 h-8 rounded-xl bg-sky-50 border border-sky-300 text-sky-600 flex items-center justify-center shrink-0 text-xs"><i class="fa-solid fa-compass"></i></div>
+              <span class="text-xs sm:text-sm font-bold text-slate-800">الانشغال اليومي دون رؤية واضحة.</span>
+            </div>
+            <div class="bg-white p-3.5 rounded-2xl border border-slate-200/80 shadow-sm flex items-center gap-3">
+              <div class="w-8 h-8 rounded-xl bg-sky-50 border border-sky-300 text-sky-600 flex items-center justify-center shrink-0 text-xs"><i class="fa-solid fa-list-ol"></i></div>
+              <span class="text-xs sm:text-sm font-bold text-slate-800">تعدد الأهداف وصعوبة ترتيب الأولويات.</span>
+            </div>
+            <div class="bg-white p-3.5 rounded-2xl border border-slate-200/80 shadow-sm flex items-center gap-3">
+              <div class="w-8 h-8 rounded-xl bg-sky-50 border border-sky-300 text-sky-600 flex items-center justify-center shrink-0 text-xs"><i class="fa-solid fa-anchor"></i></div>
+              <span class="text-xs sm:text-sm font-bold text-slate-800">الشعور بالجمود الشخصي أو المهني.</span>
+            </div>
+            <div class="bg-white p-3.5 rounded-2xl border border-slate-200/80 shadow-sm flex items-center gap-3">
+              <div class="w-8 h-8 rounded-xl bg-sky-50 border border-sky-300 text-sky-600 flex items-center justify-center shrink-0 text-xs"><i class="fa-solid fa-scale-balanced"></i></div>
+              <span class="text-xs sm:text-sm font-bold text-slate-800">صعوبة اتخاذ القرارات المهمة.</span>
+            </div>
+            <div class="bg-white p-3.5 rounded-2xl border border-slate-200/80 shadow-sm flex items-center gap-3">
+              <div class="w-8 h-8 rounded-xl bg-sky-50 border border-sky-300 text-sky-600 flex items-center justify-center shrink-0 text-xs"><i class="fa-solid fa-battery-quarter"></i></div>
+              <span class="text-xs sm:text-sm font-bold text-slate-800">ضعف الانضباط والاستمرارية.</span>
+            </div>
+            <div class="bg-white p-3.5 rounded-2xl border border-slate-200/80 shadow-sm flex items-center gap-3">
+              <div class="w-8 h-8 rounded-xl bg-sky-50 border border-sky-300 text-sky-600 flex items-center justify-center shrink-0 text-xs"><i class="fa-solid fa-map"></i></div>
+              <span class="text-xs sm:text-sm font-bold text-slate-800">امتلاك الطموح دون وجود خطة واضحة.</span>
+            </div>
+            <div class="bg-white p-3.5 rounded-2xl border border-slate-200/80 shadow-sm flex items-center gap-3">
+              <div class="w-8 h-8 rounded-xl bg-sky-50 border border-sky-300 text-sky-600 flex items-center justify-center shrink-0 text-xs"><i class="fa-solid fa-yin-yang"></i></div>
+              <span class="text-xs sm:text-sm font-bold text-slate-800">صعوبة الموازنة بين الحياة الشخصية والمهنية.</span>
+            </div>
+            <div class="bg-white p-3.5 rounded-2xl border border-slate-200/80 shadow-sm flex items-center gap-3">
+              <div class="w-8 h-8 rounded-xl bg-sky-50 border border-sky-300 text-sky-600 flex items-center justify-center shrink-0 text-xs"><i class="fa-solid fa-bullseye"></i></div>
+              <span class="text-xs sm:text-sm font-bold text-slate-800">عدم القدرة على تحويل الأفكار إلى نتائج ملموسة.</span>
+            </div>
+          </div>
+          <div class="bg-brand-900 text-white border border-sky-400/50 rounded-2xl p-4 text-center shadow-sm">
+            <p class="text-xs sm:text-sm font-black text-sky-300">
+              المشكلة ليست دائمًا في قلة الجهد، بل قد تكون في غياب الرؤية والاستراتيجية المناسبة.
+            </p>
+          </div>
+        </div>
+
+        <!-- محتوى تبويب الفئات المستهدفة الستة -->
+        <div id="audiencePanel-target" class="hidden space-y-5">
+          <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-3">
+            <div class="bg-white p-4 rounded-2xl border border-slate-200/80 shadow-sm flex items-center gap-3">
+              <div class="w-10 h-10 rounded-xl bg-brand-900 text-sky-300 flex items-center justify-center text-base shrink-0"><i class="fa-solid fa-user-tie"></i></div>
+              <h3 class="text-xs sm:text-sm font-extrabold text-slate-900">المدراء التنفيذيون</h3>
+            </div>
+            <div class="bg-white p-4 rounded-2xl border border-slate-200/80 shadow-sm flex items-center gap-3">
+              <div class="w-10 h-10 rounded-xl bg-brand-900 text-sky-300 flex items-center justify-center text-base shrink-0"><i class="fa-solid fa-building"></i></div>
+              <h3 class="text-xs sm:text-sm font-extrabold text-slate-900">أصحاب المؤسسات والمشاريع</h3>
+            </div>
+            <div class="bg-white p-4 rounded-2xl border border-slate-200/80 shadow-sm flex items-center gap-3">
+              <div class="w-10 h-10 rounded-xl bg-brand-900 text-sky-300 flex items-center justify-center text-base shrink-0"><i class="fa-solid fa-rocket"></i></div>
+              <h3 class="text-xs sm:text-sm font-extrabold text-slate-900">رواد الأعمال</h3>
+            </div>
+            <div class="bg-white p-4 rounded-2xl border border-slate-200/80 shadow-sm flex items-center gap-3">
+              <div class="w-10 h-10 rounded-xl bg-brand-900 text-sky-300 flex items-center justify-center text-base shrink-0"><i class="fa-solid fa-users-gear"></i></div>
+              <h3 class="text-xs sm:text-sm font-extrabold text-slate-900">مسؤولو الفرق وقادة العمل</h3>
+            </div>
+            <div class="bg-white p-4 rounded-2xl border border-slate-200/80 shadow-sm flex items-center gap-3">
+              <div class="w-10 h-10 rounded-xl bg-brand-900 text-sky-300 flex items-center justify-center text-base shrink-0"><i class="fa-solid fa-chart-line"></i></div>
+              <h3 class="text-xs sm:text-sm font-extrabold text-slate-900">الموظفون الطموحون الراغبون في تطوير مسارهم المهني</h3>
+            </div>
+            <div class="bg-white p-4 rounded-2xl border border-slate-200/80 shadow-sm flex items-center gap-3">
+              <div class="w-10 h-10 rounded-xl bg-brand-900 text-sky-300 flex items-center justify-center text-base shrink-0"><i class="fa-solid fa-compass"></i></div>
+              <h3 class="text-xs sm:text-sm font-extrabold text-slate-900">كل شخص يريد بناء رؤية واضحة لحياته ومستقبله</h3>
+            </div>
+          </div>
+          <div class="text-center">
+            <button type="button" onclick="switchSection('packages')" class="glow-btn text-sm px-8 py-3.5">
+              <span>سجّل الآن واكتشف الباقة المناسبة لك</span>
+              <i class="fa-solid fa-arrow-left text-xs"></i>
+            </button>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- القسم الرابع المدمج: مركز استكشاف البرنامج (المحاور الستة + النتائج الـ 10 + الرحلة) -->
+    <section id="curriculumSection" class="py-14 bg-white border-b border-slate-200/70 px-4 reveal">
+      <div class="max-w-4xl mx-auto">
+        <div class="text-center max-w-2xl mx-auto mb-6">
+          <span class="text-xs font-extrabold text-sky-700">رحلة متكاملة من اكتشاف الذات إلى تصميم المستقبل</span>
+          <h2 class="text-2xl sm:text-3xl font-black text-brand-950 mt-1.5">ماذا ستتعلم في برنامج <span class="text-gold-gradient">هندسة الحياة؟</span></h2>
+          <p class="text-xs sm:text-sm text-slate-600 mt-1.5">
+            هندسة الحياة برنامج تدريبي يدمج بين التخطيط الاستراتيجي الشخصي وتطوير المهارات الجوهرية والقيادية.
+          </p>
+        </div>
+
+        <!-- أزرار التبويبات الرئيسية لمحتوى البرنامج -->
+        <div class="flex flex-wrap justify-center gap-2 mb-6">
+          <button type="button" id="progTabBtn-modules" onclick="switchProgramTab('modules')" class="px-4 sm:px-5 py-2.5 rounded-full text-xs sm:text-sm font-black transition bg-brand-900 text-sky-300 border border-sky-400 shadow">
+            <i class="fa-solid fa-layer-group ml-1"></i> المحاور التدريبية (6)
+          </button>
+          <button type="button" id="progTabBtn-outcomes" onclick="switchProgramTab('outcomes')" class="px-4 sm:px-5 py-2.5 rounded-full text-xs sm:text-sm font-black transition bg-slate-100 text-slate-700 hover:bg-sky-50 border border-slate-200">
+            <i class="fa-solid fa-trophy ml-1 text-sky-600"></i> النتائج والمخرجات (10)
+          </button>
+          <button type="button" id="progTabBtn-journey" onclick="switchProgramTab('journey')" class="px-4 sm:px-5 py-2.5 rounded-full text-xs sm:text-sm font-black transition bg-slate-100 text-slate-700 hover:bg-sky-50 border border-slate-200">
+            <i class="fa-solid fa-route ml-1 text-sky-600"></i> خطوات الرحلة (7)
+          </button>
+        </div>
+
+        <!-- 1. تبويب المحاور الستة بنظام الأكورديون الأنيق (مضغوط ولا يأخذ مساحة طويلة) -->
+        <div id="progPanel-modules" class="space-y-2.5">
+          <div class="bg-slate-50 border border-sky-300 rounded-2xl overflow-hidden">
+            <button type="button" onclick="toggleModuleAcc(1)" class="w-full p-4 text-right flex items-center justify-between gap-3">
+              <div class="flex items-center gap-3">
+                <span class="w-8 h-8 rounded-full bg-brand-900 text-sky-300 font-en font-black text-xs flex items-center justify-center shrink-0">01</span>
+                <h3 class="text-sm sm:text-base font-black text-slate-900">المحور الأول: هندسة الذات والوعي الشخصي والقيادي</h3>
+              </div>
+              <i id="modIcon-1" class="fa-solid fa-chevron-down text-sky-600 text-xs transition-transform duration-300 rotate-180"></i>
+            </button>
+            <div id="modBody-1" class="px-4 pb-4 pt-1 text-xs sm:text-sm text-slate-600 leading-relaxed border-t border-slate-200/70">
+              فهم الذات واكتشاف القيم • تحديد نقاط القوة ومناطق التطوير • اكتشاف القدرات والاهتمامات • عجلة الحياة والتوازن بين الأدوار • الهوية الشخصية والقيادية.
+            </div>
+          </div>
+
+          <div class="bg-slate-50 border border-slate-200 hover:border-sky-300 rounded-2xl overflow-hidden transition">
+            <button type="button" onclick="toggleModuleAcc(2)" class="w-full p-4 text-right flex items-center justify-between gap-3">
+              <div class="flex items-center gap-3">
+                <span class="w-8 h-8 rounded-full bg-brand-900 text-sky-300 font-en font-black text-xs flex items-center justify-center shrink-0">02</span>
+                <h3 class="text-sm sm:text-base font-black text-slate-900">المحور الثاني: بناء الرؤية الشخصية والمهنية</h3>
+              </div>
+              <i id="modIcon-2" class="fa-solid fa-chevron-down text-sky-600 text-xs transition-transform duration-300"></i>
+            </button>
+            <div id="modBody-2" class="hidden px-4 pb-4 pt-1 text-xs sm:text-sm text-slate-600 leading-relaxed border-t border-slate-200/70">
+              فهم الرؤية والرسالة والقيم • تحديد الاتجاه المستقبلي • تصور الحياة والمسار المهني • الربط بين الطموحات الشخصية والمهنية • صياغة الرؤية الشخصية والقيادية.
+            </div>
+          </div>
+
+          <div class="bg-slate-50 border border-slate-200 hover:border-sky-300 rounded-2xl overflow-hidden transition">
+            <button type="button" onclick="toggleModuleAcc(3)" class="w-full p-4 text-right flex items-center justify-between gap-3">
+              <div class="flex items-center gap-3">
+                <span class="w-8 h-8 rounded-full bg-brand-900 text-sky-300 font-en font-black text-xs flex items-center justify-center shrink-0">03</span>
+                <h3 class="text-sm sm:text-base font-black text-slate-900">المحور الثالث: التخطيط الاستراتيجي الشخصي</h3>
+              </div>
+              <i id="modIcon-3" class="fa-solid fa-chevron-down text-sky-600 text-xs transition-transform duration-300"></i>
+            </button>
+            <div id="modBody-3" class="hidden px-4 pb-4 pt-1 text-xs sm:text-sm text-slate-600 leading-relaxed border-t border-slate-200/70">
+              التفكير الاستراتيجي • تحليل الواقع الحالي • تحليل SWOT • تحليل الفجوات • تحديد الأولويات • صياغة الأهداف • بناء الاستراتيجية الشخصية والمهنية.
+            </div>
+          </div>
+
+          <div class="bg-slate-50 border border-slate-200 hover:border-sky-300 rounded-2xl overflow-hidden transition">
+            <button type="button" onclick="toggleModuleAcc(4)" class="w-full p-4 text-right flex items-center justify-between gap-3">
+              <div class="flex items-center gap-3">
+                <span class="w-8 h-8 rounded-full bg-brand-900 text-sky-300 font-en font-black text-xs flex items-center justify-center shrink-0">04</span>
+                <h3 class="text-sm sm:text-base font-black text-slate-900">المحور الرابع: Power Skills – المهارات الجوهرية</h3>
+              </div>
+              <i id="modIcon-4" class="fa-solid fa-chevron-down text-sky-600 text-xs transition-transform duration-300"></i>
+            </button>
+            <div id="modBody-4" class="hidden px-4 pb-4 pt-1 text-xs sm:text-sm text-slate-600 leading-relaxed border-t border-slate-200/70">
+              الوعي الذاتي والذكاء العاطفي • التفكير النقدي والاستراتيجي • اتخاذ القرار وحل المشكلات • التواصل الفعال والتأثير والتفاوض • إدارة الوقت والأولويات • الانضباط الذاتي وإدارة الذات • المرونة والتكيف مع التغيير • القيادة وبناء الثقة وإدارة الفرق.
+            </div>
+          </div>
+
+          <div class="bg-slate-50 border border-slate-200 hover:border-sky-300 rounded-2xl overflow-hidden transition">
+            <button type="button" onclick="toggleModuleAcc(5)" class="w-full p-4 text-right flex items-center justify-between gap-3">
+              <div class="flex items-center gap-3">
+                <span class="w-8 h-8 rounded-full bg-brand-900 text-sky-300 font-en font-black text-xs flex items-center justify-center shrink-0">05</span>
+                <h3 class="text-sm sm:text-base font-black text-slate-900">المحور الخامس: الذكاء الاصطناعي والإنتاجية</h3>
+              </div>
+              <i id="modIcon-5" class="fa-solid fa-chevron-down text-sky-600 text-xs transition-transform duration-300"></i>
+            </button>
+            <div id="modBody-5" class="hidden px-4 pb-4 pt-1 text-xs sm:text-sm text-slate-600 leading-relaxed border-t border-slate-200/70">
+              توظيف الذكاء الاصطناعي في التخطيط • استخدام أدوات AI لتحليل الأفكار والخيارات • إعداد الخطط وتنظيم المهام • دعم الإنتاجية الشخصية والتنفيذية • استخدام الأدوات الرقمية لمتابعة الأهداف.
+            </div>
+          </div>
+
+          <div class="bg-slate-50 border border-slate-200 hover:border-sky-300 rounded-2xl overflow-hidden transition">
+            <button type="button" onclick="toggleModuleAcc(6)" class="w-full p-4 text-right flex items-center justify-between gap-3">
+              <div class="flex items-center gap-3">
+                <span class="w-8 h-8 rounded-full bg-brand-900 text-sky-300 font-en font-black text-xs flex items-center justify-center shrink-0">06</span>
+                <h3 class="text-sm sm:text-base font-black text-slate-900">المحور السادس: التنفيذ وتحقيق النتائج</h3>
+              </div>
+              <i id="modIcon-6" class="fa-solid fa-chevron-down text-sky-600 text-xs transition-transform duration-300"></i>
+            </button>
+            <div id="modBody-6" class="hidden px-4 pb-4 pt-1 text-xs sm:text-sm text-slate-600 leading-relaxed border-t border-slate-200/70">
+              تحويل الأهداف إلى مشاريع ومبادرات • إعداد خارطة الطريق • بناء خطة 90 يومًا • إدارة الوقت والطاقة والعادات • تحديد مؤشرات الأداء KPIs • قياس التقدم ومراجعة النتائج • تعديل المسار والاستمرارية.
+            </div>
+          </div>
+        </div>
+
+        <!-- 2. تبويب النتائج الـ 10 -->
+        <div id="progPanel-outcomes" class="hidden bg-slate-50 rounded-3xl border-2 border-sky-200 p-5 sm:p-7">
+          <h3 class="text-lg sm:text-xl font-black text-center text-brand-950 mb-5">
+            ماذا ستحصل عليه بعد رحلتك في <span class="text-gold-gradient">هندسة الحياة؟</span>
+          </h3>
+          <div class="grid grid-cols-1 sm:grid-cols-2 gap-2.5 text-xs sm:text-sm font-bold text-slate-800 mb-5">
+            <div class="bg-white p-3 rounded-xl border border-slate-200/80 flex items-center gap-2.5"><span class="text-sky-600 font-en font-black">1.</span><span>رؤية شخصية ومهنية أكثر وضوحًا.</span></div>
+            <div class="bg-white p-3 rounded-xl border border-slate-200/80 flex items-center gap-2.5"><span class="text-sky-600 font-en font-black">2.</span><span>فهم أعمق للذات والقدرات.</span></div>
+            <div class="bg-white p-3 rounded-xl border border-slate-200/80 flex items-center gap-2.5"><span class="text-sky-600 font-en font-black">3.</span><span>تحليل واضح للواقع ونقاط التطوير.</span></div>
+            <div class="bg-white p-3 rounded-xl border border-slate-200/80 flex items-center gap-2.5"><span class="text-sky-600 font-en font-black">4.</span><span>استراتيجية شخصية ومهنية.</span></div>
+            <div class="bg-white p-3 rounded-xl border border-slate-200/80 flex items-center gap-2.5"><span class="text-sky-600 font-en font-black">5.</span><span>أهداف وأولويات محددة.</span></div>
+            <div class="bg-white p-3 rounded-xl border border-slate-200/80 flex items-center gap-2.5"><span class="text-sky-600 font-en font-black">6.</span><span>خطة لتطوير المهارات الجوهرية والقيادية.</span></div>
+            <div class="bg-white p-3 rounded-xl border border-slate-200/80 flex items-center gap-2.5"><span class="text-sky-600 font-en font-black">7.</span><span>أدوات رقمية وذكاء اصطناعي لدعم التخطيط.</span></div>
+            <div class="bg-white p-3 rounded-xl border border-slate-200/80 flex items-center gap-2.5"><span class="text-sky-600 font-en font-black">8.</span><span>خارطة طريق عملية لمدة 90 يومًا.</span></div>
+            <div class="bg-white p-3 rounded-xl border border-slate-200/80 flex items-center gap-2.5"><span class="text-sky-600 font-en font-black">9.</span><span>مؤشرات لقياس الأداء والتقدم.</span></div>
+            <div class="bg-white p-3 rounded-xl border border-slate-200/80 flex items-center gap-2.5"><span class="text-sky-600 font-en font-black">10.</span><span>نظام متابعة ومراجعة مستمرة.</span></div>
+          </div>
+          <p class="text-center text-xs sm:text-sm font-black text-sky-700">
+            لن تكتفي بالتعلم... ستعمل على بناء استراتيجيتك الخاصة.
+          </p>
+        </div>
+
+        <!-- 3. تبويب خطوات الرحلة الـ 7 -->
+        <div id="progPanel-journey" class="hidden bg-slate-50 rounded-3xl border border-sky-200 p-5 sm:p-7">
+          <div class="grid grid-cols-2 sm:grid-cols-4 lg:grid-cols-7 gap-2.5 text-center">
+            <div class="bg-white p-3.5 rounded-2xl border border-sky-200 shadow-sm"><span class="font-en text-xs font-black text-sky-600 block">01</span><span class="text-xs font-extrabold text-slate-900">اكتشف ذاتك</span></div>
+            <div class="bg-white p-3.5 rounded-2xl border border-sky-200 shadow-sm"><span class="font-en text-xs font-black text-sky-600 block">02</span><span class="text-xs font-extrabold text-slate-900">افهم واقعك</span></div>
+            <div class="bg-white p-3.5 rounded-2xl border border-sky-200 shadow-sm"><span class="font-en text-xs font-black text-sky-600 block">03</span><span class="text-xs font-extrabold text-slate-900">صمّم رؤيتك</span></div>
+            <div class="bg-white p-3.5 rounded-2xl border border-sky-200 shadow-sm"><span class="font-en text-xs font-black text-sky-600 block">04</span><span class="text-xs font-extrabold text-slate-900">ابنِ استراتيجيتك</span></div>
+            <div class="bg-white p-3.5 rounded-2xl border border-sky-200 shadow-sm"><span class="font-en text-xs font-black text-sky-600 block">05</span><span class="text-xs font-extrabold text-slate-900">طوّر قدراتك</span></div>
+            <div class="bg-white p-3.5 rounded-2xl border border-sky-200 shadow-sm"><span class="font-en text-xs font-black text-sky-600 block">06</span><span class="text-xs font-extrabold text-slate-900">نفّذ خطتك</span></div>
+            <div class="bg-brand-900 text-white p-3.5 rounded-2xl border border-sky-400 shadow-sm col-span-2 sm:col-span-1"><span class="font-en text-xs font-black text-sky-400 block">07</span><span class="text-xs font-extrabold">قِس نتائجك</span></div>
+          </div>
+        </div>
+
+        <div class="text-center mt-7">
+          <button type="button" onclick="switchSection('packages')" class="glow-btn text-sm sm:text-base px-9 py-3.5">
+            <span>سجّل الآن وابدأ التخطيط الاستراتيجي</span>
+            <i class="fa-solid fa-arrow-left text-sm"></i>
+          </button>
         </div>
       </div>
     </section>
@@ -726,13 +792,21 @@
       </div>
     </section>
 
-    <!-- القسم الثامن: الأسئلة الشائعة FAQ -->
-    <section class="py-16 bg-slate-50 border-t border-slate-200/70 px-4 reveal">
+    <!-- القسم الثامن: الأسئلة الشائعة FAQ (مقسمة إلى 3 فئات ذكية لتقليص طول الصفحة) -->
+    <section class="py-14 bg-slate-50 border-t border-slate-200/70 px-4 reveal">
       <div class="max-w-3xl mx-auto">
-        <div class="text-center mb-8">
+        <div class="text-center mb-5">
           <h2 class="text-2xl sm:text-3xl font-black text-brand-950">الأسئلة الشائعة <span class="text-gold-gradient">FAQ</span></h2>
+          <p class="text-xs text-slate-500 mt-1">اختر التصنيف لعرض الأسئلة وإجاباتها مباشرة</p>
         </div>
-        <div id="faqContainer" class="space-y-3"></div>
+
+        <div class="flex flex-wrap justify-center gap-2 mb-5">
+          <button type="button" id="faqCatBtn-all" onclick="filterFAQCategory('all')" class="px-4 py-1.5 rounded-full text-xs font-black bg-brand-900 text-sky-300 border border-sky-400 transition">عن البرنامج (1–4)</button>
+          <button type="button" id="faqCatBtn-packages" onclick="filterFAQCategory('packages')" class="px-4 py-1.5 rounded-full text-xs font-black bg-white text-slate-700 border border-slate-200 hover:border-sky-300 transition">الباقات والمحتوى (5–10)</button>
+          <button type="button" id="faqCatBtn-support" onclick="filterFAQCategory('support')" class="px-4 py-1.5 rounded-full text-xs font-black bg-white text-slate-700 border border-slate-200 hover:border-sky-300 transition">المتابعة والتسجيل (11–15)</button>
+        </div>
+
+        <div id="faqContainer" class="space-y-2.5"></div>
       </div>
     </section>
 
@@ -1148,68 +1222,51 @@
     };
 
     const faqData = [
-      { q: '1. ما هو برنامج هندسة الحياة؟', a: 'برنامج تدريبي يدمج بين التخطيط الاستراتيجي الشخصي وتطوير المهارات الجوهرية والقيادية لمساعدة المشارك على فهم واقعه، وتحديد اتجاهه، وبناء استراتيجية شخصية ومهنية وتحويلها إلى خطوات عملية قابلة للتنفيذ والقياس.' },
-      { q: '2. هل البرنامج مناسب للمدراء وأصحاب المشاريع؟', a: 'نعم، البرنامج مصمم للمدراء التنفيذيين، أصحاب المؤسسات والمشاريع، رواد الأعمال، مسؤولي الفرق وقادة العمل، والموظفين الطموحين.' },
-      { q: '3. هل أحتاج إلى خبرة سابقة في التخطيط الاستراتيجي؟', a: 'لا، يبدأ البرنامج معك من اكتشاف الذات وفهم الواقع خطوة بخطوة.' },
-      { q: '4. هل يمكنني متابعة الدورة من الهاتف؟', a: 'نعم، المحتوى الرقمي والفيديوهات التعليمية متاحة للمتابعة عبر الهاتف أو الحاسوب.' },
-      { q: '5. ما الفرق بين الباقات الثلاث؟', a: 'البرونزية (4,900 دج) للمحتوى الرقمي؛ الفضية (6,900 دج) تضيف الدفترين المطبوعين ومتابعة شهر؛ الذهبية Gold Box (12,900 دج) تضم 19 عنصرًا متكاملًا مع متابعة 3 أشهر وجلسات استشارية فردية وتوصيل مجاني.' },
-      { q: '6. ماذا تتضمن الباقة البرونزية؟', a: 'الوصول إلى المحتوى الرقمي للدورة، مشاهدة الفيديوهات التعليمية، الموارد والملفات الرقمية المرافقة، وشهادة مشاركة إلكترونية.' },
-      { q: '7. ما الذي يميز الباقة الفضية؟', a: 'تتضمن محتوى الباقة البرونزية بالإضافة إلى دفتر عملي مطبوع للتخطيط الاستراتيجي الشخصي، دفتر الفوائد، ومتابعة ومرافقة لمدة شهر كامل.' },
-      { q: '8. ماذا يوجد داخل Gold Box؟', a: 'يحتوي على 19 عنصرًا تشمل صندوق التخطيط الاستراتيجي، خارطة طريق الدورة، بطاقة الدخول، دفتر التخطيط، دفتر الفوائد، عجلة الحياة، 3 جداريات، 40 بطاقة تحفيزية، مكتبة رحلتي التعليمية، فاصلة كتاب، شهادة المشاركة، تطبيقين على الهاتف، بطاقة الدعم، متابعة 3 أشهر، جلسات استشارية فردية، هدية جواز سفر أحلامي، وتوصيل مجاني.' },
-      { q: '9. كيف أحصل على الصندوق الذهبي؟', a: 'اختر باقة Gold Box واضغط على «احصل على Gold Box الآن» ثم املأ بياناتك وعنوان التوصيل في نموذج الطلب.' },
-      { q: '10. هل التوصيل مجاني؟', a: 'نعم، التوصيل المنزلي مجاني للباقة الذهبية Gold Box.' },
-      { q: '11. كم مدة المتابعة في كل باقة؟', a: 'البرونزية: تعلم ذاتي؛ الفضية: متابعة لمدة شهر كامل؛ Gold Box: متابعة لمدة ثلاثة أشهر.' },
-      { q: '12. هل توجد جلسات استشارية فردية؟', a: 'نعم، الجلسات الاستشارية الفردية متوفرة ضمن مزايا باقة Gold Box.' },
-      { q: '13. كيف أحصل على شهادة المشاركة؟', a: 'تُمنح شهادة مشاركة إلكترونية في الباقة البرونزية، وشهادة مشاركة وفق صيغة الباقة المعتمدة في الفضية والذهبية.' },
-      { q: '14. كيف يمكنني إتمام عملية التسجيل والدفع؟', a: 'عبر تعبئة نموذج الطلب في المتجر وتأكيد طلبك للحصول على رقم الطلب ووسيلة الدفع المعتمدة.' },
-      { q: '15. كيف أتواصل مع فريق الأكاديمية؟', a: 'بعد إرسال طلبك أو عبر القنوات الرسمية المعتمدة لأكاديمية إكسيلانس.' }
+      { q: '1. ما هو برنامج هندسة الحياة؟', a: 'برنامج تدريبي متكامل يدمج بين التخطيط الاستراتيجي الشخصي وتطوير المهارات الجوهرية والقيادية لمساعدة المشارك على اكتشاف ذاته وبناء رؤيته وتحويل أهدافه إلى خطة عملية قابلة للتنفيذ والقياس.' },
+      { q: '2. هل البرنامج مناسب للمدراء وأصحاب المشاريع؟', a: 'نعم، البرنامج مصمم خصيصاً للمدراء التنفيذيين، أصحاب المؤسسات والمشاريع، رواد الأعمال، مسؤولي الفرق، والموظفين الطموحين وكل من يسعى لبناء رؤية واضحة.' },
+      { q: '3. هل أحتاج إلى خبرة سابقة في التخطيط الاستراتيجي؟', a: 'لا، يبدأ البرنامج معك من فهم الذات وتحليل الواقع خطوة بخطوة حتى بناء الاستراتيجية وخارطة طريق 90 يوماً.' },
+      { q: '4. هل يمكنني متابعة الدورة من الهاتف؟', a: 'نعم، المحتوى التدريبي الرقمي متاح للمشاهدة والاستخدام عبر الهاتف والحاسوب في أي وقت.' },
+      { q: '5. ما الفرق بين الباقات الثلاث؟', a: 'الباقة البرونزية توفر المحتوى التدريبي الرقمي، الباقة الفضية تضيف الدفاتر العملية المطبوعة ومتابعة لمدة شهر، والباقة الذهبية (Gold Box) تمنحك الصندوق المتكامل مع متابعة 3 أشهر وجلسات استشارية فردية وتوصيل منزلي مجاني.' },
+      { q: '6. ماذا تتضمن الباقة البرونزية؟', a: 'تتضمن الوصول إلى المحتوى الرقمي للدورة، مشاهدة الفيديوهات التعليمية، الموارد والملفات الرقمية المرافقة، وشهادة مشاركة إلكترونية.' },
+      { q: '7. ما الذي يميز الباقة الفضية؟', a: 'تجمع بين المحتوى الرقمي الكامل والأدوات المطبوعة (دفتر التخطيط الاستراتيجي الشخصي + دفتر الفوائد) مع مرافقة ومتابعة لمدة شهر كامل.' },
+      { q: '8. ماذا يوجد داخل Gold Box؟', a: 'يحتوي على صندوق التخطيط الاستراتيجي الشخصي، خارطة طريق الدورة، بطاقة الدخول، دفتر التخطيط الاستراتيجي، دفتر الفوائد، عجلة الحياة، الجداريات الثلاث، 40 بطاقة تحفيزية، مكتبة رحلتي التعليمية، فاصلة كتاب، شهادة المشاركة، تطبيقين على الهاتف، بطاقة الدعم والمتابعة، وجواز سفر أحلامي.' },
+      { q: '9. كيف أحصل على الصندوق الذهبي؟', a: 'اختر باقة Gold Box من صفحة الباقات، ثم املأ بياناتك وعنوان التوصيل في نموذج الطلب وسيتواصل معك فريق الأكاديمية لتأكيد الإرسال.' },
+      { q: '10. هل التوصيل مجاني؟', a: 'نعم، التوصيل المنزلي مجاني بالكامل عند طلب الباقة الذهبية (Gold Box).' },
+      { q: '11. كم مدة المتابعة في كل باقة؟', a: 'الباقة البرونزية تعتمد على التعلم الذاتي، الباقة الفضية تشمل متابعة لمدة شهر كامل، والباقة الذهبية (Gold Box) تشمل متابعة لمدة ثلاثة أشهر.' },
+      { q: '12. هل توجد جلسات استشارية فردية؟', a: 'نعم، الجلسات الاستشارية الفردية متوفرة ضمن مزايا الباقة الذهبية (Gold Box).' },
+      { q: '13. كيف أحصل على شهادة المشاركة؟', a: 'تُمنح شهادة المشاركة للمشتركين بعد إتمام البرنامج وفق صيغة كل باقة (إلكترونية في البرونزية، ومطبوعة/معتمدة في الفضية والذهبية).' },
+      { q: '14. كيف يمكنني إتمام عملية التسجيل والدفع؟', a: 'اختر باقتك المناسبة، أدخل معلوماتك في صفحة إتمام الطلب، واختر وسيلة الدفع المعتمدة والمتاحة لتأكيد اشتراكك.' },
+      { q: '15. كيف أتواصل مع فريق الأكاديمية؟', a: 'بمجرد تسجيل طلبك يتواصل معك فريق أكاديمية إكسيلانس مباشرة عبر الهاتف لتأكيد البيانات وتفعيل اشتراكك.' }
     ];
 
-    // خانات آراء المشاركين القابلة للإضافة بصور حقيقية بدون نصوص وهمية
+    const paymentOptions = [
+      { id: 'bank', label: 'التحويل البنكي أو البريدي (CCP / BaridiMob)', enabled: true },
+      { id: 'epay', label: 'الدفع الإلكتروني (CIB / الذهبية)', enabled: true },
+      { id: 'cod', label: 'الدفع عند الاستلام (متاح لباقة Gold Box)', enabled: true }
+    ];
+
     const testimonialsSlots = [
       { code: '01', imageUrl: '' },
       { code: '02', imageUrl: '' },
       { code: '03', imageUrl: '' },
       { code: '04', imageUrl: '' }
     ];
-    let currentTestimonialIdx = 0;
 
     let activePkgKey = 'silver';
+    let currentTestimonialIdx = 0;
     let ordersList = [];
-    let paymentOptions = [
-      { id: 'bank', label: 'التحويل البنكي أو البريدي', enabled: true },
-      { id: 'cod', label: 'الدفع عند الاستلام (خاص بـ Gold Box)', enabled: true },
-      { id: 'online', label: 'الدفع الإلكتروني', enabled: false }
-    ];
 
-    // =========================================================
-    // التهيئة عند فتح الصفحة
-    // =========================================================
     function initApp() {
-      // إخفاء شاشة البداية بسلاسة
-      setTimeout(() => {
-        const splash = document.getElementById('splashScreen');
-        if (splash) {
-          splash.style.opacity = '0';
-          setTimeout(() => { splash.style.display = 'none'; }, 900);
-        }
-      }, 1300);
-
-      // تعبئة الأسئلة الشائعة
-      const faqContainer = document.getElementById('faqContainer');
-      if (faqContainer) {
-        faqContainer.innerHTML = faqData.map((item, i) => `
-          <div class="bg-white border border-slate-200 hover:border-sky-400 rounded-2xl overflow-hidden shadow-sm transition">
-            <button type="button" onclick="toggleFAQItem(${i})" class="w-full p-4 text-right flex items-center justify-between gap-3 font-extrabold text-xs sm:text-sm text-slate-900">
-              <span>${item.q}</span>
-              <i id="faqIcon-${i}" class="fa-solid fa-chevron-down text-sky-600 text-xs transition-transform duration-300"></i>
-            </button>
-            <div id="faqAns-${i}" class="hidden px-4 pb-4 text-xs sm:text-sm text-slate-600 leading-relaxed border-t border-slate-100 pt-2.5">
-              ${item.a}
-            </div>
-          </div>
-        `).join('');
+      const splash = document.getElementById('splashScreen');
+      if (splash) {
+        setTimeout(() => {
+          splash.classList.add('opacity-0', 'pointer-events-none');
+          setTimeout(() => splash.remove(), 1000);
+        }, 1600);
       }
+
+      // تعبئة الأسئلة الشائعة حسب الفئة لتقليل الازدحام
+      filterFAQCategory('all');
 
       // تفعيل السكرول والباقة الافتراضية وآراء المشاركين
       renderTestimonialCard();
@@ -1222,6 +1279,85 @@
       document.addEventListener('DOMContentLoaded', initApp);
     } else {
       initApp();
+    }
+
+    function switchAudienceTab(tab) {
+      const isChallenges = tab === 'challenges';
+      document.getElementById('audiencePanel-challenges').classList.toggle('hidden', !isChallenges);
+      document.getElementById('audiencePanel-target').classList.toggle('hidden', isChallenges);
+
+      const btnCh = document.getElementById('audienceTabBtn-challenges');
+      const btnTg = document.getElementById('audienceTabBtn-target');
+      btnCh.className = isChallenges
+        ? 'px-4 sm:px-6 py-2.5 rounded-full text-xs sm:text-sm font-black transition bg-brand-900 text-sky-300 shadow'
+        : 'px-4 sm:px-6 py-2.5 rounded-full text-xs sm:text-sm font-black transition text-slate-600 hover:text-brand-900';
+      btnTg.className = !isChallenges
+        ? 'px-4 sm:px-6 py-2.5 rounded-full text-xs sm:text-sm font-black transition bg-brand-900 text-sky-300 shadow'
+        : 'px-4 sm:px-6 py-2.5 rounded-full text-xs sm:text-sm font-black transition text-slate-600 hover:text-brand-900';
+    }
+
+    function switchProgramTab(tab) {
+      ['modules', 'outcomes', 'journey'].forEach(k => {
+        const panel = document.getElementById(`progPanel-${k}`);
+        const btn = document.getElementById(`progTabBtn-${k}`);
+        if (panel) panel.classList.toggle('hidden', k !== tab);
+        if (btn) {
+          btn.className = (k === tab)
+            ? 'px-4 sm:px-5 py-2.5 rounded-full text-xs sm:text-sm font-black transition bg-brand-900 text-sky-300 border border-sky-400 shadow'
+            : 'px-4 sm:px-5 py-2.5 rounded-full text-xs sm:text-sm font-black transition bg-slate-100 text-slate-700 hover:bg-sky-50 border border-slate-200';
+        }
+      });
+    }
+
+    function toggleModuleAcc(num) {
+      for (let i = 1; i <= 6; i++) {
+        const body = document.getElementById(`modBody-${i}`);
+        const icon = document.getElementById(`modIcon-${i}`);
+        if (!body || !icon) continue;
+        if (i === num) {
+          const isHidden = body.classList.contains('hidden');
+          body.classList.toggle('hidden', !isHidden);
+          icon.classList.toggle('rotate-180', isHidden);
+        } else {
+          body.classList.add('hidden');
+          icon.classList.remove('rotate-180');
+        }
+      }
+    }
+
+    function filterFAQCategory(cat) {
+      const ranges = {
+        all: [0, 4],
+        packages: [4, 10],
+        support: [10, 15]
+      };
+      ['all', 'packages', 'support'].forEach(c => {
+        const b = document.getElementById(`faqCatBtn-${c}`);
+        if (b) {
+          b.className = (c === cat)
+            ? 'px-4 py-1.5 rounded-full text-xs font-black bg-brand-900 text-sky-300 border border-sky-400 transition'
+            : 'px-4 py-1.5 rounded-full text-xs font-black bg-white text-slate-700 border border-slate-200 hover:border-sky-300 transition';
+        }
+      });
+      const [start, end] = ranges[cat] || [0, 4];
+      const slice = faqData.slice(start, end);
+      const faqContainer = document.getElementById('faqContainer');
+      if (faqContainer) {
+        faqContainer.innerHTML = slice.map((item, idx) => {
+          const realIdx = start + idx;
+          return `
+            <div class="bg-white border border-slate-200 hover:border-sky-400 rounded-2xl overflow-hidden shadow-sm transition">
+              <button type="button" onclick="toggleFAQItem(${realIdx})" class="w-full p-4 text-right flex items-center justify-between gap-3 font-extrabold text-xs sm:text-sm text-slate-900">
+                <span>${item.q}</span>
+                <i id="faqIcon-${realIdx}" class="fa-solid fa-chevron-down text-sky-600 text-xs transition-transform duration-300"></i>
+              </button>
+              <div id="faqAns-${realIdx}" class="hidden px-4 pb-4 text-xs sm:text-sm text-slate-600 leading-relaxed border-t border-slate-100 pt-2.5">
+                ${item.a}
+              </div>
+            </div>
+          `;
+        }).join('');
+      }
     }
 
     function renderTestimonialCard() {
